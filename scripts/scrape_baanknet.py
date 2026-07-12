@@ -70,6 +70,7 @@ ENRICH_DETAILS = os.environ.get("BAANKNET_ENRICH_DETAILS", "1") == "1"
 ENRICH_LIMIT = int(os.environ.get("BAANKNET_ENRICH_LIMIT", "1000"))
 RUN_SCORE_ENGINE = os.environ.get("BAANKNET_SCORE", "1") == "1"
 INCREMENTAL_REFRESH = os.environ.get("BAANKNET_INCREMENTAL", "0") == "1"
+DRY_RUN = os.environ.get("BAANKNET_DRY_RUN", "0") == "1"
 
 DETAIL_FIELDS = [
     "propertyAddress",
@@ -701,6 +702,9 @@ def main() -> None:
             f"Incremental merge reused {reused} enriched rows; {needs_enrichment} rows need detail refresh.",
             flush=True,
         )
+    if DRY_RUN:
+        print("Dry run enabled. Skipping detail enrichment, possession refresh, scoring, and file writes.", flush=True)
+        return
     if ENRICH_DETAILS:
         enrich_auction_details(session, auctions, ENRICH_LIMIT)
     enrich_possession_statuses(session, base_filters, auctions)

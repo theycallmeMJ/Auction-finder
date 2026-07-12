@@ -285,6 +285,7 @@ BAANKNET_STATE_ID=17
 BAANKNET_DISTRICT_ID=
 BAANKNET_STATUSES=upcoming,live,cancelled,closed
 BAANKNET_INCREMENTAL=0
+BAANKNET_DRY_RUN=0
 BAANKNET_ENRICH_DETAILS=1
 BAANKNET_ENRICH_LIMIT=1000
 BAANKNET_SCORE=1
@@ -302,6 +303,17 @@ BAANKNET_SCORE=1
 ```
 
 For a one-off full re-enrichment, run with `BAANKNET_INCREMENTAL=0`.
+
+For a fast local check that only prints listing/merge counts and does not write
+files, push data, build, or deploy:
+
+```bash
+BAANKNET_STATUSES=upcoming \
+BAANKNET_INCREMENTAL=1 \
+BAANKNET_DRY_RUN=1 \
+BAANKNET_SCORE=0 \
+python3 scripts/scrape_baanknet.py
+```
 
 ## UI Functionality
 
