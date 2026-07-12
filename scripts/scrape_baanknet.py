@@ -96,17 +96,19 @@ DETAIL_FIELDS = [
     "extendByMinutes",
 ]
 
+REUSABLE_ENRICHED_FIELDS = DETAIL_FIELDS + [
+    "possessionStatus",
+    "pricePerSqft",
+    "score",
+]
+
 LISTING_SIGNATURE_FIELDS = [
     "auctionId",
     "status",
     "bankPropertyId",
-    "title",
     "reservePrice",
-    "reservePriceText",
     "startDate",
     "endDate",
-    "auctionDetailUrl",
-    "propertyDetailUrl",
 ]
 
 
@@ -391,8 +393,27 @@ def auction_key(auction: dict[str, Any]) -> tuple[str, str]:
     return (str(auction.get("status") or ""), str(auction.get("auctionId") or ""))
 
 
+def normalize_signature_date(value: Any) -> str:
+    text = str(value or "").strip()
+    match = re.match(r"(\d{2}-\d{2}-\d{4})\s+(\d{2}:\d{2})(?::\d{2})?", text)
+    if match:
+        return f"{match.group(1)} {match.group(2)}"
+    return text
+
+
+def normalize_signature_value(field: str, value: Any) -> Any:
+    if field in ("startDate", "endDate"):
+        return normalize_signature_date(value)
+    if field == "reservePrice":
+        return int(value) if isinstance(value, (int, float)) else value
+    return str(value or "").strip()
+
+
 def listing_signature(auction: dict[str, Any]) -> dict[str, Any]:
-    return {field: auction.get(field) for field in LISTING_SIGNATURE_FIELDS}
+    return {
+        field: normalize_signature_value(field, auction.get(field))
+        for field in LISTING_SIGNATURE_FIELDS
+    }
 
 
 def has_detail_data(auction: dict[str, Any]) -> bool:
@@ -430,11 +451,8 @@ def merge_existing_details(
 
         unchanged = listing_signature(auction) == listing_signature(existing)
         if unchanged and has_detail_data(existing):
-            for key, value in existing.items():
-                if key in ("status", "auctionId"):
-                    continue
-                if key.startswith("_"):
-                    continue
+            for key in REUSABLE_ENRICHED_FIELDS:
+                value = existing.get(key)
                 if value not in ("", None, []):
                     auction[key] = value
             auction["_needsDetailEnrichment"] = False
