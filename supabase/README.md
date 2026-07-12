@@ -82,12 +82,28 @@ rows and writes refresh status rows. Do not expose it to browser code.
 Workflow data steps:
 
 1. scrape upcoming BAANKNET auctions
-2. enrich detail fields
-3. score auctions
-4. push `public.auctions`
-5. push `public.catalog_snapshots`
-6. write `public.refresh_runs`
-7. deploy the updated frontend to Cloudflare Pages
+2. reuse existing enriched fields for unchanged auctions
+3. enrich only new or changed auction detail pages
+4. score auctions
+5. clear old Supabase rows for refreshed statuses, usually `upcoming`
+6. push `public.auctions`
+7. push `public.catalog_snapshots`
+8. write `public.refresh_runs`
+9. deploy the updated frontend to Cloudflare Pages
+
+Production refresh env:
+
+```text
+BAANKNET_STATUSES=upcoming
+BAANKNET_INCREMENTAL=1
+BAANKNET_ENRICH_DETAILS=1
+BAANKNET_ENRICH_LIMIT=2000
+BAANKNET_SCORE=1
+SUPABASE_REPLACE_STATUS_ROWS=1
+```
+
+`SUPABASE_REPLACE_STATUS_ROWS=1` prevents stale upcoming auctions from staying
+in Supabase after BAANKNET removes or expires them.
 
 ## 4. Auth
 

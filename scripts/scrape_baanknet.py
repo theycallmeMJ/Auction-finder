@@ -69,6 +69,45 @@ MAX_CLOSED_PAGES = int(os.environ.get("BAANKNET_MAX_CLOSED_PAGES", "10"))
 ENRICH_DETAILS = os.environ.get("BAANKNET_ENRICH_DETAILS", "1") == "1"
 ENRICH_LIMIT = int(os.environ.get("BAANKNET_ENRICH_LIMIT", "1000"))
 RUN_SCORE_ENGINE = os.environ.get("BAANKNET_SCORE", "1") == "1"
+INCREMENTAL_REFRESH = os.environ.get("BAANKNET_INCREMENTAL", "0") == "1"
+
+DETAIL_FIELDS = [
+    "propertyAddress",
+    "borrowerName",
+    "borrowerAddress",
+    "customerId",
+    "branch",
+    "officer",
+    "carpetArea",
+    "builtUpArea",
+    "areaSqft",
+    "typeOfAction",
+    "dealingOfficer",
+    "mobileNo",
+    "branchAddress",
+    "inspectionDateFrom",
+    "inspectionDateTo",
+    "emdStartDate",
+    "emdEndDate",
+    "emd",
+    "incrementPrice",
+    "incrementDuringExtension",
+    "extendWhenBidInLastMinutes",
+    "extendByMinutes",
+]
+
+LISTING_SIGNATURE_FIELDS = [
+    "auctionId",
+    "status",
+    "bankPropertyId",
+    "title",
+    "reservePrice",
+    "reservePriceText",
+    "startDate",
+    "endDate",
+    "auctionDetailUrl",
+    "propertyDetailUrl",
+]
 
 
 @dataclass
@@ -348,6 +387,65 @@ def parse_auction_notice(fragment: str) -> dict[str, str]:
     }
 
 
+def auction_key(auction: dict[str, Any]) -> tuple[str, str]:
+    return (str(auction.get("status") or ""), str(auction.get("auctionId") or ""))
+
+
+def listing_signature(auction: dict[str, Any]) -> dict[str, Any]:
+    return {field: auction.get(field) for field in LISTING_SIGNATURE_FIELDS}
+
+
+def has_detail_data(auction: dict[str, Any]) -> bool:
+    return any(str(auction.get(field) or "").strip() for field in DETAIL_FIELDS)
+
+
+def load_existing_auctions() -> dict[tuple[str, str], dict[str, Any]]:
+    path = OUTPUT_DIR / "auctions.json"
+    if not path.exists():
+        return {}
+    try:
+        existing = json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+    return {
+        auction_key(auction): auction
+        for auction in existing
+        if auction.get("status") and auction.get("auctionId")
+    }
+
+
+def merge_existing_details(
+    auctions: list[dict[str, Any]],
+    existing_by_key: dict[tuple[str, str], dict[str, Any]],
+) -> tuple[int, int]:
+    reused = 0
+    needs_enrichment = 0
+
+    for auction in auctions:
+        existing = existing_by_key.get(auction_key(auction))
+        if not existing:
+            auction["_needsDetailEnrichment"] = True
+            needs_enrichment += 1
+            continue
+
+        unchanged = listing_signature(auction) == listing_signature(existing)
+        if unchanged and has_detail_data(existing):
+            for key, value in existing.items():
+                if key in ("status", "auctionId"):
+                    continue
+                if key.startswith("_"):
+                    continue
+                if value not in ("", None, []):
+                    auction[key] = value
+            auction["_needsDetailEnrichment"] = False
+            reused += 1
+        else:
+            auction["_needsDetailEnrichment"] = True
+            needs_enrichment += 1
+
+    return reused, needs_enrichment
+
+
 def parse_cards(fragment: str, status: str) -> list[dict[str, Any]]:
     blocks = re.findall(r'<div class="eproc-listing-main">.*?(?=<div class="eproc-listing-main">|</div>\s*</div>\s*</div>\s*$)', fragment, re.S)
     if not blocks:
@@ -442,8 +540,18 @@ def parse_cards(fragment: str, status: str) -> list[dict[str, Any]]:
 
 def enrich_auction_details(session: Session, auctions: list[dict[str, Any]], limit: int) -> None:
     enriched = 0
-    for auction in auctions:
-        if not auction.get("auctionDetailUrl") or enriched >= limit:
+    candidates = [
+        auction
+        for auction in auctions
+        if auction.get("auctionDetailUrl") and auction.get("_needsDetailEnrichment", True)
+    ]
+    total = min(len(candidates), limit)
+    if not total:
+        print("No auction detail pages need enrichment.", flush=True)
+        return
+    print(f"Enriching {total} auction detail pages...", flush=True)
+    for auction in candidates:
+        if enriched >= limit:
             continue
         try:
             detail_html = fetch_text(
@@ -458,9 +566,14 @@ def enrich_auction_details(session: Session, auctions: list[dict[str, Any]], lim
             if auction.get("reservePriceText"):
                 auction["reservePrice"] = money_to_rupees(auction["reservePriceText"]) or auction.get("reservePrice")
             enriched += 1
+            if enriched == total or enriched % 50 == 0:
+                print(f"Enriched {enriched}/{total} auction detail pages...", flush=True)
             time.sleep(0.15)
         except Exception as exc:
             auction["detailError"] = str(exc)
+            enriched += 1
+            if enriched == total or enriched % 50 == 0:
+                print(f"Processed {enriched}/{total} auction detail pages...", flush=True)
 
 
 def enrich_possession_statuses(
@@ -515,6 +628,9 @@ def search_all_pages(
 
 def main() -> None:
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+    existing_by_key = load_existing_auctions() if INCREMENTAL_REFRESH else {}
+    if INCREMENTAL_REFRESH:
+        print(f"Incremental refresh enabled. Loaded {len(existing_by_key)} existing auctions.", flush=True)
     session = start_session()
 
     states = {DEFAULT_STATE_ID: "Kerala"}
@@ -560,9 +676,18 @@ def main() -> None:
             raise RuntimeError(f"Unknown BAANKNET status: {status}")
         max_pages = MAX_CLOSED_PAGES if status == "closed" else None
         auctions.extend(search_all_pages(session, base_filters, status, max_pages=max_pages))
+    print(f"Fetched {len(auctions)} listing rows from BAANKNET.", flush=True)
+    if INCREMENTAL_REFRESH:
+        reused, needs_enrichment = merge_existing_details(auctions, existing_by_key)
+        print(
+            f"Incremental merge reused {reused} enriched rows; {needs_enrichment} rows need detail refresh.",
+            flush=True,
+        )
     if ENRICH_DETAILS:
         enrich_auction_details(session, auctions, ENRICH_LIMIT)
     enrich_possession_statuses(session, base_filters, auctions)
+    for auction in auctions:
+        auction.pop("_needsDetailEnrichment", None)
 
     catalog = {
         "states": [{"id": key, "name": value} for key, value in states.items()],

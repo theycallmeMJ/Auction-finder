@@ -31,6 +31,7 @@ jobs:
       - name: Refresh upcoming auctions
         env:
           BAANKNET_STATUSES: upcoming
+          BAANKNET_INCREMENTAL: "1"
           BAANKNET_ENRICH_DETAILS: "1"
           BAANKNET_ENRICH_LIMIT: "2000"
           BAANKNET_SCORE: "1"
@@ -40,6 +41,7 @@ jobs:
         env:
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          SUPABASE_REPLACE_STATUS_ROWS: "1"
         run: python3 scripts/push_to_supabase.py
 
       - name: Commit refreshed data

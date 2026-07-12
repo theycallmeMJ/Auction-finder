@@ -2,6 +2,7 @@
 import json
 import os
 import sys
+import urllib.parse
 import urllib.error
 import urllib.request
 from datetime import datetime, timezone, timedelta
@@ -12,6 +13,7 @@ from uuid import uuid4
 ROOT = Path(__file__).resolve().parents[1]
 DATA_DIR = ROOT / "public" / "data"
 IST = timezone(timedelta(hours=5, minutes=30))
+REPLACE_STATUS_ROWS = os.environ.get("SUPABASE_REPLACE_STATUS_ROWS", "1") == "1"
 
 
 def read_env_file():
@@ -78,6 +80,32 @@ def supabase_request(path, payload, method="POST"):
     except urllib.error.HTTPError as error:
         details = error.read().decode("utf-8", errors="replace")
         raise RuntimeError(f"Supabase write failed ({error.code}): {details}") from error
+
+
+def supabase_delete(path):
+    supabase_url = os.environ.get("NEXT_PUBLIC_SUPABASE_URL", "").rstrip("/")
+    service_key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY", "")
+    if not supabase_url or not service_key:
+        raise SystemExit(
+            "Set NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY before running this script."
+        )
+
+    request = urllib.request.Request(
+        f"{supabase_url}/rest/v1/{path}",
+        method="DELETE",
+        headers={
+            "apikey": service_key,
+            "Authorization": f"Bearer {service_key}",
+            "Prefer": "return=minimal",
+        },
+    )
+
+    try:
+        with urllib.request.urlopen(request, timeout=60) as response:
+            return response.status
+    except urllib.error.HTTPError as error:
+        details = error.read().decode("utf-8", errors="replace")
+        raise RuntimeError(f"Supabase delete failed ({error.code}): {details}") from error
 
 
 def create_refresh_run():
@@ -153,6 +181,11 @@ def main():
 
     try:
         rows = [auction_row(auction) for auction in auctions if auction.get("auctionId")]
+        statuses = sorted({row["status"] for row in rows if row.get("status")})
+        if REPLACE_STATUS_ROWS and statuses:
+            encoded_statuses = urllib.parse.quote(",".join(statuses), safe=",")
+            supabase_delete(f"auctions?status=in.({encoded_statuses})")
+            print(f"Cleared existing Supabase auction rows for statuses: {', '.join(statuses)}")
         for batch in chunks(rows, 500):
             supabase_request("auctions?on_conflict=auction_id,status", batch)
             pushed_count += len(batch)

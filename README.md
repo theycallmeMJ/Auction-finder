@@ -229,15 +229,26 @@ The refresh step currently uses:
 
 ```text
 BAANKNET_STATUSES=upcoming
+BAANKNET_INCREMENTAL=1
 BAANKNET_ENRICH_DETAILS=1
 BAANKNET_ENRICH_LIMIT=2000
 BAANKNET_SCORE=1
+SUPABASE_REPLACE_STATUS_ROWS=1
 ```
 
-The first full refresh can take several minutes because it fetches BAANKNET
-listing data and enriches many detail pages. If it crosses 25-30 minutes, check
-the GitHub Actions logs for the current step and consider lowering
-`BAANKNET_ENRICH_LIMIT`.
+Incremental mode compares fresh listing rows against the existing
+`public/data/auctions.json` in the repo. If an auction ID/status is already
+present and its listing signature is unchanged, the scraper reuses existing
+detail fields instead of opening the BAANKNET detail page again.
+
+Rows are re-enriched when the auction is new, key listing fields changed, or
+the existing row has no captured detail fields. `SUPABASE_REPLACE_STATUS_ROWS=1`
+clears old Supabase rows for the refreshed statuses before inserting the new
+set, so expired or removed `upcoming` auctions do not linger in production.
+
+The first full refresh can still take several minutes because it may need to
+enrich many BAANKNET detail pages. Later daily runs should be much faster and
+will print progress logs showing reused rows and detail pages still needed.
 
 Manual run path:
 
@@ -273,6 +284,7 @@ Useful scraper env vars:
 BAANKNET_STATE_ID=17
 BAANKNET_DISTRICT_ID=
 BAANKNET_STATUSES=upcoming,live,cancelled,closed
+BAANKNET_INCREMENTAL=0
 BAANKNET_ENRICH_DETAILS=1
 BAANKNET_ENRICH_LIMIT=1000
 BAANKNET_SCORE=1
@@ -283,10 +295,13 @@ The GitHub workflow currently refreshes only upcoming auctions:
 
 ```text
 BAANKNET_STATUSES=upcoming
+BAANKNET_INCREMENTAL=1
 BAANKNET_ENRICH_DETAILS=1
 BAANKNET_ENRICH_LIMIT=2000
 BAANKNET_SCORE=1
 ```
+
+For a one-off full re-enrichment, run with `BAANKNET_INCREMENTAL=0`.
 
 ## UI Functionality
 
@@ -541,12 +556,13 @@ It:
 
 1. installs dependencies
 2. scrapes upcoming BAANKNET auctions
-3. enriches details
-4. scores auctions
-5. pushes refreshed data into Supabase and records a `refresh_runs` status row
-6. commits refreshed `public/data/*.json`
-7. builds Cloudflare Pages output with production action limit set to 10
-8. deploys to Cloudflare Pages
+3. reuses existing enriched details for unchanged rows
+4. enriches only new or changed auction detail pages
+5. scores auctions
+6. replaces Supabase rows for refreshed statuses and records a `refresh_runs` status row
+7. commits refreshed `public/data/*.json`
+8. builds Cloudflare Pages output with production action limit set to 10
+9. deploys to Cloudflare Pages
 
 Required GitHub secrets:
 
@@ -560,6 +576,8 @@ SUPABASE_SERVICE_ROLE_KEY
 Troubleshooting:
 
 - If the scraper step is slow, open the `Refresh upcoming auctions` step logs.
+  Incremental refresh should print how many existing enriched rows were reused
+  and how many detail pages still need to be fetched.
 - If Supabase push fails, confirm `SUPABASE_SERVICE_ROLE_KEY` and
   `NEXT_PUBLIC_SUPABASE_URL` repo secrets.
 - If Cloudflare deploy fails, confirm `CLOUDFLARE_API_TOKEN` and
@@ -585,6 +603,8 @@ Troubleshooting:
 - magic-link flow support
 - login event tracking code
 - refresh run tracking code
+- incremental refresh that skips unchanged detail pages
+- Supabase stale status cleanup during refresh push
 - Cloudflare Pages deployment setup
 - daily GitHub Actions refresh/deploy workflow
 
