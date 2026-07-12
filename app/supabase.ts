@@ -2,6 +2,8 @@ const SUPABASE_URL_KEY = "NEXT_PUBLIC_SUPABASE_URL";
 const SUPABASE_ANON_KEY = "NEXT_PUBLIC_SUPABASE_ANON_KEY";
 const VITE_SUPABASE_URL_KEY = "VITE_SUPABASE_URL";
 const VITE_SUPABASE_ANON_KEY = "VITE_SUPABASE_ANON_KEY";
+const AUTH_REDIRECT_URL_KEY = "NEXT_PUBLIC_AUTH_REDIRECT_URL";
+const VITE_AUTH_REDIRECT_URL_KEY = "VITE_AUTH_REDIRECT_URL";
 
 type SupabaseEnv = Record<string, string | undefined>;
 
@@ -96,6 +98,10 @@ async function authRequest<T>(path: string, body?: unknown, accessToken?: string
 
 function getRedirectTo() {
   if (typeof window === "undefined") return undefined;
+  const configuredRedirect = readEnv(AUTH_REDIRECT_URL_KEY) ?? readEnv(VITE_AUTH_REDIRECT_URL_KEY);
+  if (configuredRedirect) {
+    return configuredRedirect.replace(/\/$/, "");
+  }
   return `${window.location.origin}${window.location.pathname}`;
 }
 

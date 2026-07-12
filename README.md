@@ -150,6 +150,8 @@ NEXT_PUBLIC_ENABLE_GOOGLE_AUTH
 VITE_ENABLE_GOOGLE_AUTH
 NEXT_PUBLIC_FREE_PROTECTED_ACTIONS
 VITE_FREE_PROTECTED_ACTIONS
+NEXT_PUBLIC_AUTH_REDIRECT_URL
+VITE_AUTH_REDIRECT_URL
 ```
 
 Server/trusted job variable:
@@ -183,6 +185,8 @@ Cloudflare Pages production build env:
 ```text
 NEXT_PUBLIC_FREE_PROTECTED_ACTIONS=10
 VITE_FREE_PROTECTED_ACTIONS=10
+NEXT_PUBLIC_AUTH_REDIRECT_URL=https://kerala-auction-finder.pages.dev
+VITE_AUTH_REDIRECT_URL=https://kerala-auction-finder.pages.dev
 ```
 
 ## Data Flow
@@ -422,6 +426,20 @@ App URLs to allow in Supabase:
 http://localhost:3000
 https://kerala-auction-finder.pages.dev
 ```
+
+Supabase Auth URL Configuration should be:
+
+```text
+Site URL: https://kerala-auction-finder.pages.dev
+Redirect URLs:
+  http://localhost:3000
+  http://localhost:3000/*
+  https://kerala-auction-finder.pages.dev
+  https://kerala-auction-finder.pages.dev/*
+```
+
+If the Site URL is left as `http://localhost:3000`, Google/magic-link login can
+circle back to localhost even when the user started from production.
 
 ## Login History Tracking
 

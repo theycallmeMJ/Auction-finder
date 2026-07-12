@@ -67,6 +67,8 @@ jobs:
         env:
           NEXT_PUBLIC_FREE_PROTECTED_ACTIONS: "10"
           VITE_FREE_PROTECTED_ACTIONS: "10"
+          NEXT_PUBLIC_AUTH_REDIRECT_URL: "https://kerala-auction-finder.pages.dev"
+          VITE_AUTH_REDIRECT_URL: "https://kerala-auction-finder.pages.dev"
         run: pnpm run pages:build
 
       - name: Deploy to Cloudflare Pages
