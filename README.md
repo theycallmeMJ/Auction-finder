@@ -1,98 +1,441 @@
-# vinext-starter
+# Kerala Auction Finder
 
-A clean full-stack starter running on
-[vinext](https://github.com/cloudflare/vinext), with optional Cloudflare D1 and
-Drizzle support.
+A Kerala-focused BAANKNET auction finder for filtering, ranking, and inspecting
+bank-listed auction properties.
 
-## Prerequisites
+The app is built as a Vinext/React frontend with static JSON fallback data,
+optional Supabase database/auth, and Cloudflare Pages deployment support.
 
-- Node.js `>=22.13.0`
+## What Is Built
 
-## Quick Start
+- BAANKNET auction listing UI
+- Kerala-focused filters
+- Ranking mode with Opportunity Score
+- Property detail expansion
+- BAANKNET notice/property outbound links
+- Mobile-friendly filter drawer and auction cards
+- Static JSON fallback data
+- Supabase-backed data loading when configured
+- Supabase magic-link login
+- Supabase Google OAuth login
+- Login gate after free auction actions
+- Login event tracking schema and frontend insert
+- Daily GitHub Actions scrape/deploy workflow
+- Cloudflare Pages build/deploy setup
+
+## Current Local Path
+
+```text
+/Users/melvinjames/Documents/Codex/2026-07-11/hel
+```
+
+## Main Files
+
+- `app/page.tsx`: main React UI, filters, ranking, auth modal, protected actions
+- `app/globals.css`: all layout, desktop, and mobile styling
+- `app/supabase.ts`: Supabase data/auth helpers and login-event writer
+- `scripts/scrape_baanknet.py`: BAANKNET scraper
+- `scripts/score_auctions.py`: scoring engine
+- `scripts/push_to_supabase.py`: pushes scraped JSON into Supabase
+- `scripts/prepare_cloudflare_pages.mjs`: prepares `dist-pages` for Cloudflare Pages
+- `public/data/auctions.json`: bundled auction data fallback
+- `public/data/catalog.json`: bundled filter catalog fallback
+- `public/data/area_profiles.json`: cached area profile/scoring support data
+- `supabase/schema.sql`: Supabase tables, indexes, and RLS policies
+- `.github/workflows/cloudflare-pages.yml`: daily scrape/build/deploy workflow
+- `CLOUDFLARE_PAGES.md`: Cloudflare deployment notes
+- `supabase/README.md`: Supabase setup and query notes
+
+## Run Locally
+
+Use the bundled Node/pnpm runtime if your shell does not have `node` or `pnpm`.
 
 ```bash
-npm install
-npm run dev
-npm run build
+cd /Users/melvinjames/Documents/Codex/2026-07-11/hel
+PATH=/Users/melvinjames/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin:$PATH \
+  /Users/melvinjames/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/fallback/pnpm run dev
 ```
 
-This starter does not use `wrangler.jsonc`.
+Open:
 
-## Included Shape
-
-- edit site code under `app/`
-- `.openai/hosting.json` declares optional Sites D1 and R2 bindings
-- `vite.config.ts` simulates declared bindings for local development
-- `db/schema.ts` starts intentionally empty
-- `examples/d1/` contains an optional D1 example surface
-- `drizzle.config.ts` supports local migration generation when needed
-
-## Workspace Auth Headers
-
-OpenAI workspace sites can read the current user's email from
-`oai-authenticated-user-email`.
-
-SIWC-authenticated workspace sites may also receive
-`oai-authenticated-user-full-name` when the user's SIWC profile has a non-empty
-`name` claim. The full-name value is percent-encoded UTF-8 and is accompanied by
-`oai-authenticated-user-full-name-encoding: percent-encoded-utf-8`.
-
-Treat the full name as optional and fall back to email when it is absent:
-
-```tsx
-import { headers } from "next/headers";
-
-export default async function Home() {
-  const requestHeaders = await headers();
-  const email = requestHeaders.get("oai-authenticated-user-email");
-  const encodedFullName = requestHeaders.get("oai-authenticated-user-full-name");
-  const fullName =
-    encodedFullName &&
-    requestHeaders.get("oai-authenticated-user-full-name-encoding") ===
-      "percent-encoded-utf-8"
-      ? decodeURIComponent(encodedFullName)
-      : null;
-
-  const displayName = fullName ?? email;
-  // ...
-}
+```text
+http://localhost:3000
 ```
 
-## Optional Dispatch-Owned ChatGPT Sign-In
+Stop a stuck local server:
 
-Import the ready-to-use helpers from `app/chatgpt-auth.ts` when the site needs
-optional or required ChatGPT sign-in:
+```bash
+lsof -ti tcp:3000 | xargs kill
+lsof -ti tcp:3001 | xargs kill
+```
 
-- Use `getChatGPTUser()` for optional signed-in UI.
-- Use `requireChatGPTUser(returnTo)` for server-rendered pages that should send
-  anonymous visitors through Sign in with ChatGPT.
-- Use `chatGPTSignInPath(returnTo)` and `chatGPTSignOutPath(returnTo)` for
-  browser links or actions.
-- Pass a same-origin relative `returnTo` path for the destination after sign-in
-  or sign-out. The helper validates and safely encodes it.
-- Mark protected pages with `export const dynamic = "force-dynamic"` because
-  they depend on per-request identity headers.
+Force stop if needed:
 
-Dispatch owns `/signin-with-chatgpt`, `/signout-with-chatgpt`, `/callback`, the
-OAuth cookies, and identity header injection. Do not implement app routes for
-those reserved paths. Routes that do not import and call the helper remain
-anonymous-compatible.
-
-SIWC establishes identity only; it does not prove workspace membership. Use the
-Sites hosting platform's access policy controls for workspace-wide restrictions,
-or enforce explicit server-side membership or allowlist checks.
-
-Use SIWC for account pages, user-specific dashboards, saved records, and write
-actions tied to the current ChatGPT user. Leave public content anonymous.
+```bash
+lsof -ti tcp:3000 | xargs kill -9
+lsof -ti tcp:3001 | xargs kill -9
+```
 
 ## Useful Commands
 
-- `npm run dev`: start local development
-- `npm run build`: verify the vinext build output
-- `npm test`: build the starter and verify its rendered loading skeleton
-- `npm run db:generate`: generate Drizzle migrations after schema changes
+```bash
+pnpm run dev
+pnpm run build
+pnpm run pages:build
+pnpm run pages:deploy
+python3 scripts/scrape_baanknet.py
+python3 scripts/push_to_supabase.py
+```
 
-## Learn More
+If `pnpm` is not available globally, use:
 
-- [vinext Documentation](https://github.com/cloudflare/vinext)
-- [Drizzle D1 Guide](https://orm.drizzle.team/docs/get-started/d1-new)
+```bash
+PATH=/Users/melvinjames/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin:$PATH \
+  /Users/melvinjames/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/fallback/pnpm run build
+```
+
+## Environment Variables
+
+Local variables live in `.env.local`. Do not commit real secrets.
+
+Public browser variables:
+
+```text
+NEXT_PUBLIC_SUPABASE_URL
+NEXT_PUBLIC_SUPABASE_ANON_KEY
+VITE_SUPABASE_URL
+VITE_SUPABASE_ANON_KEY
+NEXT_PUBLIC_ENABLE_GOOGLE_AUTH
+VITE_ENABLE_GOOGLE_AUTH
+NEXT_PUBLIC_FREE_PROTECTED_ACTIONS
+VITE_FREE_PROTECTED_ACTIONS
+```
+
+Server/trusted job variable:
+
+```text
+SUPABASE_SERVICE_ROLE_KEY
+```
+
+Only use `SUPABASE_SERVICE_ROLE_KEY` from local scripts, cron, or GitHub Actions.
+Never expose it in browser code.
+
+## Data Flow
+
+```text
+BAANKNET
+  -> scripts/scrape_baanknet.py
+  -> public/data/auctions.json
+  -> scripts/score_auctions.py
+  -> optional scripts/push_to_supabase.py
+  -> Supabase tables
+  -> app/page.tsx
+```
+
+The frontend prefers Supabase when configured. If Supabase is missing or returns
+no rows, it falls back to the static JSON files in `public/data`.
+
+## Scraper
+
+The scraper:
+
+- starts a BAANKNET session
+- reads CSRF/form fields
+- calls BAANKNET AJAX search
+- fetches upcoming/live/closed/cancelled statuses based on env
+- parses listing cards
+- optionally enriches each row from the auction notice detail page
+- extracts richer fields such as EMD, increment price, inspection dates, branch,
+  officer, borrower, property address, and area fields
+- runs the scoring engine when enabled
+- writes `public/data/auctions.json`, `catalog.json`, and area profile data
+
+Useful scraper env vars:
+
+```text
+BAANKNET_STATE_ID=17
+BAANKNET_DISTRICT_ID=
+BAANKNET_STATUSES=upcoming,live,cancelled,closed
+BAANKNET_ENRICH_DETAILS=1
+BAANKNET_ENRICH_LIMIT=1000
+BAANKNET_SCORE=1
+BAANKNET_MAX_CLOSED_PAGES=10
+```
+
+The GitHub workflow currently refreshes only upcoming auctions:
+
+```text
+BAANKNET_STATUSES=upcoming
+BAANKNET_ENRICH_DETAILS=1
+BAANKNET_ENRICH_LIMIT=2000
+BAANKNET_SCORE=1
+```
+
+## UI Functionality
+
+The main UI supports:
+
+- status tabs: Upcoming, Live, Closed, Cancelled
+- state filter
+- district filter
+- city filter
+- property type filter
+- property subtype filter
+- possession status filter
+- loan availability filter
+- min/max reserve price
+- keyword search
+- quick district pills
+- quick price-band pills
+- sort by soonest, latest, score, price low/high
+- Search mode
+- Rank mode
+- top ranked area cards
+- active filter chips
+- load-more pagination
+- mobile filter drawer
+- mobile auction KPI row
+- score breakdown accordion
+- auction detail accordion
+- protected BAANKNET notice/property links
+
+## Scoring
+
+Opportunity Score is calculated from:
+
+- Area Score
+- Property Score
+- Risk Score
+- Confidence Score
+- Bonus Score
+
+Weights used in the UI:
+
+```text
+Area: 35%
+Property: 25%
+Risk: 20%
+Confidence: 10%
+Bonus: 10%
+```
+
+Current scoring is heuristic and based on available scraped data plus cached
+area profiles. It is good enough for ranking and discovery, but not a financial
+valuation model.
+
+## Auth And Login Gate
+
+The app allows a small number of free protected actions before asking users to
+sign in.
+
+Deep actions consume the free allowance:
+
+- opening full auction details
+- opening official BAANKNET notice/property links
+
+After the allowance is exhausted, most interactive actions also require login:
+
+- changing filters
+- resetting filters
+- sorting results
+- switching Search/Rank modes
+- opening score explanations
+- using quick district or price-band pills
+- loading more results
+
+Current allowance:
+
+```text
+FREE_PROTECTED_ACTIONS = NEXT_PUBLIC_FREE_PROTECTED_ACTIONS or VITE_FREE_PROTECTED_ACTIONS or 2
+```
+
+Local default is 2, so the login modal appears on the third deep action. For
+production, set `NEXT_PUBLIC_FREE_PROTECTED_ACTIONS=10` in Cloudflare Pages to
+allow ten deep actions before sign-in. After the allowance is exhausted, most
+app interactions are blocked until the user signs in.
+
+Supported sign-in options:
+
+- Google OAuth through Supabase
+- Email magic link through Supabase
+
+Google setup requires:
+
+- Google Cloud OAuth client
+- Supabase Google provider enabled
+- Supabase callback URL registered in Google
+- app URL configured in Supabase URL Configuration
+
+Supabase callback URL currently used:
+
+```text
+https://xpdduahsbxveogubysti.supabase.co/auth/v1/callback
+```
+
+App URLs to allow in Supabase:
+
+```text
+http://localhost:3000
+https://kerala-auction-finder.pages.dev
+```
+
+## Login History Tracking
+
+The code now supports a custom `public.login_events` table.
+
+After successful Supabase redirect login, the frontend inserts one event with:
+
+- user id
+- email
+- provider
+- source
+- current path
+- browser user agent
+- timestamp
+
+The app uses a local duplicate guard so page refreshes do not create repeated
+events for the same session.
+
+Run `supabase/schema.sql` in Supabase SQL Editor to create this table.
+
+Query recent login events:
+
+```sql
+select
+  created_at,
+  email,
+  provider,
+  source,
+  path,
+  user_agent
+from public.login_events
+order by created_at desc
+limit 50;
+```
+
+Status: code is implemented, but the remote Supabase project still needs the
+latest SQL run if the table has not been created yet.
+
+## Supabase Database
+
+Tables in `supabase/schema.sql`:
+
+- `public.auctions`
+- `public.catalog_snapshots`
+- `public.refresh_runs`
+- `public.login_events`
+
+`auctions` stores searchable columns plus the full auction JSON payload.
+
+`catalog_snapshots` stores filter metadata.
+
+`refresh_runs` stores the status and row counts for each scheduled or local
+data push.
+
+`login_events` stores app-level login history.
+
+RLS is enabled. Public read is enabled for auction/catalog data. Login-event
+writes are limited to authenticated users writing their own row.
+
+Push scraped data to Supabase:
+
+```bash
+python3 scripts/push_to_supabase.py
+```
+
+## Hosting
+
+Current production URL:
+
+```text
+https://kerala-auction-finder.pages.dev
+```
+
+Cloudflare Pages build settings:
+
+```text
+Framework preset: None
+Build command: pnpm run pages:build
+Build output directory: dist-pages
+Node.js version: 22
+Compatibility date: 2026-05-15
+Compatibility flags: nodejs_compat
+```
+
+The `pages:build` command runs Vinext build and prepares `dist-pages` with a
+Cloudflare `_worker.js` wrapper that serves static assets/data correctly.
+
+## Daily Refresh Workflow
+
+`.github/workflows/cloudflare-pages.yml` runs daily at:
+
+```text
+01:30 UTC
+```
+
+It:
+
+1. installs dependencies
+2. scrapes upcoming BAANKNET auctions
+3. enriches details
+4. scores auctions
+5. pushes refreshed data into Supabase and records a `refresh_runs` status row
+6. commits refreshed `public/data/*.json`
+7. builds Cloudflare Pages output with production action limit set to 10
+8. deploys to Cloudflare Pages
+
+Required GitHub secrets:
+
+```text
+CLOUDFLARE_API_TOKEN
+CLOUDFLARE_ACCOUNT_ID
+NEXT_PUBLIC_SUPABASE_URL
+SUPABASE_SERVICE_ROLE_KEY
+```
+
+## What Is Done
+
+- Kerala auction finder UI
+- interactive filters
+- ranking and score breakdown
+- richer auction details
+- reserve price parsing fix for Lakh/Crore and comma values
+- mobile layout improvements
+- scrollable mobile filters
+- detail/link login gate
+- Supabase data loading
+- Supabase push script
+- Supabase auth helpers
+- Google OAuth flow support
+- magic-link flow support
+- login event tracking code
+- refresh run tracking code
+- Cloudflare Pages deployment setup
+- daily GitHub Actions refresh/deploy workflow
+
+## Pending / Next
+
+- Run latest `supabase/schema.sql` in Supabase if `login_events` or `refresh_runs` tables are not created yet
+- Deploy the latest auth/login-tracking changes to Cloudflare Pages
+- Confirm Google OAuth works on both `localhost:3000` and Cloudflare production URL
+- Add a small admin-only page or script to view login events without opening Supabase SQL
+- Add saved searches/watchlists for signed-in users
+- Add email alerts for matching auctions
+- Add payments/subscription gating if needed
+- Improve area scoring with real OpenStreetMap/Nominatim enrichment
+- Improve market-value/discount estimates with historical auction and local market data
+- Add robust scraper tests or snapshot fixtures
+- Add monitoring for BAANKNET layout/API changes
+- Add privacy/terms copy before broader public launch
+
+## Known Notes
+
+- BAANKNET scraping should be done respectfully and at low frequency.
+- Some fields can still be blank when BAANKNET does not expose them consistently.
+- Scoring is directional, not legal/financial advice.
+- Supabase Auth Admin API shows current users and last sign-in, but full auth
+  audit logs are not exposed through this project REST API. That is why
+  `login_events` was added.
+- Refresh history is tracked in `public.refresh_runs` after the latest schema is
+  applied in Supabase.
+- Keep service-role keys out of browser code and public commits.

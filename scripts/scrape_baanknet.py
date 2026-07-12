@@ -41,6 +41,12 @@ PROPERTY_TYPES = {
     "5": "Other",
 }
 
+POSSESSION_TYPES = {
+    "1": "Physical",
+    "2": "Symbolic",
+    "3": "Other",
+}
+
 PROPERTY_SUBTYPE_FALLBACKS = [
     {"id": "house", "name": "Individual House", "propertyTypeId": "1"},
     {"id": "flat", "name": "Flat", "propertyTypeId": "1"},
@@ -364,7 +370,8 @@ def parse_cards(fragment: str, status: str) -> list[dict[str, Any]]:
         location_match = re.search(r"(Kerala,\s*[^,]+,\s*[^ ]+-\d{6})", text)
 
         location = location_match.group(1) if location_match else ""
-        state = district = city = pin_code = ""
+        state = "Kerala"
+        district = city = pin_code = ""
         if location:
             loc_match = re.match(r"([^,]+),\s*([^,]+),\s*(.*)-(\d{6})", location)
             if loc_match:
@@ -456,6 +463,33 @@ def enrich_auction_details(session: Session, auctions: list[dict[str, Any]], lim
             auction["detailError"] = str(exc)
 
 
+def enrich_possession_statuses(
+    session: Session,
+    base_filters: dict[str, str],
+    auctions: list[dict[str, Any]],
+) -> None:
+    by_key = {
+        (auction.get("status"), auction.get("auctionId")): auction
+        for auction in auctions
+        if auction.get("status") and auction.get("auctionId")
+    }
+    statuses = sorted({str(auction.get("status")) for auction in auctions if auction.get("status")})
+
+    for status in statuses:
+        if status not in STATUSES:
+            continue
+        max_pages = MAX_CLOSED_PAGES if status == "closed" else None
+        for possession_id, possession_name in POSSESSION_TYPES.items():
+            possession_filters = {
+                **base_filters,
+                "propertyPossessionTypeId": possession_id,
+            }
+            for matched in search_all_pages(session, possession_filters, status, max_pages=max_pages):
+                auction = by_key.get((status, matched.get("auctionId")))
+                if auction:
+                    auction["possessionStatus"] = possession_name
+
+
 def search_all_pages(
     session: Session,
     filters: dict[str, str],
@@ -528,6 +562,7 @@ def main() -> None:
         auctions.extend(search_all_pages(session, base_filters, status, max_pages=max_pages))
     if ENRICH_DETAILS:
         enrich_auction_details(session, auctions, ENRICH_LIMIT)
+    enrich_possession_statuses(session, base_filters, auctions)
 
     catalog = {
         "states": [{"id": key, "name": value} for key, value in states.items()],
@@ -536,9 +571,8 @@ def main() -> None:
         "propertyTypes": [{"id": key, "name": value} for key, value in PROPERTY_TYPES.items()],
         "propertySubTypes": [],
         "possessionStatuses": [
-            {"id": "1", "name": "Physical"},
-            {"id": "2", "name": "Symbolic"},
-            {"id": "3", "name": "Other"},
+            {"id": key, "name": value} for key, value in POSSESSION_TYPES.items()
+        ] + [
             {"id": "unknown", "name": "Unknown"},
         ],
     }

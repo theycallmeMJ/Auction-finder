@@ -36,6 +36,12 @@ jobs:
           BAANKNET_SCORE: "1"
         run: python3 scripts/scrape_baanknet.py
 
+      - name: Push refreshed data to Supabase
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: python3 scripts/push_to_supabase.py
+
       - name: Commit refreshed data
         uses: stefanzweifel/git-auto-commit-action@v6
         with:
@@ -43,6 +49,9 @@ jobs:
           file_pattern: "public/data/*.json"
 
       - name: Build Cloudflare Pages output
+        env:
+          NEXT_PUBLIC_FREE_PROTECTED_ACTIONS: "10"
+          VITE_FREE_PROTECTED_ACTIONS: "10"
         run: pnpm run pages:build
 
       - name: Deploy to Cloudflare Pages

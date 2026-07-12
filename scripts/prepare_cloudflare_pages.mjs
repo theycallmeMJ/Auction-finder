@@ -27,16 +27,34 @@ const staticFiles = new Set([
   "/window.svg",
 ]);
 
+function withCacheControl(response, value) {
+  const headers = new Headers(response.headers);
+  headers.set("Cache-Control", value);
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
+  });
+}
+
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
     if (staticPrefixes.some((prefix) => url.pathname.startsWith(prefix)) || staticFiles.has(url.pathname)) {
       const response = await env.ASSETS.fetch(request);
       if (response.status !== 404) {
+        if (url.pathname.startsWith("/data/")) {
+          return withCacheControl(response, "no-cache, must-revalidate");
+        }
         return response;
       }
     }
-    return app.fetch(request, env, ctx);
+    const response = await app.fetch(request, env, ctx);
+    const contentType = response.headers.get("content-type") || "";
+    if (contentType.includes("text/html")) {
+      return withCacheControl(response, "no-store");
+    }
+    return response;
   },
 };
 `,
