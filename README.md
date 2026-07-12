@@ -4,7 +4,8 @@ A Kerala-focused BAANKNET auction finder for filtering, ranking, and inspecting
 bank-listed auction properties.
 
 The app is built as a Vinext/React frontend with static JSON fallback data,
-optional Supabase database/auth, and Cloudflare Pages deployment support.
+Supabase database/auth support, GitHub Actions data refresh, and Cloudflare
+Pages deployment.
 
 ## What Is Built
 
@@ -45,6 +46,46 @@ optional Supabase database/auth, and Cloudflare Pages deployment support.
 - `.github/workflows/cloudflare-pages.yml`: daily scrape/build/deploy workflow
 - `CLOUDFLARE_PAGES.md`: Cloudflare deployment notes
 - `supabase/README.md`: Supabase setup and query notes
+
+## Production Architecture
+
+```text
+User browser
+  -> Cloudflare Pages
+  -> Vinext/React auction finder
+  -> Supabase Auth for login
+  -> Supabase Postgres for auction data
+
+GitHub Actions schedule/manual run
+  -> BAANKNET scraper
+  -> scoring engine
+  -> Supabase data push
+  -> Cloudflare Pages deployment
+```
+
+Current production URL:
+
+```text
+https://kerala-auction-finder.pages.dev
+```
+
+GitHub repository:
+
+```text
+https://github.com/theycallmeMJ/Auction-finder
+```
+
+Cloudflare Pages project:
+
+```text
+kerala-auction-finder
+```
+
+Supabase project URL:
+
+```text
+https://xpdduahsbxveogubysti.supabase.co
+```
 
 ## Run Locally
 
@@ -120,6 +161,30 @@ SUPABASE_SERVICE_ROLE_KEY
 Only use `SUPABASE_SERVICE_ROLE_KEY` from local scripts, cron, or GitHub Actions.
 Never expose it in browser code.
 
+Production GitHub Actions secrets:
+
+```text
+CLOUDFLARE_API_TOKEN
+CLOUDFLARE_ACCOUNT_ID
+NEXT_PUBLIC_SUPABASE_URL
+SUPABASE_SERVICE_ROLE_KEY
+```
+
+The Cloudflare token is used only by GitHub Actions to deploy to Pages. It
+should have the minimum permissions needed for this project:
+
+```text
+Account -> Cloudflare Pages -> Edit
+Account -> Account Settings -> Read
+```
+
+Cloudflare Pages production build env:
+
+```text
+NEXT_PUBLIC_FREE_PROTECTED_ACTIONS=10
+VITE_FREE_PROTECTED_ACTIONS=10
+```
+
 ## Data Flow
 
 ```text
@@ -134,6 +199,58 @@ BAANKNET
 
 The frontend prefers Supabase when configured. If Supabase is missing or returns
 no rows, it falls back to the static JSON files in `public/data`.
+
+## GitHub Actions Refresh And Deploy
+
+Workflow file:
+
+```text
+.github/workflows/cloudflare-pages.yml
+```
+
+Triggers:
+
+- manual run from GitHub Actions using **Run workflow**
+- daily schedule at `01:30 UTC`, which is `07:00 IST`
+
+The workflow job is named `deploy`. It performs these steps:
+
+1. Checkout repo
+2. Setup Node 22
+3. Setup pnpm 10
+4. Install dependencies
+5. Run `python3 scripts/scrape_baanknet.py`
+6. Run `python3 scripts/push_to_supabase.py`
+7. Commit refreshed `public/data/*.json`
+8. Run `pnpm run pages:build`
+9. Deploy `dist-pages` to Cloudflare Pages
+
+The refresh step currently uses:
+
+```text
+BAANKNET_STATUSES=upcoming
+BAANKNET_ENRICH_DETAILS=1
+BAANKNET_ENRICH_LIMIT=2000
+BAANKNET_SCORE=1
+```
+
+The first full refresh can take several minutes because it fetches BAANKNET
+listing data and enriches many detail pages. If it crosses 25-30 minutes, check
+the GitHub Actions logs for the current step and consider lowering
+`BAANKNET_ENRICH_LIMIT`.
+
+Manual run path:
+
+```text
+GitHub repo -> Actions -> Refresh BAANKNET data and deploy -> Run workflow
+```
+
+Expected success signs:
+
+- GitHub Actions job ends green
+- Cloudflare Pages deploy step prints a deployment URL
+- Supabase `public.refresh_runs` gets a `success` row
+- Supabase `public.auctions` row count updates
 
 ## Scraper
 
@@ -343,13 +460,49 @@ Push scraped data to Supabase:
 python3 scripts/push_to_supabase.py
 ```
 
-## Hosting
+Important Supabase setup:
 
-Current production URL:
+- Run `supabase/schema.sql` in Supabase SQL Editor.
+- If policies already exist, create only the missing tables/indexes/policies.
+- Keep the service-role key only in `.env.local` or GitHub secrets.
+- Use the anon key only in browser/public env variables.
 
-```text
-https://kerala-auction-finder.pages.dev
+Check latest refresh runs:
+
+```sql
+select
+  started_at,
+  finished_at,
+  status,
+  source,
+  auction_count,
+  catalog_pushed,
+  error_message
+from public.refresh_runs
+order by started_at desc
+limit 20;
 ```
+
+Check auction data freshness:
+
+```sql
+select
+  count(*) as total_rows,
+  max(scraped_at) as latest_scraped_at
+from public.auctions;
+```
+
+Check latest catalog snapshot:
+
+```sql
+select
+  kind,
+  created_at
+from public.catalog_snapshots
+order by created_at desc;
+```
+
+## Hosting
 
 Cloudflare Pages build settings:
 
@@ -364,6 +517,17 @@ Compatibility flags: nodejs_compat
 
 The `pages:build` command runs Vinext build and prepares `dist-pages` with a
 Cloudflare `_worker.js` wrapper that serves static assets/data correctly.
+
+Cloudflare deployment is currently handled by GitHub Actions using
+`cloudflare/wrangler-action@v3`. Local manual deployment is still possible:
+
+```bash
+pnpm run pages:build
+pnpm run pages:deploy
+```
+
+If local `node` or `pnpm` is missing, use the bundled Codex runtime command from
+the **Run Locally** section.
 
 ## Daily Refresh Workflow
 
@@ -393,6 +557,17 @@ NEXT_PUBLIC_SUPABASE_URL
 SUPABASE_SERVICE_ROLE_KEY
 ```
 
+Troubleshooting:
+
+- If the scraper step is slow, open the `Refresh upcoming auctions` step logs.
+- If Supabase push fails, confirm `SUPABASE_SERVICE_ROLE_KEY` and
+  `NEXT_PUBLIC_SUPABASE_URL` repo secrets.
+- If Cloudflare deploy fails, confirm `CLOUDFLARE_API_TOKEN` and
+  `CLOUDFLARE_ACCOUNT_ID` repo secrets.
+- If `refresh_runs` is missing, rerun the latest `supabase/schema.sql`.
+- If the website still shows older data, check whether the workflow reached the
+  Cloudflare deployment step.
+
 ## What Is Done
 
 - Kerala auction finder UI
@@ -415,8 +590,8 @@ SUPABASE_SERVICE_ROLE_KEY
 
 ## Pending / Next
 
-- Run latest `supabase/schema.sql` in Supabase if `login_events` or `refresh_runs` tables are not created yet
-- Deploy the latest auth/login-tracking changes to Cloudflare Pages
+- Confirm first GitHub Actions refresh/deploy run finishes successfully
+- Confirm `refresh_runs` shows a success row after the first scheduled/manual run
 - Confirm Google OAuth works on both `localhost:3000` and Cloudflare production URL
 - Add a small admin-only page or script to view login events without opening Supabase SQL
 - Add saved searches/watchlists for signed-in users
