@@ -1,0 +1,53 @@
+name: Refresh BAANKNET data and deploy
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "30 1 * * *"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Refresh upcoming auctions
+        env:
+          BAANKNET_STATUSES: upcoming
+          BAANKNET_ENRICH_DETAILS: "1"
+          BAANKNET_ENRICH_LIMIT: "2000"
+          BAANKNET_SCORE: "1"
+        run: python3 scripts/scrape_baanknet.py
+
+      - name: Commit refreshed data
+        uses: stefanzweifel/git-auto-commit-action@v6
+        with:
+          commit_message: "Refresh BAANKNET auction data"
+          file_pattern: "public/data/*.json"
+
+      - name: Build Cloudflare Pages output
+        run: pnpm run pages:build
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy dist-pages --project-name kerala-auction-finder
