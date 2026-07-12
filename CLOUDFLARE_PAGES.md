@@ -17,6 +17,8 @@ Framework preset: None
 Build command: pnpm run pages:build
 Build output directory: dist-pages
 Node.js version: 22
+Compatibility date: 2026-05-15
+Compatibility flags: nodejs_compat
 ```
 
 4. Add these GitHub repository secrets if you want the included daily refresh workflow to deploy automatically:
@@ -39,6 +41,15 @@ pnpm run pages:deploy
 
 That command builds the app, prepares `dist-pages`, and deploys it to a
 Cloudflare Pages project named `kerala-auction-finder`.
+
+If the project does not exist yet, create it first:
+
+```bash
+wrangler pages project create kerala-auction-finder \
+  --production-branch main \
+  --compatibility-date 2026-05-15 \
+  --compatibility-flag nodejs_compat
+```
 
 ## Current Data Model
 
