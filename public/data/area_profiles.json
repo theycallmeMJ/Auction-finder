@@ -1,0 +1,4682 @@
+{
+  "ernakulam::angamaly": {
+    "areaKey": "ernakulam::angamaly",
+    "villageOrCity": "Angamaly",
+    "district": "Ernakulam",
+    "pinCode": "683572",
+    "areaScore": 80,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 84,
+      "localityAdjustment": -4,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kozhikode::eravattur": {
+    "areaKey": "kozhikode::eravattur",
+    "villageOrCity": "Eravattur",
+    "district": "Kozhikode",
+    "pinCode": "673525",
+    "areaScore": 81,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 80,
+      "localityAdjustment": 1,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thiruvananthapuram::neyyattinkara": {
+    "areaKey": "thiruvananthapuram::neyyattinkara",
+    "villageOrCity": "Neyyattinkara",
+    "district": "Thiruvananthapuram",
+    "pinCode": "695122",
+    "areaScore": 87,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 82,
+      "localityAdjustment": 5,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "pathanamthitta::pathanamthitta": {
+    "areaKey": "pathanamthitta::pathanamthitta",
+    "villageOrCity": "Pathanamthitta",
+    "district": "Pathanamthitta",
+    "pinCode": "689647",
+    "areaScore": 69,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 68,
+      "localityAdjustment": 1,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kollam::kollam": {
+    "areaKey": "kollam::kollam",
+    "villageOrCity": "Kollam",
+    "district": "Kollam",
+    "pinCode": "691005",
+    "areaScore": 73,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 72,
+      "localityAdjustment": 1,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kollam::elampalloor": {
+    "areaKey": "kollam::elampalloor",
+    "villageOrCity": "Elampalloor",
+    "district": "Kollam",
+    "pinCode": "691501",
+    "areaScore": 70,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 72,
+      "localityAdjustment": -2,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "alappuzha::bharanikkavu": {
+    "areaKey": "alappuzha::bharanikkavu",
+    "villageOrCity": "Bharanikkavu",
+    "district": "Alappuzha",
+    "pinCode": "690503",
+    "areaScore": 69,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 70,
+      "localityAdjustment": -1,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "alappuzha::kattanam": {
+    "areaKey": "alappuzha::kattanam",
+    "villageOrCity": "Kattanam",
+    "district": "Alappuzha",
+    "pinCode": "690107",
+    "areaScore": 68,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 70,
+      "localityAdjustment": -2,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kollam::punalur": {
+    "areaKey": "kollam::punalur",
+    "villageOrCity": "Punalur",
+    "district": "Kollam",
+    "pinCode": "691305",
+    "areaScore": 71,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 72,
+      "localityAdjustment": -1,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kozhikode::kozhikode": {
+    "areaKey": "kozhikode::kozhikode",
+    "villageOrCity": "Kozhikode",
+    "district": "Kozhikode",
+    "pinCode": "673003",
+    "areaScore": 81,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 80,
+      "localityAdjustment": 1,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kozhikode::edacheri": {
+    "areaKey": "kozhikode::edacheri",
+    "villageOrCity": "Edacheri",
+    "district": "Kozhikode",
+    "pinCode": "673501",
+    "areaScore": 79,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 80,
+      "localityAdjustment": -1,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kannur::azhikode": {
+    "areaKey": "kannur::azhikode",
+    "villageOrCity": "Azhikode",
+    "district": "Kannur",
+    "pinCode": "670009",
+    "areaScore": 69,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 73,
+      "localityAdjustment": -4,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "ernakulam::kalady": {
+    "areaKey": "ernakulam::kalady",
+    "villageOrCity": "Kalady",
+    "district": "Ernakulam",
+    "pinCode": "683574",
+    "areaScore": 87,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 84,
+      "localityAdjustment": 3,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thrissur::thrissur": {
+    "areaKey": "thrissur::thrissur",
+    "villageOrCity": "Thrissur",
+    "district": "Thrissur",
+    "pinCode": "680001",
+    "areaScore": 82,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 78,
+      "localityAdjustment": 4,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kottayam::vaikom": {
+    "areaKey": "kottayam::vaikom",
+    "villageOrCity": "Vaikom",
+    "district": "Kottayam",
+    "pinCode": "686141",
+    "areaScore": 78,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 74,
+      "localityAdjustment": 4,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thrissur::chavakkad": {
+    "areaKey": "thrissur::chavakkad",
+    "villageOrCity": "Chavakkad",
+    "district": "Thrissur",
+    "pinCode": "680506",
+    "areaScore": 78,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 78,
+      "localityAdjustment": 0,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "ernakulam::koothattukulam": {
+    "areaKey": "ernakulam::koothattukulam",
+    "villageOrCity": "Koothattukulam",
+    "district": "Ernakulam",
+    "pinCode": "686662",
+    "areaScore": 86,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 84,
+      "localityAdjustment": 2,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "wayanad::mananthavady": {
+    "areaKey": "wayanad::mananthavady",
+    "villageOrCity": "Mananthavady",
+    "district": "Wayanad",
+    "pinCode": "670645",
+    "areaScore": 67,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 62,
+      "localityAdjustment": 5,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kollam::adichanalloor": {
+    "areaKey": "kollam::adichanalloor",
+    "villageOrCity": "Adichanalloor",
+    "district": "Kollam",
+    "pinCode": "691576",
+    "areaScore": 74,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 72,
+      "localityAdjustment": 2,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kozhikode::chekkiad": {
+    "areaKey": "kozhikode::chekkiad",
+    "villageOrCity": "Chekkiad",
+    "district": "Kozhikode",
+    "pinCode": "673504",
+    "areaScore": 81,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 80,
+      "localityAdjustment": 1,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "malappuram::malappuram": {
+    "areaKey": "malappuram::malappuram",
+    "villageOrCity": "Malappuram",
+    "district": "Malappuram",
+    "pinCode": "676505",
+    "areaScore": 67,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 69,
+      "localityAdjustment": -2,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kottayam::ettumanoor": {
+    "areaKey": "kottayam::ettumanoor",
+    "villageOrCity": "Ettumanoor",
+    "district": "Kottayam",
+    "pinCode": "686568",
+    "areaScore": 77,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 74,
+      "localityAdjustment": 3,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "palakkad::palakkad": {
+    "areaKey": "palakkad::palakkad",
+    "villageOrCity": "Palakkad",
+    "district": "Palakkad",
+    "pinCode": "678007",
+    "areaScore": 66,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 70,
+      "localityAdjustment": -4,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "palakkad::kongad": {
+    "areaKey": "palakkad::kongad",
+    "villageOrCity": "Kongad",
+    "district": "Palakkad",
+    "pinCode": "678631",
+    "areaScore": 66,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 70,
+      "localityAdjustment": -4,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kozhikode::koduvally": {
+    "areaKey": "kozhikode::koduvally",
+    "villageOrCity": "Koduvally",
+    "district": "Kozhikode",
+    "pinCode": "673571",
+    "areaScore": 83,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 80,
+      "localityAdjustment": 3,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kozhikode::mavoor": {
+    "areaKey": "kozhikode::mavoor",
+    "villageOrCity": "Mavoor",
+    "district": "Kozhikode",
+    "pinCode": "673661",
+    "areaScore": 82,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 80,
+      "localityAdjustment": 2,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kozhikode::vadakara": {
+    "areaKey": "kozhikode::vadakara",
+    "villageOrCity": "Vadakara",
+    "district": "Kozhikode",
+    "pinCode": "673101",
+    "areaScore": 79,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 80,
+      "localityAdjustment": -1,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "malappuram::nilambur": {
+    "areaKey": "malappuram::nilambur",
+    "villageOrCity": "Nilambur",
+    "district": "Malappuram",
+    "pinCode": "679328",
+    "areaScore": 66,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 69,
+      "localityAdjustment": -3,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "malappuram::manjeri": {
+    "areaKey": "malappuram::manjeri",
+    "villageOrCity": "Manjeri",
+    "district": "Malappuram",
+    "pinCode": "676123",
+    "areaScore": 72,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 69,
+      "localityAdjustment": 3,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "malappuram::kannamangalam": {
+    "areaKey": "malappuram::kannamangalam",
+    "villageOrCity": "Kannamangalam",
+    "district": "Malappuram",
+    "pinCode": "673638",
+    "areaScore": 71,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 69,
+      "localityAdjustment": 2,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "wayanad::kalpetta": {
+    "areaKey": "wayanad::kalpetta",
+    "villageOrCity": "Kalpetta",
+    "district": "Wayanad",
+    "pinCode": "673121",
+    "areaScore": 59,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 62,
+      "localityAdjustment": -3,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kannur::kurumathur": {
+    "areaKey": "kannur::kurumathur",
+    "villageOrCity": "Kurumathur",
+    "district": "Kannur",
+    "pinCode": "670141",
+    "areaScore": 71,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 73,
+      "localityAdjustment": -2,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kannur::kannur": {
+    "areaKey": "kannur::kannur",
+    "villageOrCity": "Kannur",
+    "district": "Kannur",
+    "pinCode": "670001",
+    "areaScore": 70,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 73,
+      "localityAdjustment": -3,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kasargod::kasargod": {
+    "areaKey": "kasargod::kasargod",
+    "villageOrCity": "Kasargod",
+    "district": "Kasargod",
+    "pinCode": "671121",
+    "areaScore": 58,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 62,
+      "localityAdjustment": -4,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kannur::kuttiattoor": {
+    "areaKey": "kannur::kuttiattoor",
+    "villageOrCity": "Kuttiattoor",
+    "district": "Kannur",
+    "pinCode": "670631",
+    "areaScore": 78,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 73,
+      "localityAdjustment": 5,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kasargod::kanhangad": {
+    "areaKey": "kasargod::kanhangad",
+    "villageOrCity": "Kanhangad",
+    "district": "Kasargod",
+    "pinCode": "671314",
+    "areaScore": 67,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 62,
+      "localityAdjustment": 5,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kannur::cheruthazham": {
+    "areaKey": "kannur::cheruthazham",
+    "villageOrCity": "Cheruthazham",
+    "district": "Kannur",
+    "pinCode": "670307",
+    "areaScore": 71,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 73,
+      "localityAdjustment": -2,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kannur::kadannappalli": {
+    "areaKey": "kannur::kadannappalli",
+    "villageOrCity": "Kadannappalli",
+    "district": "Kannur",
+    "pinCode": "670306",
+    "areaScore": 68,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 73,
+      "localityAdjustment": -5,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thrissur::pallippuram": {
+    "areaKey": "thrissur::pallippuram",
+    "villageOrCity": "Pallippuram",
+    "district": "Thrissur",
+    "pinCode": "680732",
+    "areaScore": 73,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 78,
+      "localityAdjustment": -5,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thrissur::mullassery": {
+    "areaKey": "thrissur::mullassery",
+    "villageOrCity": "Mullassery",
+    "district": "Thrissur",
+    "pinCode": "680509",
+    "areaScore": 81,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 78,
+      "localityAdjustment": 3,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "malappuram::anakkayam": {
+    "areaKey": "malappuram::anakkayam",
+    "villageOrCity": "Anakkayam",
+    "district": "Malappuram",
+    "pinCode": "676122",
+    "areaScore": 65,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 69,
+      "localityAdjustment": -4,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "malappuram::perinthalmanna": {
+    "areaKey": "malappuram::perinthalmanna",
+    "villageOrCity": "Perinthalmanna",
+    "district": "Malappuram",
+    "pinCode": "679340",
+    "areaScore": 65,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 69,
+      "localityAdjustment": -4,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "malappuram::nannambra": {
+    "areaKey": "malappuram::nannambra",
+    "villageOrCity": "Nannambra",
+    "district": "Malappuram",
+    "pinCode": "676302",
+    "areaScore": 69,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 69,
+      "localityAdjustment": 0,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "malappuram::koottilangadi": {
+    "areaKey": "malappuram::koottilangadi",
+    "villageOrCity": "Koottilangadi",
+    "district": "Malappuram",
+    "pinCode": "679324",
+    "areaScore": 65,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 69,
+      "localityAdjustment": -4,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thrissur::nenmenikkara": {
+    "areaKey": "thrissur::nenmenikkara",
+    "villageOrCity": "Nenmenikkara",
+    "district": "Thrissur",
+    "pinCode": "680306",
+    "areaScore": 80,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 78,
+      "localityAdjustment": 2,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kasargod::chengala": {
+    "areaKey": "kasargod::chengala",
+    "villageOrCity": "Chengala",
+    "district": "Kasargod",
+    "pinCode": "671541",
+    "areaScore": 61,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 62,
+      "localityAdjustment": -1,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kozhikode::eramala": {
+    "areaKey": "kozhikode::eramala",
+    "villageOrCity": "Eramala",
+    "district": "Kozhikode",
+    "pinCode": "673104",
+    "areaScore": 76,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 80,
+      "localityAdjustment": -4,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thrissur::padiyur": {
+    "areaKey": "thrissur::padiyur",
+    "villageOrCity": "Padiyur",
+    "district": "Thrissur",
+    "pinCode": "680685",
+    "areaScore": 80,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 78,
+      "localityAdjustment": 2,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thrissur::adat": {
+    "areaKey": "thrissur::adat",
+    "villageOrCity": "Adat",
+    "district": "Thrissur",
+    "pinCode": "680620",
+    "areaScore": 75,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 78,
+      "localityAdjustment": -3,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "malappuram::irimbiliyam": {
+    "areaKey": "malappuram::irimbiliyam",
+    "villageOrCity": "Irimbiliyam",
+    "district": "Malappuram",
+    "pinCode": "676552",
+    "areaScore": 72,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 69,
+      "localityAdjustment": 3,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thrissur::chalakudy": {
+    "areaKey": "thrissur::chalakudy",
+    "villageOrCity": "Chalakudy",
+    "district": "Thrissur",
+    "pinCode": "680307",
+    "areaScore": 73,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 78,
+      "localityAdjustment": -5,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "malappuram::melattur": {
+    "areaKey": "malappuram::melattur",
+    "villageOrCity": "MELATTUR",
+    "district": "Malappuram",
+    "pinCode": "679326",
+    "areaScore": 71,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 69,
+      "localityAdjustment": 2,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "malappuram::kizhuparamba": {
+    "areaKey": "malappuram::kizhuparamba",
+    "villageOrCity": "Kizhuparamba",
+    "district": "Malappuram",
+    "pinCode": "673639",
+    "areaScore": 67,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 69,
+      "localityAdjustment": -2,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "malappuram::cheriyamundam": {
+    "areaKey": "malappuram::cheriyamundam",
+    "villageOrCity": "Cheriyamundam",
+    "district": "Malappuram",
+    "pinCode": "676551",
+    "areaScore": 68,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 69,
+      "localityAdjustment": -1,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "malappuram::alankod": {
+    "areaKey": "malappuram::alankod",
+    "villageOrCity": "Alankod",
+    "district": "Malappuram",
+    "pinCode": "679574",
+    "areaScore": 66,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 69,
+      "localityAdjustment": -3,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "ernakulam::chowwara": {
+    "areaKey": "ernakulam::chowwara",
+    "villageOrCity": "Chowwara",
+    "district": "Ernakulam",
+    "pinCode": "683105",
+    "areaScore": 87,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 84,
+      "localityAdjustment": 3,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "ernakulam::eramalloor": {
+    "areaKey": "ernakulam::eramalloor",
+    "villageOrCity": "Eramalloor",
+    "district": "Ernakulam",
+    "pinCode": "686691",
+    "areaScore": 81,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 84,
+      "localityAdjustment": -3,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kasargod::vallikadavu": {
+    "areaKey": "kasargod::vallikadavu",
+    "villageOrCity": "VALLIKADAVU",
+    "district": "Kasargod",
+    "pinCode": "671533",
+    "areaScore": 62,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 62,
+      "localityAdjustment": 0,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kozhikode::ayancheri": {
+    "areaKey": "kozhikode::ayancheri",
+    "villageOrCity": "Ayancheri",
+    "district": "Kozhikode",
+    "pinCode": "673541",
+    "areaScore": 78,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 80,
+      "localityAdjustment": -2,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "palakkad::ottappalam": {
+    "areaKey": "palakkad::ottappalam",
+    "villageOrCity": "Ottappalam",
+    "district": "Palakkad",
+    "pinCode": "679102",
+    "areaScore": 70,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 70,
+      "localityAdjustment": 0,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "unknown::unknown": {
+    "areaKey": "unknown::unknown",
+    "villageOrCity": "Unknown",
+    "district": "Unknown",
+    "pinCode": "",
+    "areaScore": 62,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 58,
+      "localityAdjustment": 4,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kannur::eranholi": {
+    "areaKey": "kannur::eranholi",
+    "villageOrCity": "Eranholi",
+    "district": "Kannur",
+    "pinCode": "670641",
+    "areaScore": 72,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 73,
+      "localityAdjustment": -1,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "palakkad::shoranur": {
+    "areaKey": "palakkad::shoranur",
+    "villageOrCity": "Shoranur",
+    "district": "Palakkad",
+    "pinCode": "679505",
+    "areaScore": 73,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 70,
+      "localityAdjustment": 3,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kozhikode::chelannur": {
+    "areaKey": "kozhikode::chelannur",
+    "villageOrCity": "Chelannur",
+    "district": "Kozhikode",
+    "pinCode": "673611",
+    "areaScore": 75,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 80,
+      "localityAdjustment": -5,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kozhikode::keezhariyur": {
+    "areaKey": "kozhikode::keezhariyur",
+    "villageOrCity": "Keezhariyur",
+    "district": "Kozhikode",
+    "pinCode": "673620",
+    "areaScore": 79,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 80,
+      "localityAdjustment": -1,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kozhikode::mukkam": {
+    "areaKey": "kozhikode::mukkam",
+    "villageOrCity": "Mukkam",
+    "district": "Kozhikode",
+    "pinCode": "673602",
+    "areaScore": 80,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 80,
+      "localityAdjustment": 0,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kasargod::mangalpady": {
+    "areaKey": "kasargod::mangalpady",
+    "villageOrCity": "Mangalpady",
+    "district": "Kasargod",
+    "pinCode": "671322",
+    "areaScore": 59,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 62,
+      "localityAdjustment": -3,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "palakkad::mannarkad": {
+    "areaKey": "palakkad::mannarkad",
+    "villageOrCity": "Mannarkad",
+    "district": "Palakkad",
+    "pinCode": "678593",
+    "areaScore": 71,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 70,
+      "localityAdjustment": 1,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kozhikode::iringal": {
+    "areaKey": "kozhikode::iringal",
+    "villageOrCity": "Iringal",
+    "district": "Kozhikode",
+    "pinCode": "673521",
+    "areaScore": 79,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 80,
+      "localityAdjustment": -1,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "malappuram::kodur": {
+    "areaKey": "malappuram::kodur",
+    "villageOrCity": "Kodur",
+    "district": "Malappuram",
+    "pinCode": "676503",
+    "areaScore": 74,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 69,
+      "localityAdjustment": 5,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "wayanad::vythiri": {
+    "areaKey": "wayanad::vythiri",
+    "villageOrCity": "Vythiri",
+    "district": "Wayanad",
+    "pinCode": "673576",
+    "areaScore": 62,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 62,
+      "localityAdjustment": 0,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kannur::irikkur": {
+    "areaKey": "kannur::irikkur",
+    "villageOrCity": "Irikkur",
+    "district": "Kannur",
+    "pinCode": "670593",
+    "areaScore": 72,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 73,
+      "localityAdjustment": -1,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kozhikode::atholi": {
+    "areaKey": "kozhikode::atholi",
+    "villageOrCity": "Atholi",
+    "district": "Kozhikode",
+    "pinCode": "673612",
+    "areaScore": 76,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 80,
+      "localityAdjustment": -4,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kozhikode::feroke": {
+    "areaKey": "kozhikode::feroke",
+    "villageOrCity": "Feroke",
+    "district": "Kozhikode",
+    "pinCode": "673632",
+    "areaScore": 78,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 80,
+      "localityAdjustment": -2,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kozhikode::kunnummal": {
+    "areaKey": "kozhikode::kunnummal",
+    "villageOrCity": "Kunnummal",
+    "district": "Kozhikode",
+    "pinCode": "673508",
+    "areaScore": 82,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 80,
+      "localityAdjustment": 2,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thiruvananthapuram::karakulam": {
+    "areaKey": "thiruvananthapuram::karakulam",
+    "villageOrCity": "Karakulam",
+    "district": "Thiruvananthapuram",
+    "pinCode": "695541",
+    "areaScore": 87,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 82,
+      "localityAdjustment": 5,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "alappuzha::chengannur": {
+    "areaKey": "alappuzha::chengannur",
+    "villageOrCity": "Chengannur",
+    "district": "Alappuzha",
+    "pinCode": "689121",
+    "areaScore": 73,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 70,
+      "localityAdjustment": 3,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "alappuzha::alappuzha": {
+    "areaKey": "alappuzha::alappuzha",
+    "villageOrCity": "Alappuzha",
+    "district": "Alappuzha",
+    "pinCode": "688501",
+    "areaScore": 72,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 70,
+      "localityAdjustment": 2,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "pathanamthitta::adoor": {
+    "areaKey": "pathanamthitta::adoor",
+    "villageOrCity": "Adoor",
+    "district": "Pathanamthitta",
+    "pinCode": "689501",
+    "areaScore": 72,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 68,
+      "localityAdjustment": 4,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thiruvananthapuram::malayinkeezhu": {
+    "areaKey": "thiruvananthapuram::malayinkeezhu",
+    "villageOrCity": "Malayinkeezhu",
+    "district": "Thiruvananthapuram",
+    "pinCode": "695501",
+    "areaScore": 86,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 82,
+      "localityAdjustment": 4,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thiruvananthapuram::thiruvananthapuram": {
+    "areaKey": "thiruvananthapuram::thiruvananthapuram",
+    "villageOrCity": "Thiruvananthapuram",
+    "district": "Thiruvananthapuram",
+    "pinCode": "695005",
+    "areaScore": 80,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 82,
+      "localityAdjustment": -2,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kollam::adinad": {
+    "areaKey": "kollam::adinad",
+    "villageOrCity": "Adinad",
+    "district": "Kollam",
+    "pinCode": "690518",
+    "areaScore": 77,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 72,
+      "localityAdjustment": 5,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thiruvananthapuram::nedumangad": {
+    "areaKey": "thiruvananthapuram::nedumangad",
+    "villageOrCity": "Nedumangad",
+    "district": "Thiruvananthapuram",
+    "pinCode": "695561",
+    "areaScore": 81,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 82,
+      "localityAdjustment": -1,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "pathanamthitta::kozhenchery": {
+    "areaKey": "pathanamthitta::kozhenchery",
+    "villageOrCity": "Kozhenchery",
+    "district": "Pathanamthitta",
+    "pinCode": "689611",
+    "areaScore": 72,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 68,
+      "localityAdjustment": 4,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kollam::puthoor": {
+    "areaKey": "kollam::puthoor",
+    "villageOrCity": "PUTHOOR",
+    "district": "Kollam",
+    "pinCode": "691507",
+    "areaScore": 76,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 72,
+      "localityAdjustment": 4,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kollam::kottarakkara": {
+    "areaKey": "kollam::kottarakkara",
+    "villageOrCity": "Kottarakkara",
+    "district": "Kollam",
+    "pinCode": "691531",
+    "areaScore": 77,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 72,
+      "localityAdjustment": 5,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kasargod::bovikanam": {
+    "areaKey": "kasargod::bovikanam",
+    "villageOrCity": "BOVIKANAM",
+    "district": "Kasargod",
+    "pinCode": "671542",
+    "areaScore": 57,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 62,
+      "localityAdjustment": -5,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kannur::kandamkunnu": {
+    "areaKey": "kannur::kandamkunnu",
+    "villageOrCity": "Kandamkunnu",
+    "district": "Kannur",
+    "pinCode": "670702",
+    "areaScore": 74,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 73,
+      "localityAdjustment": 1,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kottayam::kottayam": {
+    "areaKey": "kottayam::kottayam",
+    "villageOrCity": "Kottayam",
+    "district": "Kottayam",
+    "pinCode": "686010",
+    "areaScore": 75,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 74,
+      "localityAdjustment": 1,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "idukki::kattappana": {
+    "areaKey": "idukki::kattappana",
+    "villageOrCity": "Kattappana",
+    "district": "Idukki",
+    "pinCode": "685551",
+    "areaScore": 68,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 64,
+      "localityAdjustment": 4,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kottayam::pampady": {
+    "areaKey": "kottayam::pampady",
+    "villageOrCity": "PAMPADY",
+    "district": "Kottayam",
+    "pinCode": "686502",
+    "areaScore": 77,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 74,
+      "localityAdjustment": 3,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "idukki::thodupuzha": {
+    "areaKey": "idukki::thodupuzha",
+    "villageOrCity": "Thodupuzha",
+    "district": "Idukki",
+    "pinCode": "685608",
+    "areaScore": 60,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 64,
+      "localityAdjustment": -4,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thiruvananthapuram::vellanad": {
+    "areaKey": "thiruvananthapuram::vellanad",
+    "villageOrCity": "VELLANAD",
+    "district": "Thiruvananthapuram",
+    "pinCode": "695543",
+    "areaScore": 81,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 82,
+      "localityAdjustment": -1,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "ernakulam::kochi": {
+    "areaKey": "ernakulam::kochi",
+    "villageOrCity": "Kochi",
+    "district": "Ernakulam",
+    "pinCode": "682019",
+    "areaScore": 88,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 84,
+      "localityAdjustment": 4,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "ernakulam::perumbavoor": {
+    "areaKey": "ernakulam::perumbavoor",
+    "villageOrCity": "Perumbavoor",
+    "district": "Ernakulam",
+    "pinCode": "683556",
+    "areaScore": 81,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 84,
+      "localityAdjustment": -3,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "ernakulam::piravam": {
+    "areaKey": "ernakulam::piravam",
+    "villageOrCity": "Piravam",
+    "district": "Ernakulam",
+    "pinCode": "686664",
+    "areaScore": 86,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 84,
+      "localityAdjustment": 2,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "ernakulam::muvattupuzha": {
+    "areaKey": "ernakulam::muvattupuzha",
+    "villageOrCity": "Muvattupuzha",
+    "district": "Ernakulam",
+    "pinCode": "686670",
+    "areaScore": 84,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 84,
+      "localityAdjustment": 0,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thrissur::anthicad": {
+    "areaKey": "thrissur::anthicad",
+    "villageOrCity": "Anthicad",
+    "district": "Thrissur",
+    "pinCode": "680641",
+    "areaScore": 73,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 78,
+      "localityAdjustment": -5,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "palakkad::ongallur": {
+    "areaKey": "palakkad::ongallur",
+    "villageOrCity": "Ongallur",
+    "district": "Palakkad",
+    "pinCode": "679122",
+    "areaScore": 70,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 70,
+      "localityAdjustment": 0,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kollam::nedumpana": {
+    "areaKey": "kollam::nedumpana",
+    "villageOrCity": "Nedumpana",
+    "district": "Kollam",
+    "pinCode": "691509",
+    "areaScore": 76,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 72,
+      "localityAdjustment": 4,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thrissur::kainoor": {
+    "areaKey": "thrissur::kainoor",
+    "villageOrCity": "Kainoor",
+    "district": "Thrissur",
+    "pinCode": "680751",
+    "areaScore": 77,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 78,
+      "localityAdjustment": -1,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kannur::kolavelloor": {
+    "areaKey": "kannur::kolavelloor",
+    "villageOrCity": "Kolavelloor",
+    "district": "Kannur",
+    "pinCode": "670692",
+    "areaScore": 75,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 73,
+      "localityAdjustment": 2,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kollam::kottarakakra": {
+    "areaKey": "kollam::kottarakakra",
+    "villageOrCity": "KOTTARAKAKRA",
+    "district": "Kollam",
+    "pinCode": "690540",
+    "areaScore": 71,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 72,
+      "localityAdjustment": -1,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kannur::kadirur": {
+    "areaKey": "kannur::kadirur",
+    "villageOrCity": "Kadirur",
+    "district": "Kannur",
+    "pinCode": "670691",
+    "areaScore": 78,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 73,
+      "localityAdjustment": 5,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kannur::chockli": {
+    "areaKey": "kannur::chockli",
+    "villageOrCity": "Chockli",
+    "district": "Kannur",
+    "pinCode": "670671",
+    "areaScore": 76,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 73,
+      "localityAdjustment": 3,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kannur::cheleri": {
+    "areaKey": "kannur::cheleri",
+    "villageOrCity": "Cheleri",
+    "district": "Kannur",
+    "pinCode": "670591",
+    "areaScore": 76,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 73,
+      "localityAdjustment": 3,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thrissur::vadanappally": {
+    "areaKey": "thrissur::vadanappally",
+    "villageOrCity": "Vadanappally",
+    "district": "Thrissur",
+    "pinCode": "680616",
+    "areaScore": 77,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 78,
+      "localityAdjustment": -1,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "ernakulam::kureekkad": {
+    "areaKey": "ernakulam::kureekkad",
+    "villageOrCity": "Kureekkad",
+    "district": "Ernakulam",
+    "pinCode": "682301",
+    "areaScore": 87,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 84,
+      "localityAdjustment": 3,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thrissur::kodungallur": {
+    "areaKey": "thrissur::kodungallur",
+    "villageOrCity": "Kodungallur",
+    "district": "Thrissur",
+    "pinCode": "680664",
+    "areaScore": 82,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 78,
+      "localityAdjustment": 4,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "ernakulam::puthencruz": {
+    "areaKey": "ernakulam::puthencruz",
+    "villageOrCity": "Puthencruz",
+    "district": "Ernakulam",
+    "pinCode": "682308",
+    "areaScore": 87,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 84,
+      "localityAdjustment": 3,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kannur::eruvatti": {
+    "areaKey": "kannur::eruvatti",
+    "villageOrCity": "Eruvatti",
+    "district": "Kannur",
+    "pinCode": "670643",
+    "areaScore": 74,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 73,
+      "localityAdjustment": 1,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thiruvananthapuram::athiyannur": {
+    "areaKey": "thiruvananthapuram::athiyannur",
+    "villageOrCity": "Athiyannur",
+    "district": "Thiruvananthapuram",
+    "pinCode": "695123",
+    "areaScore": 80,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 82,
+      "localityAdjustment": -2,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kannur::ancharakandy": {
+    "areaKey": "kannur::ancharakandy",
+    "villageOrCity": "Ancharakandy",
+    "district": "Kannur",
+    "pinCode": "670612",
+    "areaScore": 76,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 73,
+      "localityAdjustment": 3,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kottayam::pala": {
+    "areaKey": "kottayam::pala",
+    "villageOrCity": "Pala",
+    "district": "Kottayam",
+    "pinCode": "686575",
+    "areaScore": 73,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 74,
+      "localityAdjustment": -1,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "ernakulam::puthuvype": {
+    "areaKey": "ernakulam::puthuvype",
+    "villageOrCity": "Puthuvype",
+    "district": "Ernakulam",
+    "pinCode": "682508",
+    "areaScore": 81,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 84,
+      "localityAdjustment": -3,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kannur::ezhome": {
+    "areaKey": "kannur::ezhome",
+    "villageOrCity": "Ezhome",
+    "district": "Kannur",
+    "pinCode": "670502",
+    "areaScore": 70,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 73,
+      "localityAdjustment": -3,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "palakkad::koduvayur": {
+    "areaKey": "palakkad::koduvayur",
+    "villageOrCity": "Koduvayur",
+    "district": "Palakkad",
+    "pinCode": "678671",
+    "areaScore": 68,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 70,
+      "localityAdjustment": -2,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kottayam::karukachal": {
+    "areaKey": "kottayam::karukachal",
+    "villageOrCity": "KARUKACHAL",
+    "district": "Kottayam",
+    "pinCode": "686540",
+    "areaScore": 69,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 74,
+      "localityAdjustment": -5,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "ernakulam::amballoor": {
+    "areaKey": "ernakulam::amballoor",
+    "villageOrCity": "Amballoor",
+    "district": "Ernakulam",
+    "pinCode": "682317",
+    "areaScore": 84,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 84,
+      "localityAdjustment": 0,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "ernakulam::kalamassery": {
+    "areaKey": "ernakulam::kalamassery",
+    "villageOrCity": "Kalamassery",
+    "district": "Ernakulam",
+    "pinCode": "682024",
+    "areaScore": 82,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 84,
+      "localityAdjustment": -2,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thrissur::guruvayur": {
+    "areaKey": "thrissur::guruvayur",
+    "villageOrCity": "Guruvayur",
+    "district": "Thrissur",
+    "pinCode": "680101",
+    "areaScore": 76,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 78,
+      "localityAdjustment": -2,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thrissur::madayikonam": {
+    "areaKey": "thrissur::madayikonam",
+    "villageOrCity": "Madayikonam",
+    "district": "Thrissur",
+    "pinCode": "680712",
+    "areaScore": 78,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 78,
+      "localityAdjustment": 0,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thrissur::orumanayur": {
+    "areaKey": "thrissur::orumanayur",
+    "villageOrCity": "Orumanayur",
+    "district": "Thrissur",
+    "pinCode": "680512",
+    "areaScore": 76,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 78,
+      "localityAdjustment": -2,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thiruvananthapuram::varkala": {
+    "areaKey": "thiruvananthapuram::varkala",
+    "villageOrCity": "Varkala",
+    "district": "Thiruvananthapuram",
+    "pinCode": "695141",
+    "areaScore": 77,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 82,
+      "localityAdjustment": -5,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thiruvananthapuram::parasuvaikkal": {
+    "areaKey": "thiruvananthapuram::parasuvaikkal",
+    "villageOrCity": "Parasuvaikkal",
+    "district": "Thiruvananthapuram",
+    "pinCode": "695508",
+    "areaScore": 78,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 82,
+      "localityAdjustment": -4,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kollam::panayam": {
+    "areaKey": "kollam::panayam",
+    "villageOrCity": "Panayam",
+    "district": "Kollam",
+    "pinCode": "691601",
+    "areaScore": 72,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 72,
+      "localityAdjustment": 0,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "wayanad::pozhuthana": {
+    "areaKey": "wayanad::pozhuthana",
+    "villageOrCity": "POZHUTHANA",
+    "district": "Wayanad",
+    "pinCode": "673575",
+    "areaScore": 65,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 62,
+      "localityAdjustment": 3,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kozhikode::nanmanda": {
+    "areaKey": "kozhikode::nanmanda",
+    "villageOrCity": "Nanmanda",
+    "district": "Kozhikode",
+    "pinCode": "673585",
+    "areaScore": 77,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 80,
+      "localityAdjustment": -3,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kannur::kelakam": {
+    "areaKey": "kannur::kelakam",
+    "villageOrCity": "KELAKAM",
+    "district": "Kannur",
+    "pinCode": "670674",
+    "areaScore": 76,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 73,
+      "localityAdjustment": 3,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "palakkad::alathur": {
+    "areaKey": "palakkad::alathur",
+    "villageOrCity": "Alathur",
+    "district": "Palakkad",
+    "pinCode": "678543",
+    "areaScore": 74,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 70,
+      "localityAdjustment": 4,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "malappuram::chelambra": {
+    "areaKey": "malappuram::chelambra",
+    "villageOrCity": "Chelambra",
+    "district": "Malappuram",
+    "pinCode": "673634",
+    "areaScore": 65,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 69,
+      "localityAdjustment": -4,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kannur::anthoor": {
+    "areaKey": "kannur::anthoor",
+    "villageOrCity": "Anthoor",
+    "district": "Kannur",
+    "pinCode": "670331",
+    "areaScore": 72,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 73,
+      "localityAdjustment": -1,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kannur::pariyaram": {
+    "areaKey": "kannur::pariyaram",
+    "villageOrCity": "Pariyaram",
+    "district": "Kannur",
+    "pinCode": "670581",
+    "areaScore": 74,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 73,
+      "localityAdjustment": 1,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kasargod::koipady": {
+    "areaKey": "kasargod::koipady",
+    "villageOrCity": "Koipady",
+    "district": "Kasargod",
+    "pinCode": "671321",
+    "areaScore": 67,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 62,
+      "localityAdjustment": 5,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kozhikode::koyilandi": {
+    "areaKey": "kozhikode::koyilandi",
+    "villageOrCity": "Koyilandi",
+    "district": "Kozhikode",
+    "pinCode": "673305",
+    "areaScore": 82,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 80,
+      "localityAdjustment": 2,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kollam::vadakkumthala": {
+    "areaKey": "kollam::vadakkumthala",
+    "villageOrCity": "Vadakkumthala",
+    "district": "Kollam",
+    "pinCode": "690524",
+    "areaScore": 71,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 72,
+      "localityAdjustment": -1,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "ernakulam::alangad": {
+    "areaKey": "ernakulam::alangad",
+    "villageOrCity": "Alangad",
+    "district": "Ernakulam",
+    "pinCode": "683517",
+    "areaScore": 80,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 84,
+      "localityAdjustment": -4,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thiruvananthapuram::attingal": {
+    "areaKey": "thiruvananthapuram::attingal",
+    "villageOrCity": "Attingal",
+    "district": "Thiruvananthapuram",
+    "pinCode": "695101",
+    "areaScore": 80,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 82,
+      "localityAdjustment": -2,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thrissur::kaniyarkode": {
+    "areaKey": "thrissur::kaniyarkode",
+    "villageOrCity": "Kaniyarkode",
+    "district": "Thrissur",
+    "pinCode": "680587",
+    "areaScore": 74,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 78,
+      "localityAdjustment": -4,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thrissur::oorakam": {
+    "areaKey": "thrissur::oorakam",
+    "villageOrCity": "Oorakam",
+    "district": "Thrissur",
+    "pinCode": "680562",
+    "areaScore": 79,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 78,
+      "localityAdjustment": 1,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "ernakulam::kothamangalam": {
+    "areaKey": "ernakulam::kothamangalam",
+    "villageOrCity": "Kothamangalam",
+    "district": "Ernakulam",
+    "pinCode": "686666",
+    "areaScore": 82,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 84,
+      "localityAdjustment": -2,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "malappuram::ponnani": {
+    "areaKey": "malappuram::ponnani",
+    "villageOrCity": "Ponnani",
+    "district": "Malappuram",
+    "pinCode": "679577",
+    "areaScore": 65,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 69,
+      "localityAdjustment": -4,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "palakkad::muthuthala": {
+    "areaKey": "palakkad::muthuthala",
+    "villageOrCity": "Muthuthala",
+    "district": "Palakkad",
+    "pinCode": "679303",
+    "areaScore": 66,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 70,
+      "localityAdjustment": -4,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thrissur::irinjalakuda": {
+    "areaKey": "thrissur::irinjalakuda",
+    "villageOrCity": "Irinjalakuda",
+    "district": "Thrissur",
+    "pinCode": "680125",
+    "areaScore": 73,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 78,
+      "localityAdjustment": -5,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thrissur::amballur": {
+    "areaKey": "thrissur::amballur",
+    "villageOrCity": "Amballur",
+    "district": "Thrissur",
+    "pinCode": "680301",
+    "areaScore": 78,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 78,
+      "localityAdjustment": 0,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thrissur::choondal": {
+    "areaKey": "thrissur::choondal",
+    "villageOrCity": "Choondal",
+    "district": "Thrissur",
+    "pinCode": "680502",
+    "areaScore": 73,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 78,
+      "localityAdjustment": -5,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "palakkad::parali": {
+    "areaKey": "palakkad::parali",
+    "villageOrCity": "Parali",
+    "district": "Palakkad",
+    "pinCode": "678612",
+    "areaScore": 71,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 70,
+      "localityAdjustment": 1,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thrissur::alur": {
+    "areaKey": "thrissur::alur",
+    "villageOrCity": "Alur",
+    "district": "Thrissur",
+    "pinCode": "680501",
+    "areaScore": 79,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 78,
+      "localityAdjustment": 1,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "pathanamthitta::thiruvalla": {
+    "areaKey": "pathanamthitta::thiruvalla",
+    "villageOrCity": "Thiruvalla",
+    "district": "Pathanamthitta",
+    "pinCode": "689115",
+    "areaScore": 68,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 68,
+      "localityAdjustment": 0,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kannur::manakkadavu": {
+    "areaKey": "kannur::manakkadavu",
+    "villageOrCity": "MANAKKADAVU",
+    "district": "Kannur",
+    "pinCode": "670571",
+    "areaScore": 70,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 73,
+      "localityAdjustment": -3,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "ernakulam::edathala": {
+    "areaKey": "ernakulam::edathala",
+    "villageOrCity": "Edathala",
+    "district": "Ernakulam",
+    "pinCode": "683561",
+    "areaScore": 85,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 84,
+      "localityAdjustment": 1,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "ernakulam::aluva": {
+    "areaKey": "ernakulam::aluva",
+    "villageOrCity": "Aluva",
+    "district": "Ernakulam",
+    "pinCode": "683101",
+    "areaScore": 83,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 84,
+      "localityAdjustment": -1,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "malappuram::kattipparuthi": {
+    "areaKey": "malappuram::kattipparuthi",
+    "villageOrCity": "Kattipparuthi",
+    "district": "Malappuram",
+    "pinCode": "679592",
+    "areaScore": 69,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 69,
+      "localityAdjustment": 0,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kottayam::athirampuzha": {
+    "areaKey": "kottayam::athirampuzha",
+    "villageOrCity": "Athirampuzha",
+    "district": "Kottayam",
+    "pinCode": "686630",
+    "areaScore": 76,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 74,
+      "localityAdjustment": 2,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "alappuzha::kandalloor": {
+    "areaKey": "alappuzha::kandalloor",
+    "villageOrCity": "Kandalloor",
+    "district": "Alappuzha",
+    "pinCode": "690502",
+    "areaScore": 69,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 70,
+      "localityAdjustment": -1,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thrissur::parappukkara": {
+    "areaKey": "thrissur::parappukkara",
+    "villageOrCity": "Parappukkara",
+    "district": "Thrissur",
+    "pinCode": "680305",
+    "areaScore": 79,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 78,
+      "localityAdjustment": 1,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "ernakulam::chendamangalam": {
+    "areaKey": "ernakulam::chendamangalam",
+    "villageOrCity": "Chendamangalam",
+    "district": "Ernakulam",
+    "pinCode": "683512",
+    "areaScore": 84,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 84,
+      "localityAdjustment": 0,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thrissur::ala": {
+    "areaKey": "thrissur::ala",
+    "villageOrCity": "Ala",
+    "district": "Thrissur",
+    "pinCode": "680671",
+    "areaScore": 81,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 78,
+      "localityAdjustment": 3,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kottayam::erattupetta": {
+    "areaKey": "kottayam::erattupetta",
+    "villageOrCity": "Erattupetta",
+    "district": "Kottayam",
+    "pinCode": "686122",
+    "areaScore": 73,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 74,
+      "localityAdjustment": -1,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thrissur::manakkody": {
+    "areaKey": "thrissur::manakkody",
+    "villageOrCity": "Manakkody",
+    "district": "Thrissur",
+    "pinCode": "680574",
+    "areaScore": 79,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 78,
+      "localityAdjustment": 1,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thrissur::anjur": {
+    "areaKey": "thrissur::anjur",
+    "villageOrCity": "Anjur",
+    "district": "Thrissur",
+    "pinCode": "680541",
+    "areaScore": 78,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 78,
+      "localityAdjustment": 0,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kottayam::chethipuzha": {
+    "areaKey": "kottayam::chethipuzha",
+    "villageOrCity": "Chethipuzha",
+    "district": "Kottayam",
+    "pinCode": "686538",
+    "areaScore": 72,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 74,
+      "localityAdjustment": -2,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "ernakulam::vadakkekara": {
+    "areaKey": "ernakulam::vadakkekara",
+    "villageOrCity": "Vadakkekara",
+    "district": "Ernakulam",
+    "pinCode": "683522",
+    "areaScore": 81,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 84,
+      "localityAdjustment": -3,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "alappuzha::kayamkulam": {
+    "areaKey": "alappuzha::kayamkulam",
+    "villageOrCity": "Kayamkulam",
+    "district": "Alappuzha",
+    "pinCode": "690572",
+    "areaScore": 65,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 70,
+      "localityAdjustment": -5,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thrissur::chiramanangad": {
+    "areaKey": "thrissur::chiramanangad",
+    "villageOrCity": "Chiramanangad",
+    "district": "Thrissur",
+    "pinCode": "680584",
+    "areaScore": 82,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 78,
+      "localityAdjustment": 4,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kottayam::nattakam": {
+    "areaKey": "kottayam::nattakam",
+    "villageOrCity": "Nattakam",
+    "district": "Kottayam",
+    "pinCode": "686533",
+    "areaScore": 71,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 74,
+      "localityAdjustment": -3,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thrissur::chelakkara": {
+    "areaKey": "thrissur::chelakkara",
+    "villageOrCity": "Chelakkara",
+    "district": "Thrissur",
+    "pinCode": "680586",
+    "areaScore": 76,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 78,
+      "localityAdjustment": -2,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kannur::peratta": {
+    "areaKey": "kannur::peratta",
+    "villageOrCity": "PERATTA",
+    "district": "Kannur",
+    "pinCode": "670706",
+    "areaScore": 68,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 73,
+      "localityAdjustment": -5,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thiruvananthapuram::kalliyoor": {
+    "areaKey": "thiruvananthapuram::kalliyoor",
+    "villageOrCity": "Kalliyoor",
+    "district": "Thiruvananthapuram",
+    "pinCode": "695020",
+    "areaScore": 85,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 82,
+      "localityAdjustment": 3,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "ernakulam::chelamattom": {
+    "areaKey": "ernakulam::chelamattom",
+    "villageOrCity": "Chelamattom",
+    "district": "Ernakulam",
+    "pinCode": "683542",
+    "areaScore": 87,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 84,
+      "localityAdjustment": 3,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thrissur::akathiyoor": {
+    "areaKey": "thrissur::akathiyoor",
+    "villageOrCity": "Akathiyoor",
+    "district": "Thrissur",
+    "pinCode": "680503",
+    "areaScore": 83,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 78,
+      "localityAdjustment": 5,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thrissur::killannur": {
+    "areaKey": "thrissur::killannur",
+    "villageOrCity": "Killannur",
+    "district": "Thrissur",
+    "pinCode": "680010",
+    "areaScore": 74,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 78,
+      "localityAdjustment": -4,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thiruvananthapuram::kulathummal": {
+    "areaKey": "thiruvananthapuram::kulathummal",
+    "villageOrCity": "Kulathummal",
+    "district": "Thiruvananthapuram",
+    "pinCode": "695572",
+    "areaScore": 86,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 82,
+      "localityAdjustment": 4,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kozhikode::pantheeramkavu": {
+    "areaKey": "kozhikode::pantheeramkavu",
+    "villageOrCity": "Pantheeramkavu",
+    "district": "Kozhikode",
+    "pinCode": "673019",
+    "areaScore": 77,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 80,
+      "localityAdjustment": -3,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kottayam::poonjar": {
+    "areaKey": "kottayam::poonjar",
+    "villageOrCity": "POONJAR",
+    "district": "Kottayam",
+    "pinCode": "686582",
+    "areaScore": 76,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 74,
+      "localityAdjustment": 2,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thrissur::chittanda": {
+    "areaKey": "thrissur::chittanda",
+    "villageOrCity": "Chittanda",
+    "district": "Thrissur",
+    "pinCode": "680590",
+    "areaScore": 77,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 78,
+      "localityAdjustment": -1,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thrissur::karamuck": {
+    "areaKey": "thrissur::karamuck",
+    "villageOrCity": "Karamuck",
+    "district": "Thrissur",
+    "pinCode": "680614",
+    "areaScore": 80,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 78,
+      "localityAdjustment": 2,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thrissur::avittathur": {
+    "areaKey": "thrissur::avittathur",
+    "villageOrCity": "Avittathur",
+    "district": "Thrissur",
+    "pinCode": "680683",
+    "areaScore": 81,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 78,
+      "localityAdjustment": 3,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "ernakulam::marampilly": {
+    "areaKey": "ernakulam::marampilly",
+    "villageOrCity": "Marampilly",
+    "district": "Ernakulam",
+    "pinCode": "683547",
+    "areaScore": 85,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 84,
+      "localityAdjustment": 1,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thrissur::kurichikkara": {
+    "areaKey": "thrissur::kurichikkara",
+    "villageOrCity": "Kurichikkara",
+    "district": "Thrissur",
+    "pinCode": "680631",
+    "areaScore": 78,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 78,
+      "localityAdjustment": 0,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "ernakulam::kunnathunad": {
+    "areaKey": "ernakulam::kunnathunad",
+    "villageOrCity": "Kunnathunad",
+    "district": "Ernakulam",
+    "pinCode": "683562",
+    "areaScore": 89,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 84,
+      "localityAdjustment": 5,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "alappuzha::aroor": {
+    "areaKey": "alappuzha::aroor",
+    "villageOrCity": "Aroor",
+    "district": "Alappuzha",
+    "pinCode": "688534",
+    "areaScore": 74,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 70,
+      "localityAdjustment": 4,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kozhikode::cheruvannur": {
+    "areaKey": "kozhikode::cheruvannur",
+    "villageOrCity": "Cheruvannur",
+    "district": "Kozhikode",
+    "pinCode": "673027",
+    "areaScore": 75,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 80,
+      "localityAdjustment": -5,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kollam::kunnikode": {
+    "areaKey": "kollam::kunnikode",
+    "villageOrCity": "KUNNIKODE",
+    "district": "Kollam",
+    "pinCode": "691508",
+    "areaScore": 72,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 72,
+      "localityAdjustment": 0,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thiruvananthapuram::palode": {
+    "areaKey": "thiruvananthapuram::palode",
+    "villageOrCity": "PALODE",
+    "district": "Thiruvananthapuram",
+    "pinCode": "695562",
+    "areaScore": 84,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 82,
+      "localityAdjustment": 2,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "ernakulam::kakkanad": {
+    "areaKey": "ernakulam::kakkanad",
+    "villageOrCity": "Kakkanad",
+    "district": "Ernakulam",
+    "pinCode": "682030",
+    "areaScore": 89,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 84,
+      "localityAdjustment": 5,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "alappuzha::haripad": {
+    "areaKey": "alappuzha::haripad",
+    "villageOrCity": "Haripad",
+    "district": "Alappuzha",
+    "pinCode": "690514",
+    "areaScore": 72,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 70,
+      "localityAdjustment": 2,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "ernakulam::kanayannur": {
+    "areaKey": "ernakulam::kanayannur",
+    "villageOrCity": "Kanayannur",
+    "district": "Ernakulam",
+    "pinCode": "682305",
+    "areaScore": 79,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 84,
+      "localityAdjustment": -5,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "malappuram::kondotty": {
+    "areaKey": "malappuram::kondotty",
+    "villageOrCity": "Kondotty",
+    "district": "Malappuram",
+    "pinCode": "673648",
+    "areaScore": 64,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 69,
+      "localityAdjustment": -5,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kottayam::changanacherry": {
+    "areaKey": "kottayam::changanacherry",
+    "villageOrCity": "Changanacherry",
+    "district": "Kottayam",
+    "pinCode": "686103",
+    "areaScore": 74,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 74,
+      "localityAdjustment": 0,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thrissur::brahmakulam": {
+    "areaKey": "thrissur::brahmakulam",
+    "villageOrCity": "Brahmakulam",
+    "district": "Thrissur",
+    "pinCode": "680508",
+    "areaScore": 76,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 78,
+      "localityAdjustment": -2,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "ernakulam::mulamthuruthy": {
+    "areaKey": "ernakulam::mulamthuruthy",
+    "villageOrCity": "Mulamthuruthy",
+    "district": "Ernakulam",
+    "pinCode": "682313",
+    "areaScore": 87,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 84,
+      "localityAdjustment": 3,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "ernakulam::kedamangalam": {
+    "areaKey": "ernakulam::kedamangalam",
+    "villageOrCity": "Kedamangalam",
+    "district": "Ernakulam",
+    "pinCode": "683513",
+    "areaScore": 83,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 84,
+      "localityAdjustment": -1,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thrissur::edakkazhiyur": {
+    "areaKey": "thrissur::edakkazhiyur",
+    "villageOrCity": "Edakkazhiyur",
+    "district": "Thrissur",
+    "pinCode": "680518",
+    "areaScore": 74,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 78,
+      "localityAdjustment": -4,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thrissur::paralam": {
+    "areaKey": "thrissur::paralam",
+    "villageOrCity": "Paralam",
+    "district": "Thrissur",
+    "pinCode": "680561",
+    "areaScore": 81,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 78,
+      "localityAdjustment": 3,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thrissur::edathirinji": {
+    "areaKey": "thrissur::edathirinji",
+    "villageOrCity": "Edathirinji",
+    "district": "Thrissur",
+    "pinCode": "680121",
+    "areaScore": 79,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 78,
+      "localityAdjustment": 1,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "alappuzha::cherthala": {
+    "areaKey": "alappuzha::cherthala",
+    "villageOrCity": "Cherthala",
+    "district": "Alappuzha",
+    "pinCode": "688524",
+    "areaScore": 65,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 70,
+      "localityAdjustment": -5,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thrissur::kattakampal": {
+    "areaKey": "thrissur::kattakampal",
+    "villageOrCity": "Kattakampal",
+    "district": "Thrissur",
+    "pinCode": "680544",
+    "areaScore": 75,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 78,
+      "localityAdjustment": -3,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "ernakulam::puthenvelikkara": {
+    "areaKey": "ernakulam::puthenvelikkara",
+    "villageOrCity": "Puthenvelikkara",
+    "district": "Ernakulam",
+    "pinCode": "680734",
+    "areaScore": 89,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 84,
+      "localityAdjustment": 5,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "pathanamthitta::kulanada": {
+    "areaKey": "pathanamthitta::kulanada",
+    "villageOrCity": "KULANADA",
+    "district": "Pathanamthitta",
+    "pinCode": "689503",
+    "areaScore": 64,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 68,
+      "localityAdjustment": -4,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kollam::mayyanad": {
+    "areaKey": "kollam::mayyanad",
+    "villageOrCity": "Mayyanad",
+    "district": "Kollam",
+    "pinCode": "691301",
+    "areaScore": 70,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 72,
+      "localityAdjustment": -2,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kollam::pathanapuram": {
+    "areaKey": "kollam::pathanapuram",
+    "villageOrCity": "PATHANAPURAM",
+    "district": "Kollam",
+    "pinCode": "689695",
+    "areaScore": 71,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 72,
+      "localityAdjustment": -1,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "alappuzha::chennithala": {
+    "areaKey": "alappuzha::chennithala",
+    "villageOrCity": "Chennithala",
+    "district": "Alappuzha",
+    "pinCode": "690105",
+    "areaScore": 75,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 70,
+      "localityAdjustment": 5,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thrissur::enkakkad": {
+    "areaKey": "thrissur::enkakkad",
+    "villageOrCity": "Enkakkad",
+    "district": "Thrissur",
+    "pinCode": "680623",
+    "areaScore": 74,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 78,
+      "localityAdjustment": -4,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thrissur::edathiruthy": {
+    "areaKey": "thrissur::edathiruthy",
+    "villageOrCity": "Edathiruthy",
+    "district": "Thrissur",
+    "pinCode": "680703",
+    "areaScore": 80,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 78,
+      "localityAdjustment": 2,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thiruvananthapuram::vithura": {
+    "areaKey": "thiruvananthapuram::vithura",
+    "villageOrCity": "VITHURA",
+    "district": "Thiruvananthapuram",
+    "pinCode": "695551",
+    "areaScore": 87,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 82,
+      "localityAdjustment": 5,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "alappuzha::karthikappally": {
+    "areaKey": "alappuzha::karthikappally",
+    "villageOrCity": "Karthikappally",
+    "district": "Alappuzha",
+    "pinCode": "690515",
+    "areaScore": 67,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 70,
+      "localityAdjustment": -3,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thrissur::kizhakkummuri": {
+    "areaKey": "thrissur::kizhakkummuri",
+    "villageOrCity": "Kizhakkummuri",
+    "district": "Thrissur",
+    "pinCode": "680564",
+    "areaScore": 77,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 78,
+      "localityAdjustment": -1,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "ernakulam::thrippunithura": {
+    "areaKey": "ernakulam::thrippunithura",
+    "villageOrCity": "Thrippunithura",
+    "district": "Ernakulam",
+    "pinCode": "682306",
+    "areaScore": 87,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 84,
+      "localityAdjustment": 3,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "ernakulam::maradu": {
+    "areaKey": "ernakulam::maradu",
+    "villageOrCity": "Maradu",
+    "district": "Ernakulam",
+    "pinCode": "682038",
+    "areaScore": 82,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 84,
+      "localityAdjustment": -2,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "ernakulam::elamkunnapuzha": {
+    "areaKey": "ernakulam::elamkunnapuzha",
+    "villageOrCity": "Elamkunnapuzha",
+    "district": "Ernakulam",
+    "pinCode": "682511",
+    "areaScore": 79,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 84,
+      "localityAdjustment": -5,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kozhikode::kottappally": {
+    "areaKey": "kozhikode::kottappally",
+    "villageOrCity": "Kottappally",
+    "district": "Kozhikode",
+    "pinCode": "673105",
+    "areaScore": 83,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 80,
+      "localityAdjustment": 3,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "malappuram::cherukavu": {
+    "areaKey": "malappuram::cherukavu",
+    "villageOrCity": "Cherukavu",
+    "district": "Malappuram",
+    "pinCode": "673633",
+    "areaScore": 64,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 69,
+      "localityAdjustment": -5,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kollam::veliyam": {
+    "areaKey": "kollam::veliyam",
+    "villageOrCity": "Veliyam",
+    "district": "Kollam",
+    "pinCode": "691540",
+    "areaScore": 74,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 72,
+      "localityAdjustment": 2,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "pathanamthitta::elanthor": {
+    "areaKey": "pathanamthitta::elanthor",
+    "villageOrCity": "ELANTHOR",
+    "district": "Pathanamthitta",
+    "pinCode": "689643",
+    "areaScore": 72,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 68,
+      "localityAdjustment": 4,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kottayam::peruva": {
+    "areaKey": "kottayam::peruva",
+    "villageOrCity": "PERUVA",
+    "district": "Kottayam",
+    "pinCode": "686610",
+    "areaScore": 73,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 74,
+      "localityAdjustment": -1,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kottayam::thrikkodithanam": {
+    "areaKey": "kottayam::thrikkodithanam",
+    "villageOrCity": "Thrikkodithanam",
+    "district": "Kottayam",
+    "pinCode": "686546",
+    "areaScore": 75,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 74,
+      "localityAdjustment": 1,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kottayam::thalayolaparambu": {
+    "areaKey": "kottayam::thalayolaparambu",
+    "villageOrCity": "THALAYOLAPARAMBU",
+    "district": "Kottayam",
+    "pinCode": "686605",
+    "areaScore": 79,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 74,
+      "localityAdjustment": 5,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "ernakulam::kolenchery": {
+    "areaKey": "ernakulam::kolenchery",
+    "villageOrCity": "KOLENCHERY",
+    "district": "Ernakulam",
+    "pinCode": "682311",
+    "areaScore": 81,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 84,
+      "localityAdjustment": -3,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kozhikode::ramanattukara": {
+    "areaKey": "kozhikode::ramanattukara",
+    "villageOrCity": "Ramanattukara",
+    "district": "Kozhikode",
+    "pinCode": "673019",
+    "areaScore": 79,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 80,
+      "localityAdjustment": -1,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kollam::kallelibhagom": {
+    "areaKey": "kollam::kallelibhagom",
+    "villageOrCity": "Kallelibhagom",
+    "district": "Kollam",
+    "pinCode": "690519",
+    "areaScore": 76,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 72,
+      "localityAdjustment": 4,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "pathanamthitta::chungappara": {
+    "areaKey": "pathanamthitta::chungappara",
+    "villageOrCity": "CHUNGAPPARA",
+    "district": "Pathanamthitta",
+    "pinCode": "686547",
+    "areaScore": 63,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 68,
+      "localityAdjustment": -5,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "idukki::munnar": {
+    "areaKey": "idukki::munnar",
+    "villageOrCity": "Munnar",
+    "district": "Idukki",
+    "pinCode": "685565",
+    "areaScore": 63,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 64,
+      "localityAdjustment": -1,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "alappuzha::cheppad": {
+    "areaKey": "alappuzha::cheppad",
+    "villageOrCity": "Cheppad",
+    "district": "Alappuzha",
+    "pinCode": "690508",
+    "areaScore": 74,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 70,
+      "localityAdjustment": 4,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kottayam::puthuppally": {
+    "areaKey": "kottayam::puthuppally",
+    "villageOrCity": "Puthuppally",
+    "district": "Kottayam",
+    "pinCode": "686019",
+    "areaScore": 79,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 74,
+      "localityAdjustment": 5,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thiruvananthapuram::iroopara": {
+    "areaKey": "thiruvananthapuram::iroopara",
+    "villageOrCity": "Iroopara",
+    "district": "Thiruvananthapuram",
+    "pinCode": "695585",
+    "areaScore": 78,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 82,
+      "localityAdjustment": -4,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thiruvananthapuram::kanjiramkulam": {
+    "areaKey": "thiruvananthapuram::kanjiramkulam",
+    "villageOrCity": "Kanjiramkulam",
+    "district": "Thiruvananthapuram",
+    "pinCode": "695526",
+    "areaScore": 83,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 82,
+      "localityAdjustment": 1,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "palakkad::pudussery": {
+    "areaKey": "palakkad::pudussery",
+    "villageOrCity": "Pudussery",
+    "district": "Palakkad",
+    "pinCode": "678623",
+    "areaScore": 73,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 70,
+      "localityAdjustment": 3,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "malappuram::talakkad": {
+    "areaKey": "malappuram::talakkad",
+    "villageOrCity": "Talakkad",
+    "district": "Malappuram",
+    "pinCode": "676102",
+    "areaScore": 64,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 69,
+      "localityAdjustment": -5,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "ernakulam::thiruvankulam": {
+    "areaKey": "ernakulam::thiruvankulam",
+    "villageOrCity": "Thiruvankulam",
+    "district": "Ernakulam",
+    "pinCode": "682309",
+    "areaScore": 82,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 84,
+      "localityAdjustment": -2,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kannur::chelora": {
+    "areaKey": "kannur::chelora",
+    "villageOrCity": "Chelora",
+    "district": "Kannur",
+    "pinCode": "670006",
+    "areaScore": 76,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 73,
+      "localityAdjustment": 3,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kannur::iritty": {
+    "areaKey": "kannur::iritty",
+    "villageOrCity": "Iritty",
+    "district": "Kannur",
+    "pinCode": "670703",
+    "areaScore": 75,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 73,
+      "localityAdjustment": 2,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kannur::dharmadom": {
+    "areaKey": "kannur::dharmadom",
+    "villageOrCity": "Dharmadom",
+    "district": "Kannur",
+    "pinCode": "670741",
+    "areaScore": 74,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 73,
+      "localityAdjustment": 1,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "idukki::kumily": {
+    "areaKey": "idukki::kumily",
+    "villageOrCity": "Kumily",
+    "district": "Idukki",
+    "pinCode": "685509",
+    "areaScore": 62,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 64,
+      "localityAdjustment": -2,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kollam::perinad": {
+    "areaKey": "kollam::perinad",
+    "villageOrCity": "Perinad",
+    "district": "Kollam",
+    "pinCode": "691503",
+    "areaScore": 70,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 72,
+      "localityAdjustment": -2,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kannur::thalassery": {
+    "areaKey": "kannur::thalassery",
+    "villageOrCity": "Thalassery",
+    "district": "Kannur",
+    "pinCode": "670104",
+    "areaScore": 74,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 73,
+      "localityAdjustment": 1,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "idukki::mangathotty": {
+    "areaKey": "idukki::mangathotty",
+    "villageOrCity": "mangathotty",
+    "district": "Idukki",
+    "pinCode": "685619",
+    "areaScore": 60,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 64,
+      "localityAdjustment": -4,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thiruvananthapuram::madavoor": {
+    "areaKey": "thiruvananthapuram::madavoor",
+    "villageOrCity": "Madavoor",
+    "district": "Thiruvananthapuram",
+    "pinCode": "695602",
+    "areaScore": 85,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 82,
+      "localityAdjustment": 3,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kottayam::kanjirappally": {
+    "areaKey": "kottayam::kanjirappally",
+    "villageOrCity": "Kanjirappally",
+    "district": "Kottayam",
+    "pinCode": "686507",
+    "areaScore": 69,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 74,
+      "localityAdjustment": -5,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "palakkad::puthuppariyaram": {
+    "areaKey": "palakkad::puthuppariyaram",
+    "villageOrCity": "Puthuppariyaram",
+    "district": "Palakkad",
+    "pinCode": "678731",
+    "areaScore": 69,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 70,
+      "localityAdjustment": -1,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kollam::ayanivelikulangara": {
+    "areaKey": "kollam::ayanivelikulangara",
+    "villageOrCity": "Ayanivelikulangara",
+    "district": "Kollam",
+    "pinCode": "690536",
+    "areaScore": 69,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 72,
+      "localityAdjustment": -3,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kannur::chala": {
+    "areaKey": "kannur::chala",
+    "villageOrCity": "Chala",
+    "district": "Kannur",
+    "pinCode": "670663",
+    "areaScore": 68,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 73,
+      "localityAdjustment": -5,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kozhikode::chemancheri": {
+    "areaKey": "kozhikode::chemancheri",
+    "villageOrCity": "Chemancheri",
+    "district": "Kozhikode",
+    "pinCode": "673303",
+    "areaScore": 79,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 80,
+      "localityAdjustment": -1,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "malappuram::ariyallur": {
+    "areaKey": "malappuram::ariyallur",
+    "villageOrCity": "Ariyallur",
+    "district": "Malappuram",
+    "pinCode": "676303",
+    "areaScore": 70,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 69,
+      "localityAdjustment": 1,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "palakkad::thrithala": {
+    "areaKey": "palakkad::thrithala",
+    "villageOrCity": "Thrithala",
+    "district": "Palakkad",
+    "pinCode": "679534",
+    "areaScore": 71,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 70,
+      "localityAdjustment": 1,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "malappuram::vettathur": {
+    "areaKey": "malappuram::vettathur",
+    "villageOrCity": "VETTATHUR",
+    "district": "Malappuram",
+    "pinCode": "679325",
+    "areaScore": 65,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 69,
+      "localityAdjustment": -4,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "alappuzha::athikattukulangara": {
+    "areaKey": "alappuzha::athikattukulangara",
+    "villageOrCity": "ATHIKATTUKULANGARA",
+    "district": "Alappuzha",
+    "pinCode": "690504",
+    "areaScore": 67,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 70,
+      "localityAdjustment": -3,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thiruvananthapuram::alamcode": {
+    "areaKey": "thiruvananthapuram::alamcode",
+    "villageOrCity": "Alamcode",
+    "district": "Thiruvananthapuram",
+    "pinCode": "695102",
+    "areaScore": 84,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 82,
+      "localityAdjustment": 2,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "ernakulam::karumalloor": {
+    "areaKey": "ernakulam::karumalloor",
+    "villageOrCity": "Karumalloor",
+    "district": "Ernakulam",
+    "pinCode": "683520",
+    "areaScore": 82,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 84,
+      "localityAdjustment": -2,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thiruvananthapuram::azhoor": {
+    "areaKey": "thiruvananthapuram::azhoor",
+    "villageOrCity": "Azhoor",
+    "district": "Thiruvananthapuram",
+    "pinCode": "695305",
+    "areaScore": 81,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 82,
+      "localityAdjustment": -1,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thiruvananthapuram::keezhattingal": {
+    "areaKey": "thiruvananthapuram::keezhattingal",
+    "villageOrCity": "Keezhattingal",
+    "district": "Thiruvananthapuram",
+    "pinCode": "695144",
+    "areaScore": 79,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 82,
+      "localityAdjustment": -3,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kozhikode::payyoli": {
+    "areaKey": "kozhikode::payyoli",
+    "villageOrCity": "Payyoli",
+    "district": "Kozhikode",
+    "pinCode": "673522",
+    "areaScore": 80,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 80,
+      "localityAdjustment": 0,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "idukki::vazhithala": {
+    "areaKey": "idukki::vazhithala",
+    "villageOrCity": "VAZHITHALA",
+    "district": "Idukki",
+    "pinCode": "685583",
+    "areaScore": 61,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 64,
+      "localityAdjustment": -3,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thrissur::chendrappini": {
+    "areaKey": "thrissur::chendrappini",
+    "villageOrCity": "Chendrappini",
+    "district": "Thrissur",
+    "pinCode": "680681",
+    "areaScore": 82,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 78,
+      "localityAdjustment": 4,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kollam::meenad": {
+    "areaKey": "kollam::meenad",
+    "villageOrCity": "Meenad",
+    "district": "Kollam",
+    "pinCode": "691578",
+    "areaScore": 73,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 72,
+      "localityAdjustment": 1,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kollam::paravoor": {
+    "areaKey": "kollam::paravoor",
+    "villageOrCity": "Paravoor",
+    "district": "Kollam",
+    "pinCode": "691302",
+    "areaScore": 75,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 72,
+      "localityAdjustment": 3,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thiruvananthapuram::perumkulam": {
+    "areaKey": "thiruvananthapuram::perumkulam",
+    "villageOrCity": "Perumkulam",
+    "district": "Thiruvananthapuram",
+    "pinCode": "695575",
+    "areaScore": 78,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 82,
+      "localityAdjustment": -4,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thrissur::pavaratty": {
+    "areaKey": "thrissur::pavaratty",
+    "villageOrCity": "Pavaratty",
+    "district": "Thrissur",
+    "pinCode": "680507",
+    "areaScore": 75,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 78,
+      "localityAdjustment": -3,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "pathanamthitta::konni": {
+    "areaKey": "pathanamthitta::konni",
+    "villageOrCity": "KONNI",
+    "district": "Pathanamthitta",
+    "pinCode": "689691",
+    "areaScore": 63,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 68,
+      "localityAdjustment": -5,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kollam::pattazhi": {
+    "areaKey": "kollam::pattazhi",
+    "villageOrCity": "PATTAZHI",
+    "district": "Kollam",
+    "pinCode": "691522",
+    "areaScore": 71,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 72,
+      "localityAdjustment": -1,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  }
+}

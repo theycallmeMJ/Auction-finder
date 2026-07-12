@@ -1,0 +1,3839 @@
+{
+  "states": [
+    {
+      "id": "17",
+      "name": "Kerala"
+    }
+  ],
+  "districts": [
+    {
+      "id": "307",
+      "name": "Alappuzha",
+      "stateId": "17"
+    },
+    {
+      "id": "308",
+      "name": "Ernakulam",
+      "stateId": "17"
+    },
+    {
+      "id": "309",
+      "name": "Idukki",
+      "stateId": "17"
+    },
+    {
+      "id": "310",
+      "name": "Kannur",
+      "stateId": "17"
+    },
+    {
+      "id": "311",
+      "name": "Kasargod",
+      "stateId": "17"
+    },
+    {
+      "id": "312",
+      "name": "Kollam",
+      "stateId": "17"
+    },
+    {
+      "id": "313",
+      "name": "Kottayam",
+      "stateId": "17"
+    },
+    {
+      "id": "314",
+      "name": "Kozhikode",
+      "stateId": "17"
+    },
+    {
+      "id": "315",
+      "name": "Malappuram",
+      "stateId": "17"
+    },
+    {
+      "id": "316",
+      "name": "Palakkad",
+      "stateId": "17"
+    },
+    {
+      "id": "317",
+      "name": "Pathanamthitta",
+      "stateId": "17"
+    },
+    {
+      "id": "318",
+      "name": "Thiruvananthapuram",
+      "stateId": "17"
+    },
+    {
+      "id": "319",
+      "name": "Thrissur",
+      "stateId": "17"
+    },
+    {
+      "id": "320",
+      "name": "Wayanad",
+      "stateId": "17"
+    }
+  ],
+  "cities": [
+    {
+      "id": "4310",
+      "name": "Alappuzha",
+      "districtId": "307"
+    },
+    {
+      "id": "8191",
+      "name": "AMBALAPPUZHA",
+      "districtId": "307"
+    },
+    {
+      "id": "4311",
+      "name": "Arookutty",
+      "districtId": "307"
+    },
+    {
+      "id": "4312",
+      "name": "Aroor",
+      "districtId": "307"
+    },
+    {
+      "id": "8527",
+      "name": "ATHIKATTUKULANGARA",
+      "districtId": "307"
+    },
+    {
+      "id": "4313",
+      "name": "Bharanikkavu",
+      "districtId": "307"
+    },
+    {
+      "id": "4314",
+      "name": "Chengannur",
+      "districtId": "307"
+    },
+    {
+      "id": "4315",
+      "name": "Chennithala",
+      "districtId": "307"
+    },
+    {
+      "id": "4316",
+      "name": "Cheppad",
+      "districtId": "307"
+    },
+    {
+      "id": "4317",
+      "name": "Cherthala",
+      "districtId": "307"
+    },
+    {
+      "id": "4318",
+      "name": "Chingoli",
+      "districtId": "307"
+    },
+    {
+      "id": "8193",
+      "name": "CHUNAKKARA",
+      "districtId": "307"
+    },
+    {
+      "id": "4319",
+      "name": "Ezhupunna",
+      "districtId": "307"
+    },
+    {
+      "id": "4320",
+      "name": "Haripad",
+      "districtId": "307"
+    },
+    {
+      "id": "4321",
+      "name": "Kandalloor",
+      "districtId": "307"
+    },
+    {
+      "id": "4322",
+      "name": "Kanjikkuzhi",
+      "districtId": "307"
+    },
+    {
+      "id": "4323",
+      "name": "Kannamangalam Alappuzha",
+      "districtId": "307"
+    },
+    {
+      "id": "4324",
+      "name": "Karthikappally",
+      "districtId": "307"
+    },
+    {
+      "id": "4325",
+      "name": "Kattanam",
+      "districtId": "307"
+    },
+    {
+      "id": "4326",
+      "name": "Kayamkulam",
+      "districtId": "307"
+    },
+    {
+      "id": "4327",
+      "name": "Keerikkad",
+      "districtId": "307"
+    },
+    {
+      "id": "4328",
+      "name": "Kodamthuruth",
+      "districtId": "307"
+    },
+    {
+      "id": "4329",
+      "name": "Kokkothamangalam",
+      "districtId": "307"
+    },
+    {
+      "id": "4330",
+      "name": "Krishnapuram",
+      "districtId": "307"
+    },
+    {
+      "id": "4331",
+      "name": "Kumarapuram",
+      "districtId": "307"
+    },
+    {
+      "id": "4332",
+      "name": "Kurattissery",
+      "districtId": "307"
+    },
+    {
+      "id": "4333",
+      "name": "Kuthiathode",
+      "districtId": "307"
+    },
+    {
+      "id": "4334",
+      "name": "Mannanchery",
+      "districtId": "307"
+    },
+    {
+      "id": "4335",
+      "name": "Mannar",
+      "districtId": "307"
+    },
+    {
+      "id": "4336",
+      "name": "Mavelikkara",
+      "districtId": "307"
+    },
+    {
+      "id": "4337",
+      "name": "Muhamma",
+      "districtId": "307"
+    },
+    {
+      "id": "4338",
+      "name": "Muthukulam",
+      "districtId": "307"
+    },
+    {
+      "id": "4339",
+      "name": "Pallippuram Alappuzha",
+      "districtId": "307"
+    },
+    {
+      "id": "4340",
+      "name": "Pathiyoor",
+      "districtId": "307"
+    },
+    {
+      "id": "4341",
+      "name": "Puthuppally Alappuzha",
+      "districtId": "307"
+    },
+    {
+      "id": "8544",
+      "name": "RAMANKARI",
+      "districtId": "307"
+    },
+    {
+      "id": "4342",
+      "name": "Thaikattussery",
+      "districtId": "307"
+    },
+    {
+      "id": "4343",
+      "name": "Thanneermukkam",
+      "districtId": "307"
+    },
+    {
+      "id": "4344",
+      "name": "Thazhakara",
+      "districtId": "307"
+    },
+    {
+      "id": "4345",
+      "name": "Vayalar",
+      "districtId": "307"
+    },
+    {
+      "id": "8537",
+      "name": "ADIVAD",
+      "districtId": "308"
+    },
+    {
+      "id": "4346",
+      "name": "Alangad",
+      "districtId": "308"
+    },
+    {
+      "id": "4347",
+      "name": "Aluva",
+      "districtId": "308"
+    },
+    {
+      "id": "4348",
+      "name": "Amballoor",
+      "districtId": "308"
+    },
+    {
+      "id": "4349",
+      "name": "Angamaly",
+      "districtId": "308"
+    },
+    {
+      "id": "4350",
+      "name": "Chelamattom",
+      "districtId": "308"
+    },
+    {
+      "id": "4351",
+      "name": "Chendamangalam",
+      "districtId": "308"
+    },
+    {
+      "id": "4352",
+      "name": "Chengamanad",
+      "districtId": "308"
+    },
+    {
+      "id": "4353",
+      "name": "Choornikkara",
+      "districtId": "308"
+    },
+    {
+      "id": "4354",
+      "name": "Chowwara",
+      "districtId": "308"
+    },
+    {
+      "id": "4355",
+      "name": "Edathala",
+      "districtId": "308"
+    },
+    {
+      "id": "4356",
+      "name": "Elamkunnapuzha",
+      "districtId": "308"
+    },
+    {
+      "id": "4357",
+      "name": "Eloor",
+      "districtId": "308"
+    },
+    {
+      "id": "4358",
+      "name": "Eramalloor",
+      "districtId": "308"
+    },
+    {
+      "id": "8387",
+      "name": "Ernakulam",
+      "districtId": "308"
+    },
+    {
+      "id": "4359",
+      "name": "Kadamakkudy",
+      "districtId": "308"
+    },
+    {
+      "id": "4360",
+      "name": "Kadungalloor",
+      "districtId": "308"
+    },
+    {
+      "id": "4361",
+      "name": "Kakkanad",
+      "districtId": "308"
+    },
+    {
+      "id": "4362",
+      "name": "Kalady",
+      "districtId": "308"
+    },
+    {
+      "id": "4363",
+      "name": "Kalamassery",
+      "districtId": "308"
+    },
+    {
+      "id": "4364",
+      "name": "Kanayannur",
+      "districtId": "308"
+    },
+    {
+      "id": "4365",
+      "name": "Karumalloor",
+      "districtId": "308"
+    },
+    {
+      "id": "4366",
+      "name": "Kedamangalam",
+      "districtId": "308"
+    },
+    {
+      "id": "4367",
+      "name": "KINFRA Small Industries Park Mazhuvannur",
+      "districtId": "308"
+    },
+    {
+      "id": "4368",
+      "name": "Kizhakkumbhagom",
+      "districtId": "308"
+    },
+    {
+      "id": "4369",
+      "name": "Kochi",
+      "districtId": "308"
+    },
+    {
+      "id": "8522",
+      "name": "KOLENCHERY",
+      "districtId": "308"
+    },
+    {
+      "id": "4370",
+      "name": "Koothattukulam",
+      "districtId": "308"
+    },
+    {
+      "id": "4371",
+      "name": "Koovappady",
+      "districtId": "308"
+    },
+    {
+      "id": "4372",
+      "name": "Kothamangalam",
+      "districtId": "308"
+    },
+    {
+      "id": "4373",
+      "name": "Kottuvally",
+      "districtId": "308"
+    },
+    {
+      "id": "4374",
+      "name": "Kunnathunad",
+      "districtId": "308"
+    },
+    {
+      "id": "4375",
+      "name": "Kureekkad",
+      "districtId": "308"
+    },
+    {
+      "id": "4376",
+      "name": "Manakunnam",
+      "districtId": "308"
+    },
+    {
+      "id": "8535",
+      "name": "MANJAPRA",
+      "districtId": "308"
+    },
+    {
+      "id": "4377",
+      "name": "Maradu",
+      "districtId": "308"
+    },
+    {
+      "id": "4378",
+      "name": "Marampilly",
+      "districtId": "308"
+    },
+    {
+      "id": "4379",
+      "name": "Moothakunnam",
+      "districtId": "308"
+    },
+    {
+      "id": "4380",
+      "name": "Mulamthuruthy",
+      "districtId": "308"
+    },
+    {
+      "id": "4381",
+      "name": "Muvattupuzha",
+      "districtId": "308"
+    },
+    {
+      "id": "8618",
+      "name": "Nayarambalam",
+      "districtId": "308"
+    },
+    {
+      "id": "4382",
+      "name": "Nedumbassery",
+      "districtId": "308"
+    },
+    {
+      "id": "4383",
+      "name": "Njarackal",
+      "districtId": "308"
+    },
+    {
+      "id": "4384",
+      "name": "North Paravur",
+      "districtId": "308"
+    },
+    {
+      "id": "4385",
+      "name": "Perumbavoor",
+      "districtId": "308"
+    },
+    {
+      "id": "4386",
+      "name": "Piravam",
+      "districtId": "308"
+    },
+    {
+      "id": "4387",
+      "name": "Puthencruz",
+      "districtId": "308"
+    },
+    {
+      "id": "4388",
+      "name": "Puthenvelikkara",
+      "districtId": "308"
+    },
+    {
+      "id": "4389",
+      "name": "Puthuvype",
+      "districtId": "308"
+    },
+    {
+      "id": "4390",
+      "name": "Thekkumbhagom",
+      "districtId": "308"
+    },
+    {
+      "id": "4391",
+      "name": "Thiruvankulam",
+      "districtId": "308"
+    },
+    {
+      "id": "4392",
+      "name": "Thrikkakara",
+      "districtId": "308"
+    },
+    {
+      "id": "4393",
+      "name": "Thrippunithura",
+      "districtId": "308"
+    },
+    {
+      "id": "4394",
+      "name": "Vadakkekara",
+      "districtId": "308"
+    },
+    {
+      "id": "4395",
+      "name": "Vadakkumbhagom",
+      "districtId": "308"
+    },
+    {
+      "id": "4396",
+      "name": "Varappuzha",
+      "districtId": "308"
+    },
+    {
+      "id": "4397",
+      "name": "Vazhakulam",
+      "districtId": "308"
+    },
+    {
+      "id": "4398",
+      "name": "Velloorkunnam",
+      "districtId": "308"
+    },
+    {
+      "id": "4399",
+      "name": "Vengola",
+      "districtId": "308"
+    },
+    {
+      "id": "8463",
+      "name": "ELAPPARA",
+      "districtId": "309"
+    },
+    {
+      "id": "4400",
+      "name": "Idukki Township",
+      "districtId": "309"
+    },
+    {
+      "id": "4401",
+      "name": "Industrial Development Plot Muttom",
+      "districtId": "309"
+    },
+    {
+      "id": "8442",
+      "name": "KALAYANTHANI",
+      "districtId": "309"
+    },
+    {
+      "id": "8443",
+      "name": "KANJAR",
+      "districtId": "309"
+    },
+    {
+      "id": "8421",
+      "name": "KARIMANNUR",
+      "districtId": "309"
+    },
+    {
+      "id": "4402",
+      "name": "Kattappana",
+      "districtId": "309"
+    },
+    {
+      "id": "8467",
+      "name": "KUMILI",
+      "districtId": "309"
+    },
+    {
+      "id": "4403",
+      "name": "Kumily",
+      "districtId": "309"
+    },
+    {
+      "id": "8131",
+      "name": "mangathotty",
+      "districtId": "309"
+    },
+    {
+      "id": "4404",
+      "name": "Munnar",
+      "districtId": "309"
+    },
+    {
+      "id": "8548",
+      "name": "NEDUMKANDAM",
+      "districtId": "309"
+    },
+    {
+      "id": "4405",
+      "name": "Peermade",
+      "districtId": "309"
+    },
+    {
+      "id": "4406",
+      "name": "Thodupuzha",
+      "districtId": "309"
+    },
+    {
+      "id": "8148",
+      "name": "Udumbannoor",
+      "districtId": "309"
+    },
+    {
+      "id": "8435",
+      "name": "UDUMBANNUR",
+      "districtId": "309"
+    },
+    {
+      "id": "8469",
+      "name": "UPPUTHARA",
+      "districtId": "309"
+    },
+    {
+      "id": "4407",
+      "name": "Vandiperiyar",
+      "districtId": "309"
+    },
+    {
+      "id": "8434",
+      "name": "VANNAPPURAM",
+      "districtId": "309"
+    },
+    {
+      "id": "8558",
+      "name": "VATTAVADA",
+      "districtId": "309"
+    },
+    {
+      "id": "8437",
+      "name": "VAZHITHALA",
+      "districtId": "309"
+    },
+    {
+      "id": "4408",
+      "name": "Ancharakandy",
+      "districtId": "310"
+    },
+    {
+      "id": "4409",
+      "name": "Anthoor",
+      "districtId": "310"
+    },
+    {
+      "id": "4410",
+      "name": "Azhikode",
+      "districtId": "310"
+    },
+    {
+      "id": "4411",
+      "name": "Azhikode South",
+      "districtId": "310"
+    },
+    {
+      "id": "4412",
+      "name": "Chala",
+      "districtId": "310"
+    },
+    {
+      "id": "8506",
+      "name": "CHAPPARAPADAVU",
+      "districtId": "310"
+    },
+    {
+      "id": "4413",
+      "name": "Cheleri",
+      "districtId": "310"
+    },
+    {
+      "id": "4414",
+      "name": "Chelora",
+      "districtId": "310"
+    },
+    {
+      "id": "4415",
+      "name": "Cherukunnu",
+      "districtId": "310"
+    },
+    {
+      "id": "4416",
+      "name": "Cheruthazham",
+      "districtId": "310"
+    },
+    {
+      "id": "4417",
+      "name": "Chirakkal",
+      "districtId": "310"
+    },
+    {
+      "id": "4418",
+      "name": "Chockli",
+      "districtId": "310"
+    },
+    {
+      "id": "4419",
+      "name": "Dharmadom",
+      "districtId": "310"
+    },
+    {
+      "id": "8470",
+      "name": "EDAYANNUR",
+      "districtId": "310"
+    },
+    {
+      "id": "4420",
+      "name": "Elayavoor",
+      "districtId": "310"
+    },
+    {
+      "id": "4421",
+      "name": "Eranholi",
+      "districtId": "310"
+    },
+    {
+      "id": "4422",
+      "name": "Eruvatti",
+      "districtId": "310"
+    },
+    {
+      "id": "4423",
+      "name": "Ezhome",
+      "districtId": "310"
+    },
+    {
+      "id": "4424",
+      "name": "Irikkur",
+      "districtId": "310"
+    },
+    {
+      "id": "4425",
+      "name": "Iritty",
+      "districtId": "310"
+    },
+    {
+      "id": "4426",
+      "name": "Iriveri",
+      "districtId": "310"
+    },
+    {
+      "id": "4427",
+      "name": "Kadachira",
+      "districtId": "310"
+    },
+    {
+      "id": "4428",
+      "name": "Kadannappalli",
+      "districtId": "310"
+    },
+    {
+      "id": "4429",
+      "name": "Kadirur",
+      "districtId": "310"
+    },
+    {
+      "id": "8491",
+      "name": "KAKKENGAD",
+      "districtId": "310"
+    },
+    {
+      "id": "4430",
+      "name": "Kalliasseri",
+      "districtId": "310"
+    },
+    {
+      "id": "8505",
+      "name": "KALLIKANDY",
+      "districtId": "310"
+    },
+    {
+      "id": "4431",
+      "name": "Kandamkunnu",
+      "districtId": "310"
+    },
+    {
+      "id": "4432",
+      "name": "Kanhirode",
+      "districtId": "310"
+    },
+    {
+      "id": "4433",
+      "name": "Kannadiparamba",
+      "districtId": "310"
+    },
+    {
+      "id": "4434",
+      "name": "Kannapuram",
+      "districtId": "310"
+    },
+    {
+      "id": "4435",
+      "name": "Kannur",
+      "districtId": "310"
+    },
+    {
+      "id": "8503",
+      "name": "KARETTA",
+      "districtId": "310"
+    },
+    {
+      "id": "8492",
+      "name": "KARIKOTTAKARI",
+      "districtId": "310"
+    },
+    {
+      "id": "4436",
+      "name": "Karivellur",
+      "districtId": "310"
+    },
+    {
+      "id": "8512",
+      "name": "KARUVANCHAL",
+      "districtId": "310"
+    },
+    {
+      "id": "4437",
+      "name": "Keezhallur",
+      "districtId": "310"
+    },
+    {
+      "id": "8500",
+      "name": "KELAKAM",
+      "districtId": "310"
+    },
+    {
+      "id": "4438",
+      "name": "Kolacherry",
+      "districtId": "310"
+    },
+    {
+      "id": "8471",
+      "name": "KOLASSERY",
+      "districtId": "310"
+    },
+    {
+      "id": "4439",
+      "name": "Kolavelloor",
+      "districtId": "310"
+    },
+    {
+      "id": "8497",
+      "name": "KOLAYAD",
+      "districtId": "310"
+    },
+    {
+      "id": "4440",
+      "name": "Koodali",
+      "districtId": "310"
+    },
+    {
+      "id": "4441",
+      "name": "Koothuparamba",
+      "districtId": "310"
+    },
+    {
+      "id": "4442",
+      "name": "Kottayam Malabar",
+      "districtId": "310"
+    },
+    {
+      "id": "8518",
+      "name": "KOZHICHAL",
+      "districtId": "310"
+    },
+    {
+      "id": "8477",
+      "name": "KUDIYANMALA",
+      "districtId": "310"
+    },
+    {
+      "id": "8490",
+      "name": "KUDUKKIMOTTA",
+      "districtId": "310"
+    },
+    {
+      "id": "4443",
+      "name": "Kunhimangalam",
+      "districtId": "310"
+    },
+    {
+      "id": "8504",
+      "name": "KUNHIPALLY",
+      "districtId": "310"
+    },
+    {
+      "id": "4444",
+      "name": "Kurumathur",
+      "districtId": "310"
+    },
+    {
+      "id": "4445",
+      "name": "Kuttiattoor",
+      "districtId": "310"
+    },
+    {
+      "id": "4446",
+      "name": "Madayi",
+      "districtId": "310"
+    },
+    {
+      "id": "8507",
+      "name": "MANAKKADAVU",
+      "districtId": "310"
+    },
+    {
+      "id": "4447",
+      "name": "Manantheri",
+      "districtId": "310"
+    },
+    {
+      "id": "4448",
+      "name": "Mangattidam",
+      "districtId": "310"
+    },
+    {
+      "id": "4449",
+      "name": "Maniyoor",
+      "districtId": "310"
+    },
+    {
+      "id": "8476",
+      "name": "MATHIL",
+      "districtId": "310"
+    },
+    {
+      "id": "4450",
+      "name": "Mattannur",
+      "districtId": "310"
+    },
+    {
+      "id": "8488",
+      "name": "MATTOOL",
+      "districtId": "310"
+    },
+    {
+      "id": "4451",
+      "name": "Mavilayi",
+      "districtId": "310"
+    },
+    {
+      "id": "4452",
+      "name": "Mayyil",
+      "districtId": "310"
+    },
+    {
+      "id": "4453",
+      "name": "Mokeri",
+      "districtId": "310"
+    },
+    {
+      "id": "4454",
+      "name": "Munderi",
+      "districtId": "310"
+    },
+    {
+      "id": "4455",
+      "name": "Muzhappilangad",
+      "districtId": "310"
+    },
+    {
+      "id": "4456",
+      "name": "Narath",
+      "districtId": "310"
+    },
+    {
+      "id": "8515",
+      "name": "NEENDUNOKKI",
+      "districtId": "310"
+    },
+    {
+      "id": "4457",
+      "name": "New Mahe",
+      "districtId": "310"
+    },
+    {
+      "id": "8509",
+      "name": "OLAYAMPADI",
+      "districtId": "310"
+    },
+    {
+      "id": "4458",
+      "name": "Paduvilayi",
+      "districtId": "310"
+    },
+    {
+      "id": "4459",
+      "name": "Pallikkunnu",
+      "districtId": "310"
+    },
+    {
+      "id": "4460",
+      "name": "Panniyannur",
+      "districtId": "310"
+    },
+    {
+      "id": "4461",
+      "name": "Panoor",
+      "districtId": "310"
+    },
+    {
+      "id": "4462",
+      "name": "Pappinisseri",
+      "districtId": "310"
+    },
+    {
+      "id": "8511",
+      "name": "PARAL",
+      "districtId": "310"
+    },
+    {
+      "id": "4463",
+      "name": "Pariyaram",
+      "districtId": "310"
+    },
+    {
+      "id": "4464",
+      "name": "Pathiriyad",
+      "districtId": "310"
+    },
+    {
+      "id": "4465",
+      "name": "Pattiom",
+      "districtId": "310"
+    },
+    {
+      "id": "4466",
+      "name": "Payyannur",
+      "districtId": "310"
+    },
+    {
+      "id": "8485",
+      "name": "PAYYAVOOR",
+      "districtId": "310"
+    },
+    {
+      "id": "4467",
+      "name": "Peralasseri",
+      "districtId": "310"
+    },
+    {
+      "id": "8502",
+      "name": "PERATTA",
+      "districtId": "310"
+    },
+    {
+      "id": "4468",
+      "name": "Peringathur",
+      "districtId": "310"
+    },
+    {
+      "id": "4469",
+      "name": "Pinarayi",
+      "districtId": "310"
+    },
+    {
+      "id": "4470",
+      "name": "Puzhathi",
+      "districtId": "310"
+    },
+    {
+      "id": "8475",
+      "name": "RAMANTHALI",
+      "districtId": "310"
+    },
+    {
+      "id": "4471",
+      "name": "Sreekantapuram",
+      "districtId": "310"
+    },
+    {
+      "id": "4472",
+      "name": "Taliparamba",
+      "districtId": "310"
+    },
+    {
+      "id": "4473",
+      "name": "Thalassery",
+      "districtId": "310"
+    },
+    {
+      "id": "8489",
+      "name": "THANA",
+      "districtId": "310"
+    },
+    {
+      "id": "8495",
+      "name": "THAYYIL",
+      "districtId": "310"
+    },
+    {
+      "id": "4474",
+      "name": "Thottada",
+      "districtId": "310"
+    },
+    {
+      "id": "4475",
+      "name": "Valapattanam",
+      "districtId": "310"
+    },
+    {
+      "id": "4476",
+      "name": "Varam",
+      "districtId": "310"
+    },
+    {
+      "id": "8494",
+      "name": "VATTIAMTHODU",
+      "districtId": "310"
+    },
+    {
+      "id": "8499",
+      "name": "AMBALATHARA",
+      "districtId": "311"
+    },
+    {
+      "id": "8487",
+      "name": "BANDADKA",
+      "districtId": "311"
+    },
+    {
+      "id": "4477",
+      "name": "Bangra Manjeshwar",
+      "districtId": "311"
+    },
+    {
+      "id": "4478",
+      "name": "Bare",
+      "districtId": "311"
+    },
+    {
+      "id": "8513",
+      "name": "BOVIKANAM",
+      "districtId": "311"
+    },
+    {
+      "id": "8493",
+      "name": "CHEEMENI",
+      "districtId": "311"
+    },
+    {
+      "id": "4479",
+      "name": "Chemnad",
+      "districtId": "311"
+    },
+    {
+      "id": "4480",
+      "name": "Chengala",
+      "districtId": "311"
+    },
+    {
+      "id": "4481",
+      "name": "Cheruvathur",
+      "districtId": "311"
+    },
+    {
+      "id": "8531",
+      "name": "CHITTARIKKAL",
+      "districtId": "311"
+    },
+    {
+      "id": "4482",
+      "name": "Hosabettu",
+      "districtId": "311"
+    },
+    {
+      "id": "4483",
+      "name": "Industrial Development Plot Chattanchal",
+      "districtId": "311"
+    },
+    {
+      "id": "8480",
+      "name": "JAYANAGARA",
+      "districtId": "311"
+    },
+    {
+      "id": "4484",
+      "name": "Kanhangad",
+      "districtId": "311"
+    },
+    {
+      "id": "4485",
+      "name": "Kasargod",
+      "districtId": "311"
+    },
+    {
+      "id": "4486",
+      "name": "Keekan",
+      "districtId": "311"
+    },
+    {
+      "id": "4487",
+      "name": "Koipady",
+      "districtId": "311"
+    },
+    {
+      "id": "4488",
+      "name": "Kudlu",
+      "districtId": "311"
+    },
+    {
+      "id": "4489",
+      "name": "Kunjathur",
+      "districtId": "311"
+    },
+    {
+      "id": "4490",
+      "name": "Madhur",
+      "districtId": "311"
+    },
+    {
+      "id": "4491",
+      "name": "Mangalpady",
+      "districtId": "311"
+    },
+    {
+      "id": "4492",
+      "name": "Maniyat",
+      "districtId": "311"
+    },
+    {
+      "id": "4493",
+      "name": "Manjeshwar",
+      "districtId": "311"
+    },
+    {
+      "id": "8508",
+      "name": "MEEYAPADAVU",
+      "districtId": "311"
+    },
+    {
+      "id": "8510",
+      "name": "MELPARAMBA",
+      "districtId": "311"
+    },
+    {
+      "id": "4494",
+      "name": "Mogral",
+      "districtId": "311"
+    },
+    {
+      "id": "8479",
+      "name": "MOGRALPUTHUR",
+      "districtId": "311"
+    },
+    {
+      "id": "8474",
+      "name": "NARKILAKAD",
+      "districtId": "311"
+    },
+    {
+      "id": "4495",
+      "name": "Nileshwar",
+      "districtId": "311"
+    },
+    {
+      "id": "4496",
+      "name": "North Thrikkaripur",
+      "districtId": "311"
+    },
+    {
+      "id": "8486",
+      "name": "PALAVAYAL",
+      "districtId": "311"
+    },
+    {
+      "id": "4497",
+      "name": "Pallikkara",
+      "districtId": "311"
+    },
+    {
+      "id": "8483",
+      "name": "PANATHADY",
+      "districtId": "311"
+    },
+    {
+      "id": "8516",
+      "name": "PANATHUR",
+      "districtId": "311"
+    },
+    {
+      "id": "8501",
+      "name": "PERIYA BAZAR",
+      "districtId": "311"
+    },
+    {
+      "id": "8482",
+      "name": "PERMUDE",
+      "districtId": "311"
+    },
+    {
+      "id": "4498",
+      "name": "Pilicode",
+      "districtId": "311"
+    },
+    {
+      "id": "8484",
+      "name": "PUTHIGE",
+      "districtId": "311"
+    },
+    {
+      "id": "4499",
+      "name": "Puthur Kasaragod",
+      "districtId": "311"
+    },
+    {
+      "id": "8514",
+      "name": "SAJANKILA",
+      "districtId": "311"
+    },
+    {
+      "id": "4500",
+      "name": "Shiribagilu",
+      "districtId": "311"
+    },
+    {
+      "id": "4501",
+      "name": "Shiriya",
+      "districtId": "311"
+    },
+    {
+      "id": "4502",
+      "name": "South Thrikkaripur",
+      "districtId": "311"
+    },
+    {
+      "id": "8481",
+      "name": "UDINUR",
+      "districtId": "311"
+    },
+    {
+      "id": "4503",
+      "name": "Udma",
+      "districtId": "311"
+    },
+    {
+      "id": "4504",
+      "name": "Uppala",
+      "districtId": "311"
+    },
+    {
+      "id": "8496",
+      "name": "VALIYAPARAMBA",
+      "districtId": "311"
+    },
+    {
+      "id": "8498",
+      "name": "VALLIKADAVU",
+      "districtId": "311"
+    },
+    {
+      "id": "8517",
+      "name": "VANINAGAR",
+      "districtId": "311"
+    },
+    {
+      "id": "4505",
+      "name": "Adichanalloor",
+      "districtId": "312"
+    },
+    {
+      "id": "4506",
+      "name": "Adinad",
+      "districtId": "312"
+    },
+    {
+      "id": "8521",
+      "name": "ANCHAL",
+      "districtId": "312"
+    },
+    {
+      "id": "4507",
+      "name": "Ayanivelikulangara",
+      "districtId": "312"
+    },
+    {
+      "id": "8528",
+      "name": "AYOOR",
+      "districtId": "312"
+    },
+    {
+      "id": "4508",
+      "name": "Chavara",
+      "districtId": "312"
+    },
+    {
+      "id": "4509",
+      "name": "Elampalloor",
+      "districtId": "312"
+    },
+    {
+      "id": "8541",
+      "name": "KADAKKAL",
+      "districtId": "312"
+    },
+    {
+      "id": "4510",
+      "name": "Kallelibhagom",
+      "districtId": "312"
+    },
+    {
+      "id": "4511",
+      "name": "Karunagappally",
+      "districtId": "312"
+    },
+    {
+      "id": "4512",
+      "name": "Kollam",
+      "districtId": "312"
+    },
+    {
+      "id": "4513",
+      "name": "Kottamkara",
+      "districtId": "312"
+    },
+    {
+      "id": "8643",
+      "name": "KOTTARAKAKRA",
+      "districtId": "312"
+    },
+    {
+      "id": "4514",
+      "name": "Kottarakkara",
+      "districtId": "312"
+    },
+    {
+      "id": "4515",
+      "name": "Kulasekharapuram",
+      "districtId": "312"
+    },
+    {
+      "id": "8532",
+      "name": "KULATHUPUZHA",
+      "districtId": "312"
+    },
+    {
+      "id": "8538",
+      "name": "KUNNIKODE",
+      "districtId": "312"
+    },
+    {
+      "id": "8551",
+      "name": "MADATHARA",
+      "districtId": "312"
+    },
+    {
+      "id": "4516",
+      "name": "Mayyanad",
+      "districtId": "312"
+    },
+    {
+      "id": "4517",
+      "name": "Meenad",
+      "districtId": "312"
+    },
+    {
+      "id": "4518",
+      "name": "Nedumpana",
+      "districtId": "312"
+    },
+    {
+      "id": "4519",
+      "name": "Oachira",
+      "districtId": "312"
+    },
+    {
+      "id": "4520",
+      "name": "Panayam",
+      "districtId": "312"
+    },
+    {
+      "id": "4521",
+      "name": "Panmana",
+      "districtId": "312"
+    },
+    {
+      "id": "4522",
+      "name": "Paravoor",
+      "districtId": "312"
+    },
+    {
+      "id": "8194",
+      "name": "PATHANAPURAM",
+      "districtId": "312"
+    },
+    {
+      "id": "8536",
+      "name": "PATTAZHI",
+      "districtId": "312"
+    },
+    {
+      "id": "4523",
+      "name": "Perinad",
+      "districtId": "312"
+    },
+    {
+      "id": "4524",
+      "name": "Poothakkulam",
+      "districtId": "312"
+    },
+    {
+      "id": "4525",
+      "name": "Punalur",
+      "districtId": "312"
+    },
+    {
+      "id": "8540",
+      "name": "PUTHOOR",
+      "districtId": "312"
+    },
+    {
+      "id": "8562",
+      "name": "RODUVILA",
+      "districtId": "312"
+    },
+    {
+      "id": "4526",
+      "name": "Thazhuthala",
+      "districtId": "312"
+    },
+    {
+      "id": "4527",
+      "name": "Thodiyoor",
+      "districtId": "312"
+    },
+    {
+      "id": "4528",
+      "name": "Thrikkadavoor",
+      "districtId": "312"
+    },
+    {
+      "id": "4529",
+      "name": "Thrikkaruva",
+      "districtId": "312"
+    },
+    {
+      "id": "4530",
+      "name": "Thrikkovilvattom",
+      "districtId": "312"
+    },
+    {
+      "id": "8564",
+      "name": "UMMANOOR",
+      "districtId": "312"
+    },
+    {
+      "id": "4531",
+      "name": "Vadakkumthala",
+      "districtId": "312"
+    },
+    {
+      "id": "8319",
+      "name": "Veliyam",
+      "districtId": "312"
+    },
+    {
+      "id": "4532",
+      "name": "Aimanam",
+      "districtId": "313"
+    },
+    {
+      "id": "4533",
+      "name": "Athirampuzha",
+      "districtId": "313"
+    },
+    {
+      "id": "8530",
+      "name": "AYAMKUDY",
+      "districtId": "313"
+    },
+    {
+      "id": "4534",
+      "name": "Changanacherry",
+      "districtId": "313"
+    },
+    {
+      "id": "4535",
+      "name": "Chengalam South",
+      "districtId": "313"
+    },
+    {
+      "id": "8039",
+      "name": "Cherpunkal",
+      "districtId": "313"
+    },
+    {
+      "id": "4536",
+      "name": "Chethipuzha",
+      "districtId": "313"
+    },
+    {
+      "id": "4537",
+      "name": "Erattupetta",
+      "districtId": "313"
+    },
+    {
+      "id": "8534",
+      "name": "ERUMELY",
+      "districtId": "313"
+    },
+    {
+      "id": "4538",
+      "name": "Ettumanoor",
+      "districtId": "313"
+    },
+    {
+      "id": "8539",
+      "name": "KADANAD",
+      "districtId": "313"
+    },
+    {
+      "id": "4539",
+      "name": "Kanjirappally",
+      "districtId": "313"
+    },
+    {
+      "id": "8526",
+      "name": "KARUKACHAL",
+      "districtId": "313"
+    },
+    {
+      "id": "8555",
+      "name": "KODUNGOOR",
+      "districtId": "313"
+    },
+    {
+      "id": "4540",
+      "name": "Kottayam",
+      "districtId": "313"
+    },
+    {
+      "id": "4541",
+      "name": "Kumarakom",
+      "districtId": "313"
+    },
+    {
+      "id": "8524",
+      "name": "MANIMALA",
+      "districtId": "313"
+    },
+    {
+      "id": "8543",
+      "name": "MELUKAVU",
+      "districtId": "313"
+    },
+    {
+      "id": "8642",
+      "name": "Mundakayam",
+      "districtId": "313"
+    },
+    {
+      "id": "8520",
+      "name": "MUNDAKKAYAM",
+      "districtId": "313"
+    },
+    {
+      "id": "4542",
+      "name": "Nattakam",
+      "districtId": "313"
+    },
+    {
+      "id": "8554",
+      "name": "NEENDOOR",
+      "districtId": "313"
+    },
+    {
+      "id": "4543",
+      "name": "Paippad",
+      "districtId": "313"
+    },
+    {
+      "id": "4544",
+      "name": "Pala",
+      "districtId": "313"
+    },
+    {
+      "id": "8525",
+      "name": "PALLIKATHODE",
+      "districtId": "313"
+    },
+    {
+      "id": "8189",
+      "name": "PAMPADY",
+      "districtId": "313"
+    },
+    {
+      "id": "4545",
+      "name": "Panachikkad",
+      "districtId": "313"
+    },
+    {
+      "id": "4546",
+      "name": "Perumbaikad",
+      "districtId": "313"
+    },
+    {
+      "id": "8529",
+      "name": "PERUVA",
+      "districtId": "313"
+    },
+    {
+      "id": "8547",
+      "name": "POONJAR",
+      "districtId": "313"
+    },
+    {
+      "id": "4547",
+      "name": "Puthuppally",
+      "districtId": "313"
+    },
+    {
+      "id": "8561",
+      "name": "PUTHUVELI",
+      "districtId": "313"
+    },
+    {
+      "id": "8523",
+      "name": "RAMAPURAM",
+      "districtId": "313"
+    },
+    {
+      "id": "8519",
+      "name": "THALAYOLAPARAMBU",
+      "districtId": "313"
+    },
+    {
+      "id": "4548",
+      "name": "Thrikkodithanam",
+      "districtId": "313"
+    },
+    {
+      "id": "8533",
+      "name": "UZHAVOOR",
+      "districtId": "313"
+    },
+    {
+      "id": "4549",
+      "name": "Vaikom",
+      "districtId": "313"
+    },
+    {
+      "id": "8401",
+      "name": "ANAKKAMPOYIL",
+      "districtId": "314"
+    },
+    {
+      "id": "4550",
+      "name": "Atholi",
+      "districtId": "314"
+    },
+    {
+      "id": "4551",
+      "name": "Ayancheri",
+      "districtId": "314"
+    },
+    {
+      "id": "4552",
+      "name": "Azhiyur",
+      "districtId": "314"
+    },
+    {
+      "id": "4553",
+      "name": "Balusseri",
+      "districtId": "314"
+    },
+    {
+      "id": "4554",
+      "name": "Beypore",
+      "districtId": "314"
+    },
+    {
+      "id": "4555",
+      "name": "Chekkiad",
+      "districtId": "314"
+    },
+    {
+      "id": "4556",
+      "name": "Chelannur",
+      "districtId": "314"
+    },
+    {
+      "id": "4557",
+      "name": "Chemancheri",
+      "districtId": "314"
+    },
+    {
+      "id": "4558",
+      "name": "Cheruvannur",
+      "districtId": "314"
+    },
+    {
+      "id": "4559",
+      "name": "Edacheri",
+      "districtId": "314"
+    },
+    {
+      "id": "4560",
+      "name": "Eramala",
+      "districtId": "314"
+    },
+    {
+      "id": "4561",
+      "name": "Eravattur",
+      "districtId": "314"
+    },
+    {
+      "id": "4562",
+      "name": "Feroke",
+      "districtId": "314"
+    },
+    {
+      "id": "4563",
+      "name": "Iringal",
+      "districtId": "314"
+    },
+    {
+      "id": "4564",
+      "name": "Kadalundi",
+      "districtId": "314"
+    },
+    {
+      "id": "4565",
+      "name": "Kakkodi",
+      "districtId": "314"
+    },
+    {
+      "id": "4566",
+      "name": "Karuvanthuruthy",
+      "districtId": "314"
+    },
+    {
+      "id": "8465",
+      "name": "KATTANGAL",
+      "districtId": "314"
+    },
+    {
+      "id": "4567",
+      "name": "Keezhariyur",
+      "districtId": "314"
+    },
+    {
+      "id": "4568",
+      "name": "Koduvally",
+      "districtId": "314"
+    },
+    {
+      "id": "8400",
+      "name": "KOODARANHI",
+      "districtId": "314"
+    },
+    {
+      "id": "4569",
+      "name": "Koothali",
+      "districtId": "314"
+    },
+    {
+      "id": "8394",
+      "name": "KOOTTALIDA",
+      "districtId": "314"
+    },
+    {
+      "id": "4570",
+      "name": "Kottappally",
+      "districtId": "314"
+    },
+    {
+      "id": "4571",
+      "name": "Koyilandi",
+      "districtId": "314"
+    },
+    {
+      "id": "4572",
+      "name": "Kozhikode",
+      "districtId": "314"
+    },
+    {
+      "id": "4573",
+      "name": "Kozhukkallur",
+      "districtId": "314"
+    },
+    {
+      "id": "4574",
+      "name": "KSIDC Industrial Growth Centre Kinalur",
+      "districtId": "314"
+    },
+    {
+      "id": "4575",
+      "name": "Kunnamangalam",
+      "districtId": "314"
+    },
+    {
+      "id": "4576",
+      "name": "Kunnummal",
+      "districtId": "314"
+    },
+    {
+      "id": "4577",
+      "name": "Kuruvattur",
+      "districtId": "314"
+    },
+    {
+      "id": "4578",
+      "name": "Kuttikkattoor",
+      "districtId": "314"
+    },
+    {
+      "id": "4579",
+      "name": "Maniyur",
+      "districtId": "314"
+    },
+    {
+      "id": "8397",
+      "name": "MARUTHOMKARA",
+      "districtId": "314"
+    },
+    {
+      "id": "4580",
+      "name": "Mavoor",
+      "districtId": "314"
+    },
+    {
+      "id": "4581",
+      "name": "Menhaniam",
+      "districtId": "314"
+    },
+    {
+      "id": "4582",
+      "name": "Meppayyur",
+      "districtId": "314"
+    },
+    {
+      "id": "4583",
+      "name": "Mukkam",
+      "districtId": "314"
+    },
+    {
+      "id": "4584",
+      "name": "Nadapuram",
+      "districtId": "314"
+    },
+    {
+      "id": "4585",
+      "name": "Naduvannur",
+      "districtId": "314"
+    },
+    {
+      "id": "4586",
+      "name": "Nanmanda",
+      "districtId": "314"
+    },
+    {
+      "id": "4587",
+      "name": "Olavanna",
+      "districtId": "314"
+    },
+    {
+      "id": "4588",
+      "name": "Palayad",
+      "districtId": "314"
+    },
+    {
+      "id": "4589",
+      "name": "Panangad",
+      "districtId": "314"
+    },
+    {
+      "id": "8390",
+      "name": "PANDEERKARA",
+      "districtId": "314"
+    },
+    {
+      "id": "4590",
+      "name": "Pantheeramkavu",
+      "districtId": "314"
+    },
+    {
+      "id": "4591",
+      "name": "Payyoli",
+      "districtId": "314"
+    },
+    {
+      "id": "4592",
+      "name": "Perumanna",
+      "districtId": "314"
+    },
+    {
+      "id": "4593",
+      "name": "Peruvayal",
+      "districtId": "314"
+    },
+    {
+      "id": "4594",
+      "name": "Poolacode",
+      "districtId": "314"
+    },
+    {
+      "id": "4595",
+      "name": "Ramanattukara",
+      "districtId": "314"
+    },
+    {
+      "id": "4596",
+      "name": "Thalakkulathur",
+      "districtId": "314"
+    },
+    {
+      "id": "4597",
+      "name": "Thazhecode",
+      "districtId": "314"
+    },
+    {
+      "id": "4598",
+      "name": "Thikkody",
+      "districtId": "314"
+    },
+    {
+      "id": "4599",
+      "name": "Thuneri",
+      "districtId": "314"
+    },
+    {
+      "id": "4600",
+      "name": "Thurayur",
+      "districtId": "314"
+    },
+    {
+      "id": "4601",
+      "name": "Ulliyeri",
+      "districtId": "314"
+    },
+    {
+      "id": "4602",
+      "name": "Vadakara",
+      "districtId": "314"
+    },
+    {
+      "id": "4603",
+      "name": "Valayam",
+      "districtId": "314"
+    },
+    {
+      "id": "4604",
+      "name": "Villiappally",
+      "districtId": "314"
+    },
+    {
+      "id": "4605",
+      "name": "Abdurahiman Nagar",
+      "districtId": "315"
+    },
+    {
+      "id": "4606",
+      "name": "Alankod",
+      "districtId": "315"
+    },
+    {
+      "id": "4607",
+      "name": "Anakkayam",
+      "districtId": "315"
+    },
+    {
+      "id": "8386",
+      "name": "ANAMANGAD",
+      "districtId": "315"
+    },
+    {
+      "id": "4608",
+      "name": "Ariyallur",
+      "districtId": "315"
+    },
+    {
+      "id": "4609",
+      "name": "Chelambra",
+      "districtId": "315"
+    },
+    {
+      "id": "4610",
+      "name": "Cheriyamundam",
+      "districtId": "315"
+    },
+    {
+      "id": "4611",
+      "name": "Cherukavu",
+      "districtId": "315"
+    },
+    {
+      "id": "4612",
+      "name": "Edappal",
+      "districtId": "315"
+    },
+    {
+      "id": "8381",
+      "name": "EDAVANNA",
+      "districtId": "315"
+    },
+    {
+      "id": "4613",
+      "name": "Irimbiliyam",
+      "districtId": "315"
+    },
+    {
+      "id": "4614",
+      "name": "Kalady Malappuram",
+      "districtId": "315"
+    },
+    {
+      "id": "8461",
+      "name": "KALIKAVU",
+      "districtId": "315"
+    },
+    {
+      "id": "4615",
+      "name": "Kannamangalam",
+      "districtId": "315"
+    },
+    {
+      "id": "8399",
+      "name": "KARULAI",
+      "districtId": "315"
+    },
+    {
+      "id": "8379",
+      "name": "KARUVARAKUNDU",
+      "districtId": "315"
+    },
+    {
+      "id": "4616",
+      "name": "Kattipparuthi",
+      "districtId": "315"
+    },
+    {
+      "id": "8396",
+      "name": "KAVANUR",
+      "districtId": "315"
+    },
+    {
+      "id": "8382",
+      "name": "KIZHISSERY",
+      "districtId": "315"
+    },
+    {
+      "id": "4617",
+      "name": "Kizhuparamba",
+      "districtId": "315"
+    },
+    {
+      "id": "4618",
+      "name": "Kodur",
+      "districtId": "315"
+    },
+    {
+      "id": "4619",
+      "name": "Kondotty",
+      "districtId": "315"
+    },
+    {
+      "id": "8398",
+      "name": "KOOTTAYI",
+      "districtId": "315"
+    },
+    {
+      "id": "4620",
+      "name": "Koottilangadi",
+      "districtId": "315"
+    },
+    {
+      "id": "4621",
+      "name": "Kottakal",
+      "districtId": "315"
+    },
+    {
+      "id": "4622",
+      "name": "Kuttippuram",
+      "districtId": "315"
+    },
+    {
+      "id": "4623",
+      "name": "Malappuram",
+      "districtId": "315"
+    },
+    {
+      "id": "4624",
+      "name": "Manjeri",
+      "districtId": "315"
+    },
+    {
+      "id": "4625",
+      "name": "Marancheri",
+      "districtId": "315"
+    },
+    {
+      "id": "8542",
+      "name": "MELATTUR",
+      "districtId": "315"
+    },
+    {
+      "id": "4626",
+      "name": "Moonniyur",
+      "districtId": "315"
+    },
+    {
+      "id": "8545",
+      "name": "MOOTHEDAM",
+      "districtId": "315"
+    },
+    {
+      "id": "8391",
+      "name": "MORAYUR",
+      "districtId": "315"
+    },
+    {
+      "id": "4627",
+      "name": "Naduvattom",
+      "districtId": "315"
+    },
+    {
+      "id": "4628",
+      "name": "Nannambra",
+      "districtId": "315"
+    },
+    {
+      "id": "4629",
+      "name": "Neduva",
+      "districtId": "315"
+    },
+    {
+      "id": "4630",
+      "name": "Nilambur",
+      "districtId": "315"
+    },
+    {
+      "id": "4631",
+      "name": "Othukkungal",
+      "districtId": "315"
+    },
+    {
+      "id": "4632",
+      "name": "Pallikkal",
+      "districtId": "315"
+    },
+    {
+      "id": "4633",
+      "name": "Parappanangadi",
+      "districtId": "315"
+    },
+    {
+      "id": "4634",
+      "name": "Parappur",
+      "districtId": "315"
+    },
+    {
+      "id": "4635",
+      "name": "Perinthalmanna",
+      "districtId": "315"
+    },
+    {
+      "id": "4636",
+      "name": "Perumanna Malappuram",
+      "districtId": "315"
+    },
+    {
+      "id": "8384",
+      "name": "PERUMPADAPPU",
+      "districtId": "315"
+    },
+    {
+      "id": "4637",
+      "name": "Peruvallur",
+      "districtId": "315"
+    },
+    {
+      "id": "4638",
+      "name": "Ponmundam",
+      "districtId": "315"
+    },
+    {
+      "id": "4639",
+      "name": "Ponnani",
+      "districtId": "315"
+    },
+    {
+      "id": "8392",
+      "name": "POOKKOTTUMPADAM",
+      "districtId": "315"
+    },
+    {
+      "id": "8380",
+      "name": "PULAMANTHOLE",
+      "districtId": "315"
+    },
+    {
+      "id": "8403",
+      "name": "PUTHANATHANI",
+      "districtId": "315"
+    },
+    {
+      "id": "4640",
+      "name": "Talakkad",
+      "districtId": "315"
+    },
+    {
+      "id": "4641",
+      "name": "Tanalur",
+      "districtId": "315"
+    },
+    {
+      "id": "8383",
+      "name": "TANUR",
+      "districtId": "315"
+    },
+    {
+      "id": "4642",
+      "name": "Thanoor",
+      "districtId": "315"
+    },
+    {
+      "id": "4643",
+      "name": "Thenhippalam",
+      "districtId": "315"
+    },
+    {
+      "id": "4644",
+      "name": "Thennala",
+      "districtId": "315"
+    },
+    {
+      "id": "4645",
+      "name": "Thirunavaya",
+      "districtId": "315"
+    },
+    {
+      "id": "8405",
+      "name": "THIRURKAD",
+      "districtId": "315"
+    },
+    {
+      "id": "4646",
+      "name": "Tirur",
+      "districtId": "315"
+    },
+    {
+      "id": "4647",
+      "name": "Tirurangadi",
+      "districtId": "315"
+    },
+    {
+      "id": "4648",
+      "name": "Triprangode",
+      "districtId": "315"
+    },
+    {
+      "id": "8404",
+      "name": "TUVVUR",
+      "districtId": "315"
+    },
+    {
+      "id": "4649",
+      "name": "Urakam",
+      "districtId": "315"
+    },
+    {
+      "id": "4650",
+      "name": "Valancherry",
+      "districtId": "315"
+    },
+    {
+      "id": "4651",
+      "name": "Vazhayur",
+      "districtId": "315"
+    },
+    {
+      "id": "8385",
+      "name": "VAZHIKKADAVU",
+      "districtId": "315"
+    },
+    {
+      "id": "8402",
+      "name": "VENGAD",
+      "districtId": "315"
+    },
+    {
+      "id": "4652",
+      "name": "Vengara",
+      "districtId": "315"
+    },
+    {
+      "id": "8393",
+      "name": "VETTATHUR",
+      "districtId": "315"
+    },
+    {
+      "id": "8553",
+      "name": "ALANALLUR",
+      "districtId": "316"
+    },
+    {
+      "id": "4653",
+      "name": "Alathur",
+      "districtId": "316"
+    },
+    {
+      "id": "8546",
+      "name": "ALUNGAL",
+      "districtId": "316"
+    },
+    {
+      "id": "8462",
+      "name": "ARANGOTTUKARA",
+      "districtId": "316"
+    },
+    {
+      "id": "8334",
+      "name": "AYALUR",
+      "districtId": "316"
+    },
+    {
+      "id": "8355",
+      "name": "Ayilur, Nemmara",
+      "districtId": "316"
+    },
+    {
+      "id": "4654",
+      "name": "Cherppulassery",
+      "districtId": "316"
+    },
+    {
+      "id": "4655",
+      "name": "Chittur Thathamangalam",
+      "districtId": "316"
+    },
+    {
+      "id": "4656",
+      "name": "Industrial Development Plot Kappur",
+      "districtId": "316"
+    },
+    {
+      "id": "8556",
+      "name": "KADAMPAZHIPURAM",
+      "districtId": "316"
+    },
+    {
+      "id": "8410",
+      "name": "KALLADIKODE",
+      "districtId": "316"
+    },
+    {
+      "id": "4657",
+      "name": "Kanjikode Industrial Area",
+      "districtId": "316"
+    },
+    {
+      "id": "4658",
+      "name": "KINFRA Mega Food Park Kozhipara",
+      "districtId": "316"
+    },
+    {
+      "id": "4659",
+      "name": "Koduvayur",
+      "districtId": "316"
+    },
+    {
+      "id": "8339",
+      "name": "Kongad",
+      "districtId": "316"
+    },
+    {
+      "id": "8453",
+      "name": "KOPPAM",
+      "districtId": "316"
+    },
+    {
+      "id": "4660",
+      "name": "KSIDC Investment Zone",
+      "districtId": "316"
+    },
+    {
+      "id": "8190",
+      "name": "KUZHALMANNAM-I",
+      "districtId": "316"
+    },
+    {
+      "id": "4661",
+      "name": "Mannarkad",
+      "districtId": "316"
+    },
+    {
+      "id": "8607",
+      "name": "MANNUR",
+      "districtId": "316"
+    },
+    {
+      "id": "4662",
+      "name": "Muthuthala",
+      "districtId": "316"
+    },
+    {
+      "id": "4663",
+      "name": "Ongallur",
+      "districtId": "316"
+    },
+    {
+      "id": "4664",
+      "name": "Ottappalam",
+      "districtId": "316"
+    },
+    {
+      "id": "4665",
+      "name": "Palakkad",
+      "districtId": "316"
+    },
+    {
+      "id": "8354",
+      "name": "Parali",
+      "districtId": "316"
+    },
+    {
+      "id": "8409",
+      "name": "PATHIRIPPALA",
+      "districtId": "316"
+    },
+    {
+      "id": "4666",
+      "name": "Pattambi",
+      "districtId": "316"
+    },
+    {
+      "id": "8552",
+      "name": "PERINGOTTUKURISSI",
+      "districtId": "316"
+    },
+    {
+      "id": "4667",
+      "name": "Pirayiri",
+      "districtId": "316"
+    },
+    {
+      "id": "4668",
+      "name": "Pudussery",
+      "districtId": "316"
+    },
+    {
+      "id": "4669",
+      "name": "Puthunagaram",
+      "districtId": "316"
+    },
+    {
+      "id": "4670",
+      "name": "Puthuppariyaram",
+      "districtId": "316"
+    },
+    {
+      "id": "4671",
+      "name": "Shoranur",
+      "districtId": "316"
+    },
+    {
+      "id": "8340",
+      "name": "Srikrishnapuram",
+      "districtId": "316"
+    },
+    {
+      "id": "8455",
+      "name": "THACHAMPARA",
+      "districtId": "316"
+    },
+    {
+      "id": "4672",
+      "name": "Thirumittacode",
+      "districtId": "316"
+    },
+    {
+      "id": "4673",
+      "name": "Thrithala",
+      "districtId": "316"
+    },
+    {
+      "id": "4674",
+      "name": "Vaniyamkulam",
+      "districtId": "316"
+    },
+    {
+      "id": "4675",
+      "name": "Adoor",
+      "districtId": "317"
+    },
+    {
+      "id": "8451",
+      "name": "CHALAPPALLY",
+      "districtId": "317"
+    },
+    {
+      "id": "8418",
+      "name": "CHANDANAPALLY",
+      "districtId": "317"
+    },
+    {
+      "id": "8419",
+      "name": "CHITTAR",
+      "districtId": "317"
+    },
+    {
+      "id": "8449",
+      "name": "CHUNGAPPARA",
+      "districtId": "317"
+    },
+    {
+      "id": "8549",
+      "name": "ELANTHOR",
+      "districtId": "317"
+    },
+    {
+      "id": "8464",
+      "name": "ELAVUMTHITTA",
+      "districtId": "317"
+    },
+    {
+      "id": "8414",
+      "name": "ENATHU",
+      "districtId": "317"
+    },
+    {
+      "id": "8445",
+      "name": "EZHAMKULAM",
+      "districtId": "317"
+    },
+    {
+      "id": "8417",
+      "name": "KADAMPANAD",
+      "districtId": "317"
+    },
+    {
+      "id": "8415",
+      "name": "KALANJOOR",
+      "districtId": "317"
+    },
+    {
+      "id": "8438",
+      "name": "KIDANGANNUR",
+      "districtId": "317"
+    },
+    {
+      "id": "4676",
+      "name": "KINFRA Industrial Park Kunnamthanam",
+      "districtId": "317"
+    },
+    {
+      "id": "4677",
+      "name": "KINFRA Small Industries Park Adoor",
+      "districtId": "317"
+    },
+    {
+      "id": "8413",
+      "name": "KOIPURAM",
+      "districtId": "317"
+    },
+    {
+      "id": "8412",
+      "name": "KONNI",
+      "districtId": "317"
+    },
+    {
+      "id": "8040",
+      "name": "Konnithazham Village",
+      "districtId": "317"
+    },
+    {
+      "id": "8156",
+      "name": "KOZHENCHERRY",
+      "districtId": "317"
+    },
+    {
+      "id": "4678",
+      "name": "Kozhenchery",
+      "districtId": "317"
+    },
+    {
+      "id": "8466",
+      "name": "KULANADA",
+      "districtId": "317"
+    },
+    {
+      "id": "8452",
+      "name": "MALAYALAPPUZHA",
+      "districtId": "317"
+    },
+    {
+      "id": "8439",
+      "name": "OMALLOOR",
+      "districtId": "317"
+    },
+    {
+      "id": "4679",
+      "name": "Pandalam",
+      "districtId": "317"
+    },
+    {
+      "id": "4680",
+      "name": "Pathanamthitta",
+      "districtId": "317"
+    },
+    {
+      "id": "8411",
+      "name": "PAZHAVANGADI",
+      "districtId": "317"
+    },
+    {
+      "id": "4681",
+      "name": "SIDCO Industrial Estate Kunnamthanam",
+      "districtId": "317"
+    },
+    {
+      "id": "8559",
+      "name": "THANNITHODE",
+      "districtId": "317"
+    },
+    {
+      "id": "4682",
+      "name": "Thiruvalla",
+      "districtId": "317"
+    },
+    {
+      "id": "8450",
+      "name": "THUMPAMON",
+      "districtId": "317"
+    },
+    {
+      "id": "8416",
+      "name": "VADASSERIKKARA",
+      "districtId": "317"
+    },
+    {
+      "id": "8560",
+      "name": "VALLIKODE KOTTAYAM",
+      "districtId": "317"
+    },
+    {
+      "id": "8440",
+      "name": "VENNIKULAM",
+      "districtId": "317"
+    },
+    {
+      "id": "8436",
+      "name": "685583",
+      "districtId": "318"
+    },
+    {
+      "id": "4683",
+      "name": "Alamcode",
+      "districtId": "318"
+    },
+    {
+      "id": "8429",
+      "name": "ARYANAD",
+      "districtId": "318"
+    },
+    {
+      "id": "4684",
+      "name": "Athiyannur",
+      "districtId": "318"
+    },
+    {
+      "id": "4685",
+      "name": "Attingal",
+      "districtId": "318"
+    },
+    {
+      "id": "4686",
+      "name": "Azhoor",
+      "districtId": "318"
+    },
+    {
+      "id": "4687",
+      "name": "Edakkode",
+      "districtId": "318"
+    },
+    {
+      "id": "4688",
+      "name": "Iroopara",
+      "districtId": "318"
+    },
+    {
+      "id": "8425",
+      "name": "KADAKKAVOOR",
+      "districtId": "318"
+    },
+    {
+      "id": "8432",
+      "name": "KALLAMBALAM",
+      "districtId": "318"
+    },
+    {
+      "id": "8169",
+      "name": "Kallara",
+      "districtId": "318"
+    },
+    {
+      "id": "4689",
+      "name": "Kalliyoor",
+      "districtId": "318"
+    },
+    {
+      "id": "8427",
+      "name": "KANIYAPURAM",
+      "districtId": "318"
+    },
+    {
+      "id": "4690",
+      "name": "Kanjiramkulam",
+      "districtId": "318"
+    },
+    {
+      "id": "4691",
+      "name": "Karakulam",
+      "districtId": "318"
+    },
+    {
+      "id": "8423",
+      "name": "KARETTE",
+      "districtId": "318"
+    },
+    {
+      "id": "4692",
+      "name": "Keezhattingal",
+      "districtId": "318"
+    },
+    {
+      "id": "4693",
+      "name": "Kizhuvalam Koonthalloor",
+      "districtId": "318"
+    },
+    {
+      "id": "8550",
+      "name": "KOTTOOR",
+      "districtId": "318"
+    },
+    {
+      "id": "4694",
+      "name": "Kulathummal",
+      "districtId": "318"
+    },
+    {
+      "id": "8056",
+      "name": "Madavoor",
+      "districtId": "318"
+    },
+    {
+      "id": "4695",
+      "name": "Malayinkeezhu",
+      "districtId": "318"
+    },
+    {
+      "id": "8441",
+      "name": "MANGALAPURAM",
+      "districtId": "318"
+    },
+    {
+      "id": "8456",
+      "name": "MARANALLOOR",
+      "districtId": "318"
+    },
+    {
+      "id": "8563",
+      "name": "MUTHUVILA",
+      "districtId": "318"
+    },
+    {
+      "id": "8431",
+      "name": "NADAYARA",
+      "districtId": "318"
+    },
+    {
+      "id": "8444",
+      "name": "NAGAROOR",
+      "districtId": "318"
+    },
+    {
+      "id": "4696",
+      "name": "Nedumangad",
+      "districtId": "318"
+    },
+    {
+      "id": "4697",
+      "name": "Neyyattinkara",
+      "districtId": "318"
+    },
+    {
+      "id": "4698",
+      "name": "Pallichal",
+      "districtId": "318"
+    },
+    {
+      "id": "4699",
+      "name": "Pallippuram Thiruvananthapuram",
+      "districtId": "318"
+    },
+    {
+      "id": "8422",
+      "name": "PALODE",
+      "districtId": "318"
+    },
+    {
+      "id": "8424",
+      "name": "PANAVUR",
+      "districtId": "318"
+    },
+    {
+      "id": "4700",
+      "name": "Parassala",
+      "districtId": "318"
+    },
+    {
+      "id": "4701",
+      "name": "Parasuvaikkal",
+      "districtId": "318"
+    },
+    {
+      "id": "8170",
+      "name": "Perumkulam",
+      "districtId": "318"
+    },
+    {
+      "id": "8468",
+      "name": "PERUNGUZHI",
+      "districtId": "318"
+    },
+    {
+      "id": "8426",
+      "name": "POTHENCODE",
+      "districtId": "318"
+    },
+    {
+      "id": "8460",
+      "name": "PRAVACHAMBALAM",
+      "districtId": "318"
+    },
+    {
+      "id": "4702",
+      "name": "Thiruvananthapuram",
+      "districtId": "318"
+    },
+    {
+      "id": "8428",
+      "name": "UDIYANKULANGARA",
+      "districtId": "318"
+    },
+    {
+      "id": "4703",
+      "name": "Vakkom",
+      "districtId": "318"
+    },
+    {
+      "id": "4704",
+      "name": "Varkala",
+      "districtId": "318"
+    },
+    {
+      "id": "4705",
+      "name": "Vattappara",
+      "districtId": "318"
+    },
+    {
+      "id": "4706",
+      "name": "Veiloor",
+      "districtId": "318"
+    },
+    {
+      "id": "8433",
+      "name": "VELLANAD",
+      "districtId": "318"
+    },
+    {
+      "id": "8458",
+      "name": "VELLAR",
+      "districtId": "318"
+    },
+    {
+      "id": "8459",
+      "name": "VELLARADA",
+      "districtId": "318"
+    },
+    {
+      "id": "4707",
+      "name": "Venganoor",
+      "districtId": "318"
+    },
+    {
+      "id": "8420",
+      "name": "VENJARAMOODU",
+      "districtId": "318"
+    },
+    {
+      "id": "4708",
+      "name": "Vilappil",
+      "districtId": "318"
+    },
+    {
+      "id": "4709",
+      "name": "Vilavoorkkal",
+      "districtId": "318"
+    },
+    {
+      "id": "8430",
+      "name": "VITHURA",
+      "districtId": "318"
+    },
+    {
+      "id": "4710",
+      "name": "Adat",
+      "districtId": "319"
+    },
+    {
+      "id": "4711",
+      "name": "Akathiyoor",
+      "districtId": "319"
+    },
+    {
+      "id": "4712",
+      "name": "Ala",
+      "districtId": "319"
+    },
+    {
+      "id": "4713",
+      "name": "Alur",
+      "districtId": "319"
+    },
+    {
+      "id": "4714",
+      "name": "Amballur",
+      "districtId": "319"
+    },
+    {
+      "id": "4715",
+      "name": "Anjur",
+      "districtId": "319"
+    },
+    {
+      "id": "8448",
+      "name": "ANNAMANADA",
+      "districtId": "319"
+    },
+    {
+      "id": "4716",
+      "name": "Anthicad",
+      "districtId": "319"
+    },
+    {
+      "id": "4717",
+      "name": "Avanur",
+      "districtId": "319"
+    },
+    {
+      "id": "4718",
+      "name": "Avittathur",
+      "districtId": "319"
+    },
+    {
+      "id": "4719",
+      "name": "Brahmakulam",
+      "districtId": "319"
+    },
+    {
+      "id": "4720",
+      "name": "Chalakudy",
+      "districtId": "319"
+    },
+    {
+      "id": "4721",
+      "name": "Chavakkad",
+      "districtId": "319"
+    },
+    {
+      "id": "4722",
+      "name": "Chelakkara",
+      "districtId": "319"
+    },
+    {
+      "id": "4723",
+      "name": "Chendrappini",
+      "districtId": "319"
+    },
+    {
+      "id": "4724",
+      "name": "Cheruthuruthi",
+      "districtId": "319"
+    },
+    {
+      "id": "4725",
+      "name": "Chiramanangad",
+      "districtId": "319"
+    },
+    {
+      "id": "4726",
+      "name": "Chiranellur",
+      "districtId": "319"
+    },
+    {
+      "id": "4727",
+      "name": "Chittanda",
+      "districtId": "319"
+    },
+    {
+      "id": "4728",
+      "name": "Chittilappilly",
+      "districtId": "319"
+    },
+    {
+      "id": "4729",
+      "name": "Choondal",
+      "districtId": "319"
+    },
+    {
+      "id": "4730",
+      "name": "Desamangalam",
+      "districtId": "319"
+    },
+    {
+      "id": "4731",
+      "name": "Edakkalathur",
+      "districtId": "319"
+    },
+    {
+      "id": "4732",
+      "name": "Edakkazhiyur",
+      "districtId": "319"
+    },
+    {
+      "id": "4733",
+      "name": "Edathirinji",
+      "districtId": "319"
+    },
+    {
+      "id": "4734",
+      "name": "Edathiruthy",
+      "districtId": "319"
+    },
+    {
+      "id": "4735",
+      "name": "Edavilangu",
+      "districtId": "319"
+    },
+    {
+      "id": "4736",
+      "name": "Elavally",
+      "districtId": "319"
+    },
+    {
+      "id": "4737",
+      "name": "Enkakkad",
+      "districtId": "319"
+    },
+    {
+      "id": "4738",
+      "name": "Eranellur",
+      "districtId": "319"
+    },
+    {
+      "id": "4739",
+      "name": "Eravu",
+      "districtId": "319"
+    },
+    {
+      "id": "4740",
+      "name": "Eriyad",
+      "districtId": "319"
+    },
+    {
+      "id": "8454",
+      "name": "ERUMAPETTY",
+      "districtId": "319"
+    },
+    {
+      "id": "4741",
+      "name": "Eyyal",
+      "districtId": "319"
+    },
+    {
+      "id": "4742",
+      "name": "Guruvayur",
+      "districtId": "319"
+    },
+    {
+      "id": "4743",
+      "name": "Iringaprom",
+      "districtId": "319"
+    },
+    {
+      "id": "4744",
+      "name": "Irinjalakuda",
+      "districtId": "319"
+    },
+    {
+      "id": "4745",
+      "name": "Kadavallur",
+      "districtId": "319"
+    },
+    {
+      "id": "4746",
+      "name": "Kadikkad",
+      "districtId": "319"
+    },
+    {
+      "id": "4747",
+      "name": "Kainoor",
+      "districtId": "319"
+    },
+    {
+      "id": "4748",
+      "name": "Kaipamangalam",
+      "districtId": "319"
+    },
+    {
+      "id": "4749",
+      "name": "Kaiparamba",
+      "districtId": "319"
+    },
+    {
+      "id": "4750",
+      "name": "Kallettumkara",
+      "districtId": "319"
+    },
+    {
+      "id": "4751",
+      "name": "Kallur Thekkummuri",
+      "districtId": "319"
+    },
+    {
+      "id": "4752",
+      "name": "Kallur Vadakkummuri",
+      "districtId": "319"
+    },
+    {
+      "id": "4753",
+      "name": "Kandanassery",
+      "districtId": "319"
+    },
+    {
+      "id": "4754",
+      "name": "Kaniyarkode",
+      "districtId": "319"
+    },
+    {
+      "id": "4755",
+      "name": "Karamuck",
+      "districtId": "319"
+    },
+    {
+      "id": "4756",
+      "name": "Karikkad",
+      "districtId": "319"
+    },
+    {
+      "id": "4757",
+      "name": "Kariyannur",
+      "districtId": "319"
+    },
+    {
+      "id": "4758",
+      "name": "Kattakampal",
+      "districtId": "319"
+    },
+    {
+      "id": "4759",
+      "name": "Kattur",
+      "districtId": "319"
+    },
+    {
+      "id": "4760",
+      "name": "Killannur",
+      "districtId": "319"
+    },
+    {
+      "id": "8557",
+      "name": "KILLIMANGALAM",
+      "districtId": "319"
+    },
+    {
+      "id": "4761",
+      "name": "Kizhakkummuri",
+      "districtId": "319"
+    },
+    {
+      "id": "4762",
+      "name": "Kizhuppillikkara",
+      "districtId": "319"
+    },
+    {
+      "id": "8617",
+      "name": "Kodakara",
+      "districtId": "319"
+    },
+    {
+      "id": "4763",
+      "name": "Kodungallur",
+      "districtId": "319"
+    },
+    {
+      "id": "8447",
+      "name": "KOLAZHY",
+      "districtId": "319"
+    },
+    {
+      "id": "4764",
+      "name": "Koratty",
+      "districtId": "319"
+    },
+    {
+      "id": "4765",
+      "name": "Kottappuram",
+      "districtId": "319"
+    },
+    {
+      "id": "4766",
+      "name": "Kumaranellur",
+      "districtId": "319"
+    },
+    {
+      "id": "4767",
+      "name": "Kunnamkulam",
+      "districtId": "319"
+    },
+    {
+      "id": "4768",
+      "name": "Kurichikkara",
+      "districtId": "319"
+    },
+    {
+      "id": "4769",
+      "name": "Kurumpilavu",
+      "districtId": "319"
+    },
+    {
+      "id": "4770",
+      "name": "Madayikonam",
+      "districtId": "319"
+    },
+    {
+      "id": "4771",
+      "name": "Manakkody",
+      "districtId": "319"
+    },
+    {
+      "id": "4772",
+      "name": "Manalur",
+      "districtId": "319"
+    },
+    {
+      "id": "4773",
+      "name": "Manavalassery",
+      "districtId": "319"
+    },
+    {
+      "id": "8457",
+      "name": "MATTATHUR",
+      "districtId": "319"
+    },
+    {
+      "id": "4774",
+      "name": "Methala",
+      "districtId": "319"
+    },
+    {
+      "id": "4775",
+      "name": "Minalur",
+      "districtId": "319"
+    },
+    {
+      "id": "4776",
+      "name": "Mullassery",
+      "districtId": "319"
+    },
+    {
+      "id": "4777",
+      "name": "Mundathikode",
+      "districtId": "319"
+    },
+    {
+      "id": "4778",
+      "name": "Muringur Vadakkummuri",
+      "districtId": "319"
+    },
+    {
+      "id": "8446",
+      "name": "MUTHUVARA",
+      "districtId": "319"
+    },
+    {
+      "id": "4779",
+      "name": "Nadathara",
+      "districtId": "319"
+    },
+    {
+      "id": "4780",
+      "name": "Nedumpura",
+      "districtId": "319"
+    },
+    {
+      "id": "4781",
+      "name": "Nelluwaya",
+      "districtId": "319"
+    },
+    {
+      "id": "4782",
+      "name": "Nenmenikkara",
+      "districtId": "319"
+    },
+    {
+      "id": "4783",
+      "name": "Oorakam",
+      "districtId": "319"
+    },
+    {
+      "id": "4784",
+      "name": "Orumanayur",
+      "districtId": "319"
+    },
+    {
+      "id": "4785",
+      "name": "Padiyam",
+      "districtId": "319"
+    },
+    {
+      "id": "4786",
+      "name": "Padiyur",
+      "districtId": "319"
+    },
+    {
+      "id": "4787",
+      "name": "Pallippuram",
+      "districtId": "319"
+    },
+    {
+      "id": "4788",
+      "name": "Paluvai",
+      "districtId": "319"
+    },
+    {
+      "id": "4789",
+      "name": "Panangad Thrissur",
+      "districtId": "319"
+    },
+    {
+      "id": "4790",
+      "name": "Pappinivattom",
+      "districtId": "319"
+    },
+    {
+      "id": "4791",
+      "name": "Parakkad",
+      "districtId": "319"
+    },
+    {
+      "id": "4792",
+      "name": "Paralam",
+      "districtId": "319"
+    },
+    {
+      "id": "4793",
+      "name": "Parappukkara",
+      "districtId": "319"
+    },
+    {
+      "id": "8341",
+      "name": "Pattickad",
+      "districtId": "319"
+    },
+    {
+      "id": "4794",
+      "name": "Pavaratty",
+      "districtId": "319"
+    },
+    {
+      "id": "4795",
+      "name": "Pazhanji",
+      "districtId": "319"
+    },
+    {
+      "id": "4796",
+      "name": "Peramangalam",
+      "districtId": "319"
+    },
+    {
+      "id": "4797",
+      "name": "Peringandoor",
+      "districtId": "319"
+    },
+    {
+      "id": "4798",
+      "name": "Perinjanam",
+      "districtId": "319"
+    },
+    {
+      "id": "4799",
+      "name": "Pookode",
+      "districtId": "319"
+    },
+    {
+      "id": "4800",
+      "name": "Poomangalam",
+      "districtId": "319"
+    },
+    {
+      "id": "4801",
+      "name": "Porathissery",
+      "districtId": "319"
+    },
+    {
+      "id": "4802",
+      "name": "Porkulam",
+      "districtId": "319"
+    },
+    {
+      "id": "4803",
+      "name": "Poyya",
+      "districtId": "319"
+    },
+    {
+      "id": "4804",
+      "name": "Pullur",
+      "districtId": "319"
+    },
+    {
+      "id": "4805",
+      "name": "Punnayur",
+      "districtId": "319"
+    },
+    {
+      "id": "4806",
+      "name": "Punnayurkulam",
+      "districtId": "319"
+    },
+    {
+      "id": "4807",
+      "name": "Puranattukara",
+      "districtId": "319"
+    },
+    {
+      "id": "4808",
+      "name": "Puthukkad",
+      "districtId": "319"
+    },
+    {
+      "id": "4809",
+      "name": "Puthur",
+      "districtId": "319"
+    },
+    {
+      "id": "4810",
+      "name": "Talikkulam",
+      "districtId": "319"
+    },
+    {
+      "id": "4811",
+      "name": "Thaikkad",
+      "districtId": "319"
+    },
+    {
+      "id": "4812",
+      "name": "Thangalur",
+      "districtId": "319"
+    },
+    {
+      "id": "4813",
+      "name": "Thanniyam",
+      "districtId": "319"
+    },
+    {
+      "id": "4814",
+      "name": "Thekkumkara",
+      "districtId": "319"
+    },
+    {
+      "id": "4815",
+      "name": "Tholur",
+      "districtId": "319"
+    },
+    {
+      "id": "4816",
+      "name": "Thrissur",
+      "districtId": "319"
+    },
+    {
+      "id": "4817",
+      "name": "Trikkur",
+      "districtId": "319"
+    },
+    {
+      "id": "4818",
+      "name": "Vadakkekad",
+      "districtId": "319"
+    },
+    {
+      "id": "4819",
+      "name": "Vadakkumkara",
+      "districtId": "319"
+    },
+    {
+      "id": "4820",
+      "name": "Vadakkummuri",
+      "districtId": "319"
+    },
+    {
+      "id": "4821",
+      "name": "Vadama",
+      "districtId": "319"
+    },
+    {
+      "id": "4822",
+      "name": "Vadanappally",
+      "districtId": "319"
+    },
+    {
+      "id": "4823",
+      "name": "Vellookkara",
+      "districtId": "319"
+    },
+    {
+      "id": "4824",
+      "name": "Velur",
+      "districtId": "319"
+    },
+    {
+      "id": "4825",
+      "name": "Veluthur",
+      "districtId": "319"
+    },
+    {
+      "id": "4826",
+      "name": "Venkitangu",
+      "districtId": "319"
+    },
+    {
+      "id": "4827",
+      "name": "Venmanad",
+      "districtId": "319"
+    },
+    {
+      "id": "4828",
+      "name": "Vylathur",
+      "districtId": "319"
+    },
+    {
+      "id": "4829",
+      "name": "Wadakkanchery",
+      "districtId": "319"
+    },
+    {
+      "id": "4830",
+      "name": "Kalpetta",
+      "districtId": "320"
+    },
+    {
+      "id": "8395",
+      "name": "KANIYAMBETTA",
+      "districtId": "320"
+    },
+    {
+      "id": "8472",
+      "name": "KARTIKULAM",
+      "districtId": "320"
+    },
+    {
+      "id": "8389",
+      "name": "KENICHIRA",
+      "districtId": "320"
+    },
+    {
+      "id": "4831",
+      "name": "Mananthavady",
+      "districtId": "320"
+    },
+    {
+      "id": "8388",
+      "name": "MULLANKOLLY",
+      "districtId": "320"
+    },
+    {
+      "id": "8407",
+      "name": "NADAVAYAL",
+      "districtId": "320"
+    },
+    {
+      "id": "8473",
+      "name": "PERIYA",
+      "districtId": "320"
+    },
+    {
+      "id": "8406",
+      "name": "POZHUTHANA",
+      "districtId": "320"
+    },
+    {
+      "id": "4832",
+      "name": "Sulthan Bathery",
+      "districtId": "320"
+    },
+    {
+      "id": "8408",
+      "name": "VADUVANCHAL",
+      "districtId": "320"
+    },
+    {
+      "id": "8478",
+      "name": "VELLAMUNDA",
+      "districtId": "320"
+    },
+    {
+      "id": "4833",
+      "name": "Vythiri",
+      "districtId": "320"
+    }
+  ],
+  "propertyTypes": [
+    {
+      "id": "1",
+      "name": "Residential"
+    },
+    {
+      "id": "2",
+      "name": "Commercial"
+    },
+    {
+      "id": "3",
+      "name": "Agriculture"
+    },
+    {
+      "id": "4",
+      "name": "Industrial"
+    },
+    {
+      "id": "5",
+      "name": "Other"
+    }
+  ],
+  "propertySubTypes": [
+    {
+      "id": "house",
+      "name": "Individual House",
+      "propertyTypeId": "1"
+    },
+    {
+      "id": "flat",
+      "name": "Flat",
+      "propertyTypeId": "1"
+    },
+    {
+      "id": "plot",
+      "name": "Plot",
+      "propertyTypeId": "1"
+    },
+    {
+      "id": "land-building",
+      "name": "Land and Building",
+      "propertyTypeId": "2"
+    },
+    {
+      "id": "godown",
+      "name": "Godown",
+      "propertyTypeId": "2"
+    },
+    {
+      "id": "vacant-land",
+      "name": "Vacant Land",
+      "propertyTypeId": "3"
+    },
+    {
+      "id": "industrial-building",
+      "name": "Industrial Building",
+      "propertyTypeId": "4"
+    },
+    {
+      "id": "other",
+      "name": "Other",
+      "propertyTypeId": "5"
+    }
+  ],
+  "possessionStatuses": [
+    {
+      "id": "1",
+      "name": "Physical"
+    },
+    {
+      "id": "2",
+      "name": "Symbolic"
+    },
+    {
+      "id": "3",
+      "name": "Other"
+    },
+    {
+      "id": "unknown",
+      "name": "Unknown"
+    }
+  ]
+}
