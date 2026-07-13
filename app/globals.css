@@ -1004,6 +1004,85 @@ h1 {
   background: #f7fbf8;
 }
 
+.ai-simple-grid,
+.ai-takeaway {
+  display: grid;
+  gap: 10px;
+}
+
+.ai-simple-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.ai-takeaway {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.ai-simple-grid > div,
+.ai-takeaway > div {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+  padding: 14px;
+  border: 1px solid #dce7df;
+  border-radius: 8px;
+  background: white;
+}
+
+.ai-simple-grid span,
+.ai-takeaway span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.ai-simple-grid strong,
+.ai-takeaway strong {
+  color: #253029;
+  font-size: 16px;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.ai-simple-grid small {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+.ai-details {
+  border: 1px solid #dce7df;
+  border-radius: 8px;
+  background: white;
+}
+
+.ai-details summary {
+  cursor: pointer;
+  padding: 14px;
+  color: var(--accent);
+  font-weight: 900;
+}
+
+.ai-details summary::after {
+  content: " +";
+}
+
+.ai-details[open] summary {
+  border-bottom: 1px solid #dce7df;
+}
+
+.ai-details[open] summary::after {
+  content: " -";
+}
+
+.ai-details-body {
+  display: grid;
+  gap: 14px;
+  padding: 14px;
+}
+
 .location-intelligence {
   display: grid;
   gap: 12px;
@@ -2110,6 +2189,8 @@ h1 {
 
   .market-loading,
   .smart-score-panel,
+  .ai-simple-grid,
+  .ai-takeaway,
   .location-intelligence-head,
   .location-signal-grid,
   .market-grid,

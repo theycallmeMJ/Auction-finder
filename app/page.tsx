@@ -724,15 +724,15 @@ function MarketAnalysisPanel({
             <div className="smart-score-main">
               <span>Smart AI Score</span>
               <strong>{smartScore ?? "--"}/100</strong>
-              <small>Market value is shown separately below.</small>
+              <small>{analysis.verdict.replace(/_/g, " ")}</small>
             </div>
             <div className="smart-score-context">
               <div className="smart-score-meta">
                 <span>{analysis.verdict.replace(/_/g, " ")}</span>
-                <span>Smart AI Location {analysis.investmentAssessment.locationScore}/100</span>
-                {locationConfidence && <span>{locationConfidence.level} evidence</span>}
+                <span>{analysis.confidence} confidence</span>
+                <span>{comparableCount} comparables</span>
               </div>
-              <p>{analysis.locationEvidence?.explanation ?? analysis.confidenceReason}</p>
+              <p>{analysis.confidenceReason}</p>
               <div className="nearby-chip-list">
                 {confirmedNearby.length ? confirmedNearby.slice(0, 4).map((item) => (
                   <span key={`${item.type}-${item.name}`}>
@@ -745,6 +745,43 @@ function MarketAnalysisPanel({
             </div>
           </div>
 
+          <div className="ai-simple-grid">
+            <div>
+              <span>Likely market value</span>
+              <strong>{rangeLabel(analysis.marketAssessment.adjustedMarketValueLow, analysis.marketAssessment.adjustedMarketValueHigh)}</strong>
+              <small>Reserve: {priceLabel(auction.reservePrice)}</small>
+            </div>
+            <div>
+              <span>Auction discount</span>
+              <strong>{percentRangeLabel(analysis.investmentAssessment.auctionDiscountLowPercent, analysis.investmentAssessment.auctionDiscountHighPercent)}</strong>
+              <small>{rangeLabel(analysis.marketAssessment.comparableAskingPriceLow, analysis.marketAssessment.comparableAskingPriceHigh)} asking range</small>
+            </div>
+            <div>
+              <span>Rental view</span>
+              <strong>{rangeLabel(analysis.rentalAssessment.estimatedMonthlyRentLow, analysis.rentalAssessment.estimatedMonthlyRentHigh)}</strong>
+              <small>{analysis.rentalAssessment.rentalDemand} demand</small>
+            </div>
+            <div>
+              <span>Main risk</span>
+              <strong>{risks[0] ?? "No major risk flagged"}</strong>
+              <small>Risk score {analysis.investmentAssessment.riskScore}/100</small>
+            </div>
+          </div>
+
+          <div className="ai-takeaway">
+            <div>
+              <span>Why it may be interesting</span>
+              <strong>{strengths[0]}</strong>
+            </div>
+            <div>
+              <span>What to verify first</span>
+              <strong>{missingInformation[0] ?? risks[0] ?? "Documents and physical condition"}</strong>
+            </div>
+          </div>
+
+          <details className="ai-details">
+            <summary>View detailed analysis</summary>
+            <div className="ai-details-body">
           <div className="location-intelligence">
             <div className="location-intelligence-head">
               <div>
@@ -960,6 +997,8 @@ function MarketAnalysisPanel({
               ))}
             </div>
           )}
+            </div>
+          </details>
 
           <p className="market-disclaimer">{analysis.disclaimer}</p>
         </>
