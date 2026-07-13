@@ -695,12 +695,9 @@ function MarketAnalysisPanel({
   ].find(Boolean) : null;
   const rawPropertyRisks = analysis ? (analysis.risks ?? []).filter((item) => !isAnalysisSystemNote(item)) : [];
   const propertyRisks = rawPropertyRisks.length ? compactInsightList(rawPropertyRisks, "", 4) : [];
-  const visibleSmartMeta = analysis ? [
-    analysis.verdict !== "needs_more_data" ? analysis.verdict.replace(/_/g, " ") : null,
-    analysis.confidence !== "low" ? `${analysis.confidence} confidence` : null,
-    comparableCount > 0 ? `${comparableCount} comparables` : null,
-  ].filter((item): item is string => Boolean(item)) : [];
-  const showConfidenceReason = analysis ? analysis.confidence !== "low" || comparableCount > 0 : false;
+  const visibleSmartMeta = analysis?.verdict && analysis.verdict !== "needs_more_data"
+    ? [analysis.verdict.replace(/_/g, " ")]
+    : [];
   const hasAdjustedMarketRange = hasMoneyRange(analysis?.marketAssessment.adjustedMarketValueLow, analysis?.marketAssessment.adjustedMarketValueHigh);
   const hasComparableAskingRange = hasMoneyRange(analysis?.marketAssessment.comparableAskingPriceLow, analysis?.marketAssessment.comparableAskingPriceHigh);
   const hasAuctionDiscount = hasPercentRange(analysis?.investmentAssessment.auctionDiscountLowPercent, analysis?.investmentAssessment.auctionDiscountHighPercent);
@@ -761,7 +758,6 @@ function MarketAnalysisPanel({
                   {visibleSmartMeta.map((item) => <span key={item}>{item}</span>)}
                 </div>
               )}
-              {showConfidenceReason && <p>{analysis.confidenceReason}</p>}
               {confirmedNearby.length > 0 && (
                 <div className="nearby-chip-list">
                   {confirmedNearby.slice(0, 4).map((item) => (
