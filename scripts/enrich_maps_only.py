@@ -86,9 +86,14 @@ def main() -> None:
         print("Most common coordinate outcomes:", flush=True)
         for message, count in errors.most_common(5):
             print(f"- {count}: {message}", flush=True)
-        raise SystemExit(
-            "Stopping before writing/pushing because zero coordinates were captured. "
-            "BAANKNET may be blocking the runner or the API shape changed."
+        if nearby_filled == 0:
+            raise SystemExit(
+                "Stopping before writing because neither coordinates nor nearby evidence were captured. "
+                "BAANKNET may be blocking the runner or the API shape changed."
+            )
+        print(
+            "Continuing because nearby-place enrichment made progress for already mapped properties.",
+            flush=True,
         )
 
     AUCTIONS_PATH.write_text(json.dumps(auctions, indent=2, ensure_ascii=False), encoding="utf-8")
