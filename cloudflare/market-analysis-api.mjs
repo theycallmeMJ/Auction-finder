@@ -4,6 +4,7 @@ const ARE_TO_CENTS = 2.47105;
 const CENT_TO_SQFT = 435.6;
 const CACHE_DAYS = 7;
 const MAX_FRESH_ANALYSES_PER_DAY = 5;
+const AI_ANALYSIS_MIN_SCORE = 70;
 
 const DEFAULT_DISCLAIMER =
   "This analysis is based on available auction data and current online asking prices. Asking prices may differ from completed transaction values. Verify title, possession, encumbrances, physical condition, access, statutory approvals and market value independently before bidding.";
@@ -22,6 +23,7 @@ function sanitizeError(error) {
   const message = error instanceof Error ? error.message : String(error);
   if (/quota/i.test(message)) return { code: "PROVIDER_QUOTA_EXHAUSTED", message: "Live comparable search quota is temporarily exhausted." };
   if (/timeout/i.test(message)) return { code: "PROVIDER_TIMEOUT", message: "Live comparable search timed out." };
+  if (/tavily/i.test(message)) return { code: "SEARCH_PROVIDER_UNAVAILABLE", message: "Comparable search is temporarily unavailable." };
   return { code: "GROUNDING_UNAVAILABLE", message: "Live comparable search is temporarily unavailable." };
 }
 
@@ -83,6 +85,12 @@ function firstText(...values) {
     if (typeof value === "string" && value.trim()) return value.trim();
   }
   return null;
+}
+
+function auctionBaseScore(row) {
+  const columnScore = numberOrNull(row?.score);
+  const payloadScore = numberOrNull(row?.payload?.score?.overall);
+  return columnScore ?? payloadScore ?? null;
 }
 
 function inferBhk(row) {
@@ -458,7 +466,10 @@ async function supabaseFetch(env, path) {
       Accept: "application/json",
     },
   });
-  if (!response.ok) throw new Error(`Supabase read failed: ${response.status}`);
+  if (!response.ok) {
+    const message = await response.text().catch(() => "");
+    throw new Error(`Supabase read failed: ${response.status} ${message}`);
+  }
   return response.json();
 }
 
@@ -476,7 +487,10 @@ async function supabaseWrite(env, path, body, method = "POST") {
     },
     body: JSON.stringify(body),
   });
-  if (!response.ok) throw new Error(`Supabase write failed: ${response.status}`);
+  if (!response.ok) {
+    const message = await response.text().catch(() => "");
+    throw new Error(`Supabase write failed: ${response.status} ${message}`);
+  }
   return response.json().catch(() => null);
 }
 
@@ -495,6 +509,18 @@ async function readCache(env, auctionId, inputHash, provider, model) {
   const createdAt = new Date(cached.created_at).getTime();
   if (Date.now() - createdAt > CACHE_DAYS * 24 * 60 * 60 * 1000) return null;
   return cached;
+}
+
+async function readPermanentAuctionCache(env, auctionId, provider) {
+  const rows = await supabaseFetch(
+    env,
+    `property_market_analysis?select=*&auction_id=eq.${encodeURIComponent(auctionId)}&provider=eq.${encodeURIComponent(provider)}&status=eq.success&order=created_at.desc&limit=1`,
+  );
+  return rows?.[0] ?? null;
+}
+
+function isMissingMarketAnalysisTable(error) {
+  return /property_market_analysis|PGRST205|schema cache/i.test(error?.message || "");
 }
 
 async function logUsage(env, payload) {
@@ -520,6 +546,56 @@ function extractJson(text) {
   return JSON.parse(candidate.slice(start, end + 1));
 }
 
+function normalizeTavilyResult(item, comparableType) {
+  const url = typeof item?.url === "string" ? item.url : null;
+  return {
+    comparableType,
+    title: String(item?.title || "Search result"),
+    url,
+    content: String(item?.content || item?.raw_content || "").slice(0, 1400),
+    score: numberOrNull(item?.score),
+    sourceName: url ? new URL(url).hostname.replace(/^www\./, "") : null,
+    publishedDate: item?.published_date || null,
+  };
+}
+
+async function tavilySearch(env, query, comparableType) {
+  const apiKey = env.TAVILY_API_KEY;
+  if (!apiKey) throw new Error("Tavily is not configured.");
+  const response = await fetch("https://api.tavily.com/search", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      api_key: apiKey,
+      query,
+      search_depth: "basic",
+      topic: "general",
+      max_results: 6,
+      include_answer: false,
+      include_raw_content: false,
+      include_images: false,
+    }),
+  });
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(payload?.error || payload?.message || `Tavily failed: ${response.status}`);
+  return {
+    query,
+    comparableType,
+    results: Array.isArray(payload.results) ? payload.results.map((item) => normalizeTavilyResult(item, comparableType)) : [],
+  };
+}
+
+async function tavilyComparableSearch(env, searchContext) {
+  const saleSearch = await tavilySearch(env, searchContext.primarySearchQuery, "sale");
+  const rentalSearch = await tavilySearch(env, searchContext.rentalSearchQuery, "rental");
+  return {
+    provider: "tavily",
+    saleSearch,
+    rentalSearch,
+    rawResults: [...saleSearch.results, ...rentalSearch.results],
+  };
+}
+
 async function geminiRequest(env, input, attempt = 0) {
   const apiKey = env.GEMINI_API_KEY;
   const model = env.GEMINI_MODEL;
@@ -528,8 +604,11 @@ async function geminiRequest(env, input, attempt = 0) {
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`;
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort("timeout"), 45000);
+  const hasExternalSearchResults = Array.isArray(input?.searchResults?.rawResults);
   const prompt = [
-    "You are analysing an Indian bank-auction property. Use Google Search to find current comparable sale and rental listings. Return structured JSON only. Do not fabricate URLs, prices, rents, distances, land area, legal facts, or transaction prices. Online listing prices are asking prices, not completed transaction prices. For independent houses, land extent is a major valuation input; if missing, lower confidence.",
+    hasExternalSearchResults
+      ? "You are analysing an Indian bank-auction property. Use only the supplied Tavily search results as online evidence. Return structured JSON only. Do not fabricate URLs, prices, rents, distances, land area, legal facts, transaction prices, or source names. If a price/rent/area is not visible in the supplied snippets, leave it null. Online listing prices are asking prices, not completed transaction prices. For independent houses, land extent is a major valuation input; if missing, lower confidence."
+      : "You are analysing an Indian bank-auction property. Use Google Search to find current comparable sale and rental listings. Return structured JSON only. Do not fabricate URLs, prices, rents, distances, land area, legal facts, or transaction prices. Online listing prices are asking prices, not completed transaction prices. For independent houses, land extent is a major valuation input; if missing, lower confidence.",
     JSON.stringify(input, null, 2),
   ].join("\n\n");
   const body = {
@@ -538,7 +617,7 @@ async function geminiRequest(env, input, attempt = 0) {
       temperature: 0.2,
       responseMimeType: "application/json",
     },
-    tools: groundingEnabled ? [{ google_search: {} }] : undefined,
+    tools: groundingEnabled && !hasExternalSearchResults ? [{ google_search: {} }] : undefined,
   };
   try {
     const response = await fetch(url, {
@@ -587,7 +666,8 @@ export async function handleMarketAnalysisRequest(request, env) {
   if (!/^[A-Za-z0-9_-]{3,40}$/.test(auctionId)) {
     return jsonResponse({ error: { code: "INVALID_AUCTION_ID", message: "Invalid auction ID." } }, 400);
   }
-  const provider = env.AI_PROVIDER || "gemini";
+  const searchProvider = env.SEARCH_PROVIDER || (env.TAVILY_API_KEY ? "tavily" : "gemini-grounding");
+  const provider = searchProvider === "tavily" ? "tavily+gemini" : (env.AI_PROVIDER || "gemini");
   const model = env.GEMINI_MODEL || "not-configured";
   const groundingEnabled = String(env.ENABLE_GOOGLE_SEARCH_GROUNDING ?? "true") === "true";
   const auction = await loadAuction(env, auctionId);
@@ -595,6 +675,30 @@ export async function handleMarketAnalysisRequest(request, env) {
   const { property, areaWarnings } = normalizeProperty(auction.payload || {});
   const deterministic = calculateDeterministicAnalysis(property, areaWarnings);
   const searchContext = buildComparableSearchContext(property);
+  const baseScore = auctionBaseScore(auction);
+  if (baseScore !== null && baseScore < AI_ANALYSIS_MIN_SCORE) {
+    return jsonResponse({
+      property,
+      deterministic,
+      searchContext,
+      marketAnalysis: null,
+      fallbackAnalysis: fallbackAnalysis(property, deterministic, `AI market analysis is reserved for auctions scoring ${AI_ANALYSIS_MIN_SCORE}+ before paid search enrichment.`),
+      generatedAt: new Date().toISOString(),
+      sourceUpdatedAt: property.sourceUpdatedAt,
+      provider,
+      model,
+      searchProvider,
+      groundingEnabled,
+      cached: false,
+      skipped: true,
+      baseScore,
+      minScore: AI_ANALYSIS_MIN_SCORE,
+      error: {
+        code: "LOW_BASE_SCORE",
+        message: `This auction score is ${baseScore}/100. AI market analysis starts at ${AI_ANALYSIS_MIN_SCORE}/100.`,
+      },
+    }, 200);
+  }
   const inputHash = await sha256Json({
     property: {
       auctionId: property.auctionId,
@@ -607,8 +711,37 @@ export async function handleMarketAnalysisRequest(request, env) {
       sourceUpdatedAt: property.sourceUpdatedAt,
     },
     model,
+    searchProvider,
   });
-  const cached = body.forceRefresh ? null : await readCache(env, auctionId, inputHash, provider, model);
+  let permanentCached = null;
+  try {
+    permanentCached = await readPermanentAuctionCache(env, auctionId, provider);
+  } catch (err) {
+    if (isMissingMarketAnalysisTable(err)) {
+      return jsonResponse({
+        property,
+        deterministic,
+        searchContext,
+        marketAnalysis: null,
+        fallbackAnalysis: fallbackAnalysis(property, deterministic, "AI cache tables are not set up yet, so paid comparable search was not run."),
+        generatedAt: new Date().toISOString(),
+        sourceUpdatedAt: property.sourceUpdatedAt,
+        provider,
+        model,
+        searchProvider,
+        groundingEnabled,
+        cached: false,
+        skipped: true,
+        baseScore,
+        error: {
+          code: "AI_CACHE_NOT_CONFIGURED",
+          message: "Run supabase/schema.sql before Tavily/Gemini enrichment. This prevents repeated paid search calls without cache storage.",
+        },
+      }, 503);
+    }
+    throw err;
+  }
+  const cached = permanentCached || (body.forceRefresh ? null : await readCache(env, auctionId, inputHash, provider, model));
   if (cached) {
     return jsonResponse({
       property: cached.property_snapshot,
@@ -619,7 +752,9 @@ export async function handleMarketAnalysisRequest(request, env) {
       sourceUpdatedAt: cached.source_updated_at,
       provider: cached.provider,
       model: cached.model,
+      searchProvider,
       groundingEnabled: cached.grounding_enabled,
+      baseScore,
       cached: true,
     });
   }
@@ -631,10 +766,14 @@ export async function handleMarketAnalysisRequest(request, env) {
   let processed = null;
   let status = "success";
   let error = null;
+  let searchResults = null;
   try {
-    const aiInput = { property, deterministic, searchContext };
+    if (searchProvider === "tavily") {
+      searchResults = await tavilyComparableSearch(env, searchContext);
+    }
+    const aiInput = { property, deterministic, searchContext, searchResults };
     const gemini = await geminiRequest(env, aiInput);
-    rawAi = gemini.raw;
+    rawAi = { gemini: gemini.raw, searchResults };
     processed = processGroundedAnalysis(property, deterministic, searchContext, gemini.analysis);
   } catch (err) {
     error = sanitizeError(err);
@@ -689,7 +828,7 @@ export async function handleMarketAnalysisRequest(request, env) {
     auction_id: property.auctionId,
     grounded: groundingEnabled,
     request_count: 1,
-    search_query_count: null,
+    search_query_count: searchProvider === "tavily" ? 2 : null,
     cached: false,
     success: status === "success",
     error_code: error?.code ?? null,
@@ -704,7 +843,9 @@ export async function handleMarketAnalysisRequest(request, env) {
     sourceUpdatedAt: property.sourceUpdatedAt,
     provider,
     model,
+    searchProvider,
     groundingEnabled,
+    baseScore,
     cached: false,
     error,
   }, status === "success" ? 200 : 200);

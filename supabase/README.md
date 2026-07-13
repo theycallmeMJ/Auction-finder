@@ -204,8 +204,15 @@ SUPABASE_SERVICE_ROLE_KEY
 GEMINI_API_KEY
 GEMINI_MODEL
 AI_PROVIDER=gemini
-ENABLE_GOOGLE_SEARCH_GROUNDING=true
+ENABLE_GOOGLE_SEARCH_GROUNDING=false
+TAVILY_API_KEY
+SEARCH_PROVIDER=tavily
 ```
+
+The worker only runs Tavily/Gemini enrichment for auctions with a base
+opportunity score of `70` or higher. Successful Tavily-backed analysis is reused
+permanently per `auction_id`, so the same auction does not consume Tavily search
+again unless this policy is changed later.
 
 Inspect latest AI analysis cache rows:
 

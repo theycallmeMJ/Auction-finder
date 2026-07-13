@@ -165,6 +165,8 @@ GEMINI_API_KEY
 GEMINI_MODEL
 AI_PROVIDER
 ENABLE_GOOGLE_SEARCH_GROUNDING
+TAVILY_API_KEY
+SEARCH_PROVIDER
 ```
 
 Only use `SUPABASE_SERVICE_ROLE_KEY` from local scripts, cron, or GitHub Actions.
@@ -372,11 +374,13 @@ The Cloudflare worker:
 2. normalises area, price, location and property fields
 3. calculates deterministic completeness and preliminary scores
 4. builds comparable sale/rental search context
-5. checks `property_market_analysis` cache for seven-day reuse
-6. calls Gemini with Google Search Grounding when configured
-7. validates and post-processes comparables in application code
-8. writes analysis, comparables and usage logs back to Supabase
-9. returns a graceful deterministic fallback if Gemini/grounding is unavailable
+5. skips paid enrichment when the base opportunity score is below `70`
+6. checks `property_market_analysis` for an existing successful analysis for that auction
+7. calls Tavily for sale/rental comparable search when configured
+8. sends the auction facts and Tavily evidence to Gemini for structured extraction
+9. validates and post-processes comparables in application code
+10. writes analysis, comparables and usage logs back to Supabase
+11. returns a graceful deterministic fallback if search/Gemini is unavailable
 
 Required Cloudflare runtime variables:
 
@@ -386,12 +390,18 @@ SUPABASE_SERVICE_ROLE_KEY
 GEMINI_API_KEY
 GEMINI_MODEL
 AI_PROVIDER=gemini
-ENABLE_GOOGLE_SEARCH_GROUNDING=true
+ENABLE_GOOGLE_SEARCH_GROUNDING=false
+TAVILY_API_KEY
+SEARCH_PROVIDER=tavily
 ```
 
-Gemini grounding may require a billing-enabled Google AI/Gemini project. Without
-Gemini configuration, the endpoint still returns deterministic data quality and
-preliminary analysis with a clear unavailable message.
+Tavily is the preferred comparable-search provider because it keeps web search
+separate from Gemini reasoning and avoids Google Search Grounding quota surprises.
+Once a successful Tavily-backed analysis exists for an `auction_id`, the worker
+reuses it permanently and does not call Tavily again for that auction. Gemini
+grounding remains optional for future use, but it may require a billing-enabled
+Google AI/Gemini project. Without search/Gemini configuration, the endpoint still
+returns deterministic data quality and preliminary analysis with a clear message.
 
 Cache and usage tables:
 

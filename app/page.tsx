@@ -174,7 +174,11 @@ type MarketAnalysisResponse = {
   cached: boolean;
   provider: string;
   model: string;
+  searchProvider?: string;
   groundingEnabled: boolean;
+  skipped?: boolean;
+  baseScore?: number | null;
+  minScore?: number;
   error?: {
     code: string;
     message: string;
@@ -557,6 +561,9 @@ function MarketAnalysisPanel({
   const analysis = data?.marketAnalysis ?? data?.fallbackAnalysis ?? null;
   const isLoading = state?.status === "loading";
   const comparableCount = analysis?.comparableCount ?? ((analysis?.saleComparables.length ?? 0) + (analysis?.rentalComparables.length ?? 0));
+  const baseScore = typeof auction.score?.overall === "number" ? auction.score.overall : null;
+  const minAiScore = 70;
+  const isEligible = baseScore === null || baseScore >= minAiScore;
 
   return (
     <section className="market-analysis">
@@ -566,16 +573,22 @@ function MarketAnalysisPanel({
           <p>Search current comparable sale and rental listings using AI.</p>
         </div>
         <div className="market-analysis-actions">
-          <button type="button" onClick={onRequest} disabled={isLoading}>
+          <button type="button" onClick={onRequest} disabled={isLoading || !isEligible}>
             {analysis ? "Check again" : "Check market value"}
           </button>
-          {analysis && (
+          {analysis && isEligible && (
             <button type="button" className="ghost-button" onClick={onRefresh} disabled={isLoading}>
               Force refresh
             </button>
           )}
         </div>
       </div>
+
+      {!isEligible && (
+        <p className="market-warning">
+          AI market analysis starts at {minAiScore}/100. This auction is currently scored {baseScore}/100, so paid comparable search is skipped.
+        </p>
+      )}
 
       {isLoading && (
         <div className="market-loading">
