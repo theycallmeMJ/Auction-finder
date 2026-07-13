@@ -7,6 +7,7 @@ import importlib.util
 import json
 import os
 import sys
+from collections import Counter
 from pathlib import Path
 from typing import Any
 
@@ -72,6 +73,23 @@ def main() -> None:
 
     after_missing_coordinates = sum(1 for auction in auctions if needs_coordinates(auction))
     after_missing_nearby = sum(1 for auction in auctions if needs_nearby(auction))
+    coordinates_filled = max(before_missing_coordinates - after_missing_coordinates, 0)
+    nearby_filled = max(before_missing_nearby - after_missing_nearby, 0)
+
+    if before_missing_coordinates >= 20 and coordinates_filled == 0:
+        errors = Counter(
+            str(auction.get("locationError") or "No lat/lng returned by BAANKNET")[:220]
+            for auction in auctions
+            if needs_coordinates(auction)
+        )
+        print("Map-only enrichment did not capture any coordinates.", flush=True)
+        print("Most common coordinate outcomes:", flush=True)
+        for message, count in errors.most_common(5):
+            print(f"- {count}: {message}", flush=True)
+        raise SystemExit(
+            "Stopping before writing/pushing because zero coordinates were captured. "
+            "BAANKNET may be blocking the runner or the API shape changed."
+        )
 
     AUCTIONS_PATH.write_text(json.dumps(auctions, indent=2, ensure_ascii=False), encoding="utf-8")
 
@@ -81,8 +99,8 @@ def main() -> None:
 
     print(
         "Map-only enrichment finished. "
-        f"Coordinates filled this run: {max(before_missing_coordinates - after_missing_coordinates, 0)}. "
-        f"Nearby rows filled this run: {max(before_missing_nearby - after_missing_nearby, 0)}. "
+        f"Coordinates filled this run: {coordinates_filled}. "
+        f"Nearby rows filled this run: {nearby_filled}. "
         f"Still missing coordinates: {after_missing_coordinates}. "
         f"Still missing nearby evidence: {after_missing_nearby}.",
         flush=True,

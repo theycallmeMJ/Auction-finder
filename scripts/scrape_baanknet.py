@@ -805,7 +805,14 @@ def enrich_property_locations(session: Session, auctions: list[dict[str, Any]], 
             data = fetch_json(
                 session.opener,
                 f"{BASE_URL}/api/view-property-detail/{detail_id}/1",
-                headers={"User-Agent": "Mozilla/5.0", "Accept": "application/json", "Referer": auction.get("propertyDetailUrl") or f"{BASE_URL}/eproc-listing"},
+                headers={
+                    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 Chrome/126 Safari/537.36",
+                    "Accept": "application/json, text/plain, */*",
+                    "Accept-Language": "en-US,en;q=0.9",
+                    "Origin": "https://baanknet.com",
+                    "Referer": auction.get("propertyDetailUrl") or f"{BASE_URL}/eproc-listing",
+                    "X-Requested-With": "XMLHttpRequest",
+                },
             )
             payload = data.get("respData") if isinstance(data, dict) and isinstance(data.get("respData"), dict) else data
             lat = number_or_none(payload.get("lat") if isinstance(payload, dict) else None)
