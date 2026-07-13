@@ -11,7 +11,7 @@ Pages deployment.
 
 - BAANKNET auction listing UI
 - Kerala-focused filters
-- Ranking mode with Opportunity Score
+- Ranking mode with Auction Score
 - Property detail expansion
 - BAANKNET notice/property outbound links
 - Mobile-friendly filter drawer and auction cards
@@ -21,7 +21,7 @@ Pages deployment.
 - Supabase Google OAuth login
 - Login gate after free auction actions
 - Login event tracking schema and frontend insert
-- On-demand AI Market & Investment Analysis
+- On-demand Smart AI Score with market and rental analysis
 - Server-side Gemini grounded comparable search API
 - Daily GitHub Actions scrape/deploy workflow
 - Cloudflare Pages build/deploy setup
@@ -247,7 +247,9 @@ The refresh step currently uses:
 BAANKNET_STATUSES=upcoming
 BAANKNET_INCREMENTAL=1
 BAANKNET_ENRICH_DETAILS=1
+BAANKNET_ENRICH_LOCATION=1
 BAANKNET_ENRICH_LIMIT=2000
+BAANKNET_NEARBY_LIMIT=120
 BAANKNET_SCORE=1
 SUPABASE_REPLACE_STATUS_ROWS=1
 ```
@@ -256,6 +258,12 @@ Incremental mode compares fresh listing rows against the existing
 `public/data/auctions.json` in the repo. If an auction ID/status is already
 present and its listing signature is unchanged, the scraper reuses existing
 detail fields instead of opening the BAANKNET detail page again.
+
+When BAANKNET exposes map coordinates on the property page, the scraper stores
+`latitude` and `longitude`. It then optionally enriches mapped properties with
+nearby OpenStreetMap/Overpass evidence for schools/colleges, hospitals/clinics,
+bus stands, and Kochi/Ernakulam metro stations. Missing map data is treated as
+unknown, not as a negative signal.
 
 Rows are re-enriched when the auction is new, key listing fields changed, or
 the existing row has no captured detail fields. `SUPABASE_REPLACE_STATUS_ROWS=1`
@@ -271,6 +279,27 @@ Manual run path:
 ```text
 GitHub repo -> Actions -> Refresh BAANKNET data and deploy -> Run workflow
 ```
+
+Manual runs have two modes:
+
+```text
+refresh_mode=normal
+```
+
+Runs the normal upcoming-auction refresh.
+
+```text
+refresh_mode=map-only
+```
+
+Runs `scripts/enrich_maps_only.py` against the existing `public/data/auctions.json`.
+This skips listing search, auction-notice parsing, and possession refresh. It
+only fills missing BAANKNET map coordinates and a capped batch of nearby
+school/hospital/bus/metro evidence, then rescoring/push/deploy continues as
+usual.
+
+Use `nearby_limit` to control Overpass work for either mode. `120` is the safe
+default; `300-500` is reasonable for a one-off catch-up run.
 
 Expected success signs:
 
@@ -360,9 +389,9 @@ The main UI supports:
 - AI market check inside auction details
 - protected BAANKNET notice/property links
 
-## AI Market & Investment Analysis
+## Smart AI Score And Market Analysis
 
-The property detail accordion includes **Check market value**. The browser calls:
+The property detail accordion includes **Generate Smart AI Score**. The browser calls:
 
 ```text
 POST /api/properties/:auctionId/market-analysis
@@ -374,13 +403,18 @@ The Cloudflare worker:
 2. normalises area, price, location and property fields
 3. calculates deterministic completeness and preliminary scores
 4. builds comparable sale/rental search context
-5. skips paid enrichment when the base opportunity score is below `70`
-6. checks `property_market_analysis` for an existing successful analysis for that auction
-7. calls Tavily for sale/rental comparable search when configured
-8. sends the auction facts and Tavily evidence to Gemini for structured extraction
-9. validates and post-processes comparables in application code
-10. writes analysis, comparables and usage logs back to Supabase
-11. returns a graceful deterministic fallback if search/Gemini is unavailable
+5. checks `property_market_analysis` for an existing successful analysis for that auction
+6. calls Tavily for sale/rental comparable search when configured
+7. sends the auction facts, confirmed nearby location evidence, and Tavily evidence to Gemini for structured extraction
+8. validates and post-processes comparables in application code
+9. writes analysis, comparables and usage logs back to Supabase
+10. returns a graceful deterministic fallback if search/Gemini is unavailable
+
+The Smart AI Score is the investment-style summary returned by the same market
+analysis endpoint. The market value cards remain separate and continue to show
+comparable asking prices, adjusted market range, auction discount, rent, and
+yield. Confirmed nearby schools/hospitals/bus/metro distances improve the
+location part of the Smart AI Score only when daily sync has captured them.
 
 Required Cloudflare runtime variables:
 
@@ -413,7 +447,7 @@ ai_usage_log
 
 ## Scoring
 
-Opportunity Score is calculated from:
+Auction Score is calculated from:
 
 - Area Score
 - Property Score
@@ -652,11 +686,22 @@ It:
 2. scrapes upcoming BAANKNET auctions
 3. reuses existing enriched details for unchanged rows
 4. enriches only new or changed auction detail pages
-5. scores auctions
-6. replaces Supabase rows for refreshed statuses and records a `refresh_runs` status row
-7. commits refreshed `public/data/*.json`
-8. builds Cloudflare Pages output with production action limit set to 10
-9. deploys to Cloudflare Pages
+5. stores BAANKNET map coordinates when available
+6. enriches a capped set of mapped properties with nearby school/hospital/bus/metro evidence
+7. scores auctions
+8. replaces Supabase rows for refreshed statuses and records a `refresh_runs` status row
+9. commits refreshed `public/data/*.json`
+10. builds Cloudflare Pages output with production action limit set to 10
+11. deploys to Cloudflare Pages
+
+Manual `map-only` mode changes step 2-6 to:
+
+1. load existing `public/data/auctions.json`
+2. find rows missing `latitude`/`longitude`
+3. fetch BAANKNET property-page coordinates where available
+4. find mapped rows missing `nearbyPlaces`
+5. fetch a capped batch of OpenStreetMap/Overpass nearby evidence
+6. rescore auctions using confirmed location evidence
 
 Required GitHub secrets:
 

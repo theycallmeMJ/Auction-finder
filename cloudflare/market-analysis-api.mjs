@@ -3,8 +3,8 @@ const ARE_TO_SQFT = 1076.39;
 const ARE_TO_CENTS = 2.47105;
 const CENT_TO_SQFT = 435.6;
 const CACHE_DAYS = 7;
-const MAX_FRESH_ANALYSES_PER_DAY = 5;
-const AI_ANALYSIS_MIN_SCORE = 70;
+const MAX_FRESH_ANALYSES_PER_DAY = 20;
+const AI_ANALYSIS_VERSION = "market-v6-candidate-landmark-safeguards";
 
 const DEFAULT_DISCLAIMER =
   "This analysis is based on available auction data and current online asking prices. Asking prices may differ from completed transaction values. Verify title, possession, encumbrances, physical condition, access, statutory approvals and market value independently before bidding.";
@@ -80,6 +80,37 @@ function round(value, digits = 0) {
   return Math.round(value * factor) / factor;
 }
 
+function uniqueStrings(values, limit = 20) {
+  const seen = new Set();
+  const output = [];
+  values.forEach((value) => {
+    const normalized = String(value || "").replace(/\s+/g, " ").trim();
+    if (!normalized) return;
+    const key = normalized.toLowerCase();
+    if (seen.has(key)) return;
+    seen.add(key);
+    output.push(normalized);
+  });
+  return output.slice(0, limit);
+}
+
+function removeDuplicateWords(value) {
+  const words = String(value || "").replace(/\s+/g, " ").trim().split(" ").filter(Boolean);
+  const output = [];
+  words.forEach((word) => {
+    if (output[output.length - 1]?.toLowerCase() !== word.toLowerCase()) output.push(word);
+  });
+  return output.join(" ");
+}
+
+function sanitizeGeneratedQuery(value, searchContext) {
+  let query = removeDuplicateWords(value);
+  if (searchContext?.targetPropertyType === "independent house") {
+    query = query.replace(/\b\d+\s*bhk\b\s*/gi, "").replace(/\b\d+\s*bed(?:room)?s?\b\s*/gi, "");
+  }
+  return query.replace(/\s+/g, " ").trim();
+}
+
 function firstText(...values) {
   for (const value of values) {
     if (typeof value === "string" && value.trim()) return value.trim();
@@ -101,6 +132,47 @@ function inferBhk(row) {
 
 function inferLocality(row) {
   return firstText(row.city, row.location?.split(",")?.[2]?.replace(/-\d{6}.*/, ""), row.district);
+}
+
+function coordinateOrNull(value) {
+  const number = numberOrNull(value);
+  if (!Number.isFinite(number)) return null;
+  return number;
+}
+
+function nearbyCategories(row) {
+  const categories = row?.nearbyPlaces?.categories;
+  return categories && typeof categories === "object" ? categories : {};
+}
+
+function confirmedNearbyPlaces(row) {
+  const labels = {
+    schools: "School/college",
+    hospitals: "Hospital/clinic",
+    bus_stands: "Bus stand",
+    metro: "Metro station",
+  };
+  const types = {
+    schools: "education",
+    hospitals: "hospital",
+    bus_stands: "bus stand",
+    metro: "metro",
+  };
+  return Object.entries(nearbyCategories(row))
+    .map(([key, data]) => {
+      const distance = numberOrNull(data?.nearestDistanceKm);
+      if (!Number.isFinite(distance)) return null;
+      const nearestName = firstText(data?.nearestName, labels[key], key);
+      return {
+        name: nearestName,
+        type: types[key] || key,
+        distanceKm: round(distance, 2),
+        confidence: "confirmed",
+      };
+    })
+    .filter(Boolean)
+    .sort((a, b) => a.distanceKm - b.distanceKm)
+    .slice(0, 4);
 }
 
 function normalizeProperty(row) {
@@ -149,8 +221,10 @@ function normalizeProperty(row) {
     district: row.district || null,
     state: row.state || null,
     pincode,
-    latitude: null,
-    longitude: null,
+    latitude: coordinateOrNull(row.latitude),
+    longitude: coordinateOrNull(row.longitude),
+    nearbyPlaces: row.nearbyPlaces || null,
+    confirmedNearbyPlaces: confirmedNearbyPlaces(row),
     auctionStart: row.startDate || null,
     auctionEnd: row.endDate || null,
     inspectionStart: row.inspectionDateFrom || null,
@@ -268,20 +342,106 @@ export function buildComparableSearchContext(property) {
   const targetAreaMinSqft = area ? Math.round(area * (1 - tolerance)) : null;
   const targetAreaMaxSqft = area ? Math.round(area * (1 + tolerance)) : null;
   const targetLocality = property.locality || property.city || property.pincode || property.district;
-  const areaPhrase = targetAreaMinSqft && targetAreaMaxSqft ? `${targetAreaMinSqft} ${targetAreaMaxSqft} sqft` : "";
-  const bhkPhrase = property.bhk ? `${property.bhk} BHK` : "";
-  const place = [property.projectName, property.locality, property.city, property.pincode].filter(Boolean).join(" ");
-  const primarySearchQuery = [bhkPhrase, targetPropertyType, "for sale", place, areaPhrase].filter(Boolean).join(" ");
-  const rentalSearchQuery = [bhkPhrase, targetPropertyType, "for rent", place, areaPhrase].filter(Boolean).join(" ");
-  const fallbackSearchQueries = [
-    [targetPropertyType, "for sale", property.city, property.district].filter(Boolean).join(" "),
-    [bhkPhrase, targetPropertyType, "for sale", property.pincode].filter(Boolean).join(" "),
-    [targetPropertyType, "rent", property.city, property.district].filter(Boolean).join(" "),
-  ].filter(Boolean);
+  const addressText = `${property.title || ""} ${property.address || ""} ${property.locality || ""} ${property.city || ""} ${property.district || ""}`.toLowerCase();
+  const basePlaces = uniqueStrings([
+    property.locality,
+    property.city,
+    property.district && property.city !== property.district ? property.district : null,
+  ], 5);
+  const inferredPlaces = [];
+  if (/thrikkakara/.test(addressText)) inferredPlaces.push("Thrikkakara North", "Thrikkakara");
+  if (/kalamassery|68202/.test(addressText)) inferredPlaces.push("North Kalamassery", "Kalamassery");
+  if (/edappally/.test(addressText)) inferredPlaces.push("Edappally");
+  if (/kakkanad/.test(addressText)) inferredPlaces.push("Kakkanad");
+  if (/eravattur|perambra/.test(addressText)) inferredPlaces.push("Eravattur", "Perambra", "Koyilandy");
+  if (/\bala\b|chalakudy|mala|kodungallur/.test(addressText)) inferredPlaces.push("Ala", "Mala", "Chalakudy", "Kodungallur");
+  const candidateLandmarkHints = [];
+  const regionalDemandDrivers = [];
+  if (/kalamassery|thrikkakara|68202/.test(addressText)) {
+    candidateLandmarkHints.push(
+      { name: "CUSAT", type: "college", maxRadiusKm: 8, confidence: "candidate" },
+      { name: "Kalamassery Metro", type: "metro", maxRadiusKm: 5, confidence: "candidate" },
+      { name: "Rajagiri Hospital", type: "hospital", maxRadiusKm: 8, confidence: "candidate" },
+    );
+    regionalDemandDrivers.push(
+      { name: "Infopark", type: "major employment", maxRadiusKm: 15, confidence: "regional-candidate" },
+      { name: "Kakkanad", type: "employment corridor", maxRadiusKm: 15, confidence: "regional-candidate" },
+    );
+  }
+  const confirmedNearbyLandmarks = (property.confirmedNearbyPlaces || confirmedNearbyPlaces(property)).filter((item) => {
+    if (item.type === "metro") return item.distanceKm <= 5;
+    if (item.type === "hospital" || item.type === "education") return item.distanceKm <= 8;
+    if (item.type === "bus stand") return item.distanceKm <= 5;
+    return item.distanceKm <= 5;
+  });
+  const confirmedNames = confirmedNearbyLandmarks.map((item) => item.name).slice(0, 3);
+  const candidateNames = candidateLandmarkHints.map((item) => item.name).slice(0, 3);
+  const regionalNames = regionalDemandDrivers.map((item) => item.name).slice(0, 2);
+  const buyerPlaces = uniqueStrings([...basePlaces, ...inferredPlaces], 12);
+  const propertySynonyms = isHouse(property)
+    ? ["independent house", "house", "villa", "residential house", "duplex", "2 storey house"]
+    : isFlat(property)
+      ? ["flat", "apartment", "residential apartment"]
+      : isLand(property)
+        ? ["residential land", "plot", "house plot", "land"]
+        : [targetPropertyType, "property"];
+  const roundedArea = area ? Math.round(area / 100) * 100 : null;
+  const areaValues = uniqueStrings(
+    roundedArea
+      ? [roundedArea, roundedArea - 100, roundedArea + 100, roundedArea - 200, roundedArea + 200].filter((value) => value > 300).map((value) => `${value} sqft`)
+      : [],
+    5,
+  );
+  const areaQueries = areaValues.flatMap((areaPhrase) => [
+    `${areaPhrase} ${propertySynonyms[1] || targetPropertyType} ${property.city || targetLocality}`,
+    `${areaPhrase} ${propertySynonyms[0]} ${property.locality || property.city || targetLocality}`,
+  ]);
+  const saleQueries = uniqueStrings([
+    ...buyerPlaces.slice(0, 5).flatMap((place) => [
+      `${propertySynonyms[0]} for sale ${place}`,
+      `${propertySynonyms[1] || propertySynonyms[0]} for sale ${place}`,
+    ]),
+    ...confirmedNames.slice(0, 2).map((place) => `${propertySynonyms[0]} near ${place}`),
+    ...areaQueries,
+    ...candidateNames.slice(0, 2).map((place) => `${property.city || targetLocality} ${propertySynonyms[0]} ${place}`),
+    ...regionalNames.slice(0, 1).map((place) => `${property.city || targetLocality} rental demand for ${place} commuters`),
+    property.pincode ? `${propertySynonyms[0]} for sale ${property.pincode}` : null,
+  ].map(removeDuplicateWords).filter(Boolean).map((query) => `${query} Kerala India`), 12);
+  const rentalQueries = uniqueStrings([
+    ...buyerPlaces.slice(0, 3).map((place) => `${propertySynonyms[0]} for rent ${place}`),
+    ...confirmedNames.slice(0, 1).map((place) => `${propertySynonyms[0]} for rent near ${place} ${property.city || targetLocality}`),
+    ...candidateNames.slice(0, 1).map((place) => `${property.city || targetLocality} ${propertySynonyms[0]} rent ${place}`),
+    ...regionalNames.slice(0, 1).map((place) => `${property.city || targetLocality} rental demand for ${place} commuters`),
+    ...areaValues.slice(0, 2).map((areaPhrase) => `${areaPhrase} ${propertySynonyms[0]} rent ${property.city || targetLocality}`),
+  ].map(removeDuplicateWords).filter(Boolean).map((query) => `${query} Kerala India`), 6);
+  const valueQueries = uniqueStrings([
+    `${targetPropertyType} price per sqft ${property.locality || property.city || targetLocality} Kerala India`,
+    `${propertySynonyms[0]} prices ${property.city || property.district || targetLocality} Kerala India`,
+    `${property.locality || property.city || targetLocality} property rates Kerala India`,
+    isHouse(property) ? `villa price ${property.city || targetLocality} Kerala India` : null,
+    isLand(property) ? `land rate ${property.city || targetLocality} Kerala India` : null,
+  ], 5);
+  const fallbackSearchQueries = uniqueStrings([
+    ...buyerPlaces.slice(5).map((place) => `${propertySynonyms[0]} for sale ${place} Kerala India`),
+    `${targetPropertyType} for sale ${property.city || property.district || "Kerala"} Kerala India`,
+    property.pincode ? `${targetPropertyType} sale ${property.pincode} Kerala India` : null,
+  ], 8);
+  const primarySearchQuery = saleQueries[0] || [targetPropertyType, "for sale", targetLocality, "Kerala India"].filter(Boolean).join(" ");
+  const rentalSearchQuery = rentalQueries[0] || [targetPropertyType, "for rent", targetLocality, "Kerala India"].filter(Boolean).join(" ");
   return {
+    analysisVersion: AI_ANALYSIS_VERSION,
     primarySearchQuery,
     rentalSearchQuery,
     fallbackSearchQueries,
+    saleQueries,
+    rentalQueries,
+    valueQueries,
+    buyerPlaces,
+    nearbyLandmarks: confirmedNearbyLandmarks,
+    confirmedNearbyLandmarks,
+    candidateLandmarkHints,
+    regionalDemandDrivers,
+    areaQueryPhrases: areaValues,
     targetPropertyType,
     targetLocality,
     targetAreaMinSqft,
@@ -323,6 +483,105 @@ function normalizeComparable(item) {
   };
 }
 
+function normalizeValueSignal(item) {
+  if (!item || typeof item !== "object") return null;
+  const pricePerSqft = numberOrNull(item.pricePerSqft);
+  const landRatePerCent = numberOrNull(item.landRatePerCent);
+  if (!pricePerSqft && !landRatePerCent) return null;
+  return {
+    title: String(item.title || "Market value signal"),
+    locality: item.locality || null,
+    pricePerSqft,
+    landRatePerCent,
+    sourceName: item.sourceName || null,
+    sourceUrl: typeof item.sourceUrl === "string" && /^https?:\/\//.test(item.sourceUrl) ? item.sourceUrl : null,
+    evidence: String(item.evidence || "AI extracted a locality-level value signal.").slice(0, 300),
+  };
+}
+
+function evidenceLevel(score) {
+  if (score >= 8) return "high";
+  if (score >= 5) return "medium";
+  return "low";
+}
+
+function rentalDemandSignals(property, searchContext, rentalComparables, yieldLow, searchDiagnostics) {
+  const text = `${property.title || ""} ${property.address || ""} ${property.locality || ""} ${property.city || ""} ${property.district || ""}`.toLowerCase();
+  const signals = [];
+  const rentalResultCount = numberOrNull(searchDiagnostics?.rentalResultCount) || 0;
+  let tenantDemand = 50;
+  let occupancyPotential = 50;
+  let tenantStability = 55;
+  let rentGrowth = 50;
+  if ((searchContext.confirmedNearbyLandmarks || []).length) {
+    signals.push("Confirmed nearby demand landmarks");
+    tenantDemand += Math.min((searchContext.confirmedNearbyLandmarks || []).length * 5, 12);
+    occupancyPotential += Math.min((searchContext.confirmedNearbyLandmarks || []).length * 4, 10);
+  }
+  if (rentalComparables.length) {
+    signals.push("Comparable rentals");
+    tenantDemand += rentalComparables.length * 7;
+    occupancyPotential += rentalComparables.length * 6;
+  }
+  if (rentalResultCount) {
+    signals.push("Returned rental market results");
+    tenantDemand += Math.min(rentalResultCount * 1.2, 12);
+    occupancyPotential += Math.min(rentalResultCount, 10);
+    rentGrowth += Math.min(rentalResultCount * 0.5, 5);
+  }
+  const isIndependentHouse = isHouse(property);
+  if (isIndependentHouse) {
+    occupancyPotential -= 5;
+    tenantStability += 5;
+  }
+  const rentalYieldScore = yieldLow ? clamp(45 + yieldLow * 5, 35, 75) : 50;
+  const score = clamp(
+    clamp(tenantDemand) * 0.3
+    + clamp(occupancyPotential) * 0.22
+    + rentalYieldScore * 0.18
+    + clamp(tenantStability) * 0.15
+    + clamp(rentGrowth) * 0.15,
+  );
+  return {
+    score,
+    signals: [...new Set(signals)],
+    components: {
+      tenantDemand: Math.round(clamp(tenantDemand)),
+      occupancyPotential: Math.round(clamp(occupancyPotential)),
+      rentalYield: Math.round(rentalYieldScore),
+      tenantStability: Math.round(clamp(tenantStability)),
+      rentGrowth: Math.round(clamp(rentGrowth)),
+    },
+    candidateHintsUsedOnlyForSearch: [
+      ...(searchContext.candidateLandmarkHints || []),
+      ...(searchContext.regionalDemandDrivers || []),
+    ].map((item) => item.name),
+  };
+}
+
+function locationEvidenceSummary(property, searchContext) {
+  const confirmed = Array.isArray(searchContext?.confirmedNearbyLandmarks)
+    ? searchContext.confirmedNearbyLandmarks
+    : [];
+  return {
+    coordinatesAvailable: Boolean(property.latitude && property.longitude),
+    confirmedNearbyPlaces: confirmed.map((item) => ({
+      name: item.name,
+      type: item.type,
+      distanceKm: item.distanceKm,
+    })),
+    candidateHintsUsedOnlyForSearch: [
+      ...(searchContext?.candidateLandmarkHints || []),
+      ...(searchContext?.regionalDemandDrivers || []),
+    ].map((item) => item.name),
+    explanation: confirmed.length
+      ? "Smart AI Score used confirmed nearby-place distances from the daily location enrichment."
+      : property.latitude && property.longitude
+        ? "Coordinates are available, but no strong nearby school/hospital/transport evidence was confirmed yet."
+        : "BAANKNET map coordinates were not available for this property, so location confidence is lower.",
+  };
+}
+
 function propertyTypeMatches(property, comparable) {
   const source = `${comparable.propertyType || ""} ${comparable.title || ""}`.toLowerCase();
   if (isHouse(property)) return !/flat|apartment|plot|land only|vacant/.test(source);
@@ -349,6 +608,7 @@ function dedupeComparables(comparables) {
 export function processGroundedAnalysis(property, deterministic, searchContext, rawAnalysis) {
   const rawSale = Array.isArray(rawAnalysis?.saleComparables) ? rawAnalysis.saleComparables : [];
   const rawRental = Array.isArray(rawAnalysis?.rentalComparables) ? rawAnalysis.rentalComparables : [];
+  const rawValueSignals = Array.isArray(rawAnalysis?.valueSignals) ? rawAnalysis.valueSignals : [];
   const targetArea = property.builtUpAreaSqft || property.carpetAreaSqft || property.landAreaSqft;
   const areaMin = searchContext.targetAreaMinSqft;
   const areaMax = searchContext.targetAreaMaxSqft;
@@ -359,13 +619,18 @@ export function processGroundedAnalysis(property, deterministic, searchContext, 
   const rentalComparables = dedupeComparables(rawRental.map(normalizeComparable).filter(Boolean))
     .filter((item) => item.monthlyRent && propertyTypeMatches(property, item) && areaOk(item))
     .slice(0, 8);
+  const valueSignals = rawValueSignals.map(normalizeValueSignal).filter(Boolean).slice(0, 8);
+  const valueEstimatedPrices = valueSignals
+    .map((item) => item.pricePerSqft && targetArea ? Math.round(item.pricePerSqft * targetArea) : null)
+    .filter((value) => Number.isFinite(value));
   const salePrices = saleComparables.map((item) => item.askingPrice).filter(Boolean);
+  const assessmentPrices = salePrices.length ? salePrices : valueEstimatedPrices;
   const rents = rentalComparables.map((item) => item.monthlyRent).filter(Boolean);
-  const medianAsking = median(salePrices);
+  const medianAsking = median(assessmentPrices);
   const medianRent = median(rents);
-  const enoughSaleEvidence = salePrices.length >= 3;
-  const adjustedLow = enoughSaleEvidence ? Math.round(Math.min(...salePrices) * 0.9) : null;
-  const adjustedHigh = enoughSaleEvidence ? Math.round(Math.max(...salePrices) * 0.95) : null;
+  const enoughSaleEvidence = salePrices.length >= 3 || valueEstimatedPrices.length >= 3;
+  const adjustedLow = enoughSaleEvidence ? Math.round(Math.min(...assessmentPrices) * 0.9) : null;
+  const adjustedHigh = enoughSaleEvidence ? Math.round(Math.max(...assessmentPrices) * 0.95) : null;
   const reserve = property.reservePrice;
   const discountLow = reserve && adjustedHigh ? ((adjustedHigh - reserve) / adjustedHigh) * 100 : null;
   const discountHigh = reserve && adjustedLow ? ((adjustedLow - reserve) / adjustedLow) * 100 : null;
@@ -373,28 +638,73 @@ export function processGroundedAnalysis(property, deterministic, searchContext, 
   const yieldHigh = reserve && rents.length ? (Math.max(...rents) * 12 / reserve) * 100 : null;
   const confidence = salePrices.length >= 5 && deterministic.completenessScore >= 75 && !deterministic.criticalMissingFields.length
     ? "high"
-    : salePrices.length >= 3 && deterministic.completenessScore >= 55
+    : (salePrices.length >= 3 || valueEstimatedPrices.length >= 3) && deterministic.completenessScore >= 55
       ? "medium"
       : "low";
-  const valueScore = clamp(50 + (discountLow ?? 0));
-  const rentalScore = clamp(rentalComparables.length * 12 + (yieldLow ?? 0) * 4);
+  const fairPriceScore = clamp(50 + (discountLow ?? 0));
+  const rentalDemand = rentalDemandSignals(property, searchContext, rentalComparables, yieldLow, rawAnalysis?.searchDiagnostics);
+  const rentalScore = rentalDemand.score;
   const riskScore = clamp(100 - deterministic.criticalMissingFields.length * 18 - deterministic.warnings.length * 5);
-  const locationScore = clamp(45 + saleComparables.length * 8);
-  const appreciationScore = clamp(45 + saleComparables.length * 6);
-  const liquidityScore = clamp(42 + saleComparables.length * 7);
-  const overallScore = Math.round(clamp(valueScore * 0.28 + rentalScore * 0.16 + locationScore * 0.18 + appreciationScore * 0.14 + liquidityScore * 0.12 + riskScore * 0.12));
+  const locationEvidence = locationEvidenceSummary(property, searchContext);
+  const confirmedNearbyCount = locationEvidence.confirmedNearbyPlaces.length;
+  const locationScore = clamp(45 + saleComparables.length * 5 + valueSignals.length * 4 + confirmedNearbyCount * 8);
+  const appreciationScore = clamp(42 + valueSignals.length * 6 + saleComparables.length * 3);
+  const liquidityScore = clamp(40 + saleComparables.length * 6 + (rawAnalysis?.searchDiagnostics?.saleResultCount || 0) * 0.8);
+  const overallScore = Math.round(clamp(
+    fairPriceScore * 0.25
+    + appreciationScore * 0.2
+    + rentalScore * 0.15
+    + locationScore * 0.15
+    + liquidityScore * 0.15
+    + riskScore * 0.1,
+  ));
+  const evidenceQuality = {
+    fairPrice: {
+      score: clamp(saleComparables.length * 2 + valueSignals.length, 0, 10),
+      level: evidenceLevel(clamp(saleComparables.length * 2 + valueSignals.length, 0, 10)),
+      reason: `${saleComparables.length} sale comparables and ${valueSignals.length} value signals.`,
+    },
+    rental: {
+      score: clamp(rentalComparables.length * 2 + rentalDemand.signals.length, 0, 10),
+      level: evidenceLevel(clamp(rentalComparables.length * 2 + rentalDemand.signals.length, 0, 10)),
+      reason: `${rentalComparables.length} rental comparables. Signals: ${rentalDemand.signals.join(", ") || "none"}.`,
+    },
+    appreciation: {
+      score: clamp(valueSignals.length * 2 + saleComparables.length, 0, 10),
+      level: evidenceLevel(clamp(valueSignals.length * 2 + saleComparables.length, 0, 10)),
+      reason: "Uses current value/rate signals as a proxy until growth-specific evidence is added.",
+    },
+    location: {
+      score: clamp((searchContext.nearbyLandmarks?.length || 0) + saleComparables.length + valueSignals.length, 0, 10),
+      level: evidenceLevel(clamp((searchContext.nearbyLandmarks?.length || 0) + saleComparables.length + valueSignals.length, 0, 10)),
+      reason: `${searchContext.confirmedNearbyLandmarks?.length || 0} confirmed nearby landmarks plus comparable evidence. Candidate hints are search-only.`,
+    },
+    liquidity: {
+      score: clamp(saleComparables.length * 1.5 + (rawAnalysis?.searchDiagnostics?.saleResultCount || 0) / 3, 0, 10),
+      level: evidenceLevel(clamp(saleComparables.length * 1.5 + (rawAnalysis?.searchDiagnostics?.saleResultCount || 0) / 3, 0, 10)),
+      reason: `${rawAnalysis?.searchDiagnostics?.saleResultCount || 0} sale search results retained for the market.`,
+    },
+    risk: {
+      score: clamp(10 - deterministic.criticalMissingFields.length * 2 - deterministic.warnings.length, 0, 10),
+      level: evidenceLevel(clamp(10 - deterministic.criticalMissingFields.length * 2 - deterministic.warnings.length, 0, 10)),
+      reason: deterministic.warnings.length ? deterministic.warnings.join(" ") : "No major deterministic auction-data warnings.",
+    },
+  };
   return {
     saleComparables,
     rentalComparables,
+    valueSignals,
     marketAssessment: {
-      comparableAskingPriceLow: salePrices.length ? Math.min(...salePrices) : null,
-      comparableAskingPriceHigh: salePrices.length ? Math.max(...salePrices) : null,
+      comparableAskingPriceLow: assessmentPrices.length ? Math.min(...assessmentPrices) : null,
+      comparableAskingPriceHigh: assessmentPrices.length ? Math.max(...assessmentPrices) : null,
       medianComparableAskingPrice: medianAsking ? Math.round(medianAsking) : null,
       adjustedMarketValueLow: adjustedLow,
       adjustedMarketValueHigh: adjustedHigh,
       adjustmentReason: enoughSaleEvidence
-        ? "Adjusted 5-10% below online asking prices to avoid treating asking prices as completed transaction values."
-        : "Insufficient comparable evidence for an adjusted market range.",
+        ? salePrices.length
+          ? "Adjusted 5-10% below online asking prices to avoid treating asking prices as completed transaction values."
+          : "Estimated from locality-level price-per-sqft signals because full comparable listing prices were not extractable."
+        : "Insufficient comparable or price-rate evidence for an adjusted market range.",
     },
     rentalAssessment: {
       estimatedMonthlyRentLow: rents.length ? Math.min(...rents) : null,
@@ -408,24 +718,43 @@ export function processGroundedAnalysis(property, deterministic, searchContext, 
       auctionDiscountHighPercent: round(discountHigh, 1),
       grossRentalYieldLowPercent: round(yieldLow, 2),
       grossRentalYieldHighPercent: round(yieldHigh, 2),
+      fairPriceScore: Math.round(fairPriceScore),
+      smartScore: overallScore,
       locationScore: Math.round(locationScore),
       rentalScore: Math.round(rentalScore),
+      rentalComponents: rentalDemand.components,
       appreciationScore: Math.round(appreciationScore),
       liquidityScore: Math.round(liquidityScore),
-      valueScore: Math.round(valueScore),
+      valueScore: Math.round(fairPriceScore),
       riskScore: Math.round(riskScore),
       overallScore,
+      weights: {
+        fairPrice: 25,
+        appreciation: 20,
+        rental: 15,
+        location: 15,
+        liquidity: 15,
+        risk: 10,
+      },
     },
+    evidenceQuality,
+    locationEvidence,
     bestFor: confidence === "low" ? ["needs_more_data"] : rentalComparables.length >= 3 ? ["rental", "self_use"] : ["self_use", "long_term_appreciation"],
-    strengths: Array.isArray(rawAnalysis?.strengths) ? rawAnalysis.strengths.slice(0, 6) : [],
+    strengths: [
+      ...locationEvidence.confirmedNearbyPlaces.slice(0, 3).map((item) => `${item.name} is confirmed around ${item.distanceKm} km away`),
+      ...(Array.isArray(rawAnalysis?.strengths) ? rawAnalysis.strengths : []),
+    ].slice(0, 6),
     risks: [...(Array.isArray(rawAnalysis?.risks) ? rawAnalysis.risks.slice(0, 6) : []), ...deterministic.warnings].slice(0, 8),
     missingInformation: [...new Set([...(Array.isArray(rawAnalysis?.missingInformation) ? rawAnalysis.missingInformation : []), ...deterministic.missingFields])].slice(0, 10),
     verdict: confidence === "low" ? "needs_more_data" : overallScore >= 75 ? "strong_shortlist" : overallScore >= 55 ? "worth_inspecting" : "low_priority",
     confidence,
     confidenceReason: confidence === "low"
       ? "Comparable evidence or critical auction-property fields are limited."
-      : "Confidence is based on usable comparable count and auction-property completeness.",
+      : salePrices.length
+        ? "Confidence is based on usable comparable count and auction-property completeness."
+        : "Confidence is based on locality-level value signals and auction-property completeness.",
     groundedSources: Array.isArray(rawAnalysis?.groundedSources) ? rawAnalysis.groundedSources.filter((item) => item?.url).slice(0, 12) : [],
+    searchDiagnostics: rawAnalysis?.searchDiagnostics || null,
     disclaimer: DEFAULT_DISCLAIMER,
     comparableCount: saleComparables.length + rentalComparables.length,
   };
@@ -511,11 +840,19 @@ async function readCache(env, auctionId, inputHash, provider, model) {
   return cached;
 }
 
-async function readPermanentAuctionCache(env, auctionId, provider) {
+async function readPermanentAuctionCache(env, auctionId, provider, inputHash) {
+  const rows = await supabaseFetch(
+    env,
+    `property_market_analysis?select=*&auction_id=eq.${encodeURIComponent(auctionId)}&input_hash=eq.${encodeURIComponent(inputHash)}&provider=eq.${encodeURIComponent(provider)}&status=eq.success&order=created_at.desc&limit=1`,
+  );
+  return rows?.[0] ?? null;
+}
+
+async function readLatestAuctionCache(env, auctionId, provider) {
   const rows = await supabaseFetch(
     env,
     `property_market_analysis?select=*&auction_id=eq.${encodeURIComponent(auctionId)}&provider=eq.${encodeURIComponent(provider)}&status=eq.success&order=created_at.desc&limit=1`,
-  );
+  ).catch(() => []);
   return rows?.[0] ?? null;
 }
 
@@ -548,11 +885,12 @@ function extractJson(text) {
 
 function normalizeTavilyResult(item, comparableType) {
   const url = typeof item?.url === "string" ? item.url : null;
+  const content = [item?.content, item?.raw_content].filter(Boolean).join("\n\n");
   return {
     comparableType,
     title: String(item?.title || "Search result"),
     url,
-    content: String(item?.content || item?.raw_content || "").slice(0, 1400),
+    content: String(content || "").slice(0, 2200),
     score: numberOrNull(item?.score),
     sourceName: url ? new URL(url).hostname.replace(/^www\./, "") : null,
     publishedDate: item?.published_date || null,
@@ -572,7 +910,7 @@ async function tavilySearch(env, query, comparableType) {
       topic: "general",
       max_results: 6,
       include_answer: false,
-      include_raw_content: false,
+      include_raw_content: true,
       include_images: false,
     }),
   });
@@ -585,15 +923,165 @@ async function tavilySearch(env, query, comparableType) {
   };
 }
 
+function dedupeSearchResults(results, limit = 18) {
+  const seen = new Set();
+  const output = [];
+  results.forEach((item) => {
+    const key = item.url || `${item.title}|${item.content}`.toLowerCase().slice(0, 180);
+    if (!key || seen.has(key)) return;
+    seen.add(key);
+    output.push(item);
+  });
+  return output.slice(0, limit);
+}
+
 async function tavilyComparableSearch(env, searchContext) {
-  const saleSearch = await tavilySearch(env, searchContext.primarySearchQuery, "sale");
-  const rentalSearch = await tavilySearch(env, searchContext.rentalSearchQuery, "rental");
+  const primarySaleQueries = uniqueStrings(searchContext.saleQueries || [searchContext.primarySearchQuery], 7);
+  const fallbackSaleQueries = uniqueStrings(searchContext.fallbackSearchQueries || [], 5);
+  const rentalQueries = uniqueStrings(searchContext.rentalQueries || [searchContext.rentalSearchQuery], 4);
+  const valueQueries = uniqueStrings(searchContext.valueQueries || [], 3);
+  const [primarySaleSearches, rentalSearches, valueSearches] = await Promise.all([
+    Promise.all(primarySaleQueries.map((query) => tavilySearch(env, query, "sale"))),
+    Promise.all(rentalQueries.map((query) => tavilySearch(env, query, "rental"))),
+    Promise.all(valueQueries.map((query) => tavilySearch(env, query, "value"))),
+  ]);
+  let saleSearches = primarySaleSearches;
+  let saleResults = dedupeSearchResults(primarySaleSearches.flatMap((search) => search.results), 15);
+  if (saleResults.length < 3 && fallbackSaleQueries.length) {
+    const fallbackSaleSearches = await Promise.all(fallbackSaleQueries.map((query) => tavilySearch(env, query, "sale")));
+    saleSearches = [...saleSearches, ...fallbackSaleSearches];
+    saleResults = dedupeSearchResults([...saleResults, ...fallbackSaleSearches.flatMap((search) => search.results)], 15);
+  }
+  const rentalResults = dedupeSearchResults(rentalSearches.flatMap((search) => search.results), 10);
+  const valueResults = dedupeSearchResults(valueSearches.flatMap((search) => search.results), 8);
+  const saleSearch = {
+    query: primarySaleQueries[0] || searchContext.primarySearchQuery,
+    comparableType: "sale",
+    results: saleResults,
+  };
+  const rentalSearch = {
+    query: rentalQueries[0] || searchContext.rentalSearchQuery,
+    comparableType: "rental",
+    results: rentalResults,
+  };
+  const diagnostics = {
+    saleSearches: saleSearches.map((search) => ({
+      query: search.query,
+      resultCount: search.results.length,
+      keptCount: search.results.filter((item) => saleResults.some((kept) => kept.url === item.url || kept.title === item.title)).length,
+    })),
+    rentalSearches: rentalSearches.map((search) => ({
+      query: search.query,
+      resultCount: search.results.length,
+      keptCount: search.results.filter((item) => rentalResults.some((kept) => kept.url === item.url || kept.title === item.title)).length,
+    })),
+    valueSearches: valueSearches.map((search) => ({
+      query: search.query,
+      resultCount: search.results.length,
+      keptCount: search.results.filter((item) => valueResults.some((kept) => kept.url === item.url || kept.title === item.title)).length,
+    })),
+    saleResultCount: saleResults.length,
+    rentalResultCount: rentalResults.length,
+    valueResultCount: valueResults.length,
+    broadened: saleSearches.length > primarySaleQueries.length,
+  };
   return {
     provider: "tavily",
     saleSearch,
     rentalSearch,
-    rawResults: [...saleSearch.results, ...rentalSearch.results],
+    searches: [...saleSearches, ...rentalSearches, ...valueSearches].map((search) => ({ query: search.query, comparableType: search.comparableType, resultCount: search.results.length })),
+    diagnostics,
+    rawResults: [...saleResults, ...rentalResults, ...valueResults],
   };
+}
+
+function normalizeGeneratedQueries(queries, fallback, limit, searchContext) {
+  return uniqueStrings(
+    [
+      ...(Array.isArray(queries) ? queries : []),
+      ...(Array.isArray(fallback) ? fallback : []),
+    ]
+      .map((query) => sanitizeGeneratedQuery(query, searchContext))
+      .filter((query) => query && !/\b\d{3,5}\s+\d{3,5}\s+sqft\b/i.test(query)),
+    limit,
+  );
+}
+
+async function geminiSearchQueryPlan(env, property, searchContext) {
+  const apiKey = env.GEMINI_API_KEY;
+  const model = env.GEMINI_MODEL;
+  if (!apiKey || !model) return searchContext;
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`;
+  const prompt = [
+    "Generate natural Google search queries for evaluating an Indian residential property and finding comparable listings.",
+    'Return valid JSON only with these arrays: {"saleQueries":[],"rentalQueries":[],"valueQueries":[]}.',
+    [
+      "General rules:",
+      "- Write natural searches like a buyer, broker, investor, or local resident.",
+      "- Do not write database-style filter expressions.",
+      "- Do not invent prices, distances, landmarks, projects, or locality names.",
+      "- Avoid duplicated locality, district, or state words.",
+      '- For Kerala properties, include "Kerala India" naturally in most locality-level queries.',
+      "- Do not use area minimum or maximum ranges.",
+      "- Use the exact built-up area only in one or two comparable searches.",
+      "- Use the pincode only once, as a late fallback query.",
+      "- Avoid near-duplicate queries that are likely to return the same results.",
+      "- Each query must have a distinct search purpose.",
+      "- Prefer queries likely to produce actual evidence, not generic real-estate advice.",
+      "- Use nearby landmarks only when supplied or clearly present in the property details.",
+      "- Do not assume a locality is near CUSAT, a metro station, Infopark, a hospital, or another landmark unless it is provided.",
+      "- Keep every query concise enough for Google Search.",
+      "- Do not add explanations, scores, markdown, or text outside the JSON.",
+      "Kerala property wording rules:",
+      "- For independent houses in Kerala, do not use BHK in most queries.",
+      "- Prefer natural synonyms such as independent house, residential house, house, villa, and duplex.",
+      "- Bedroom count may be included naturally in one fallback query when useful.",
+      "- For apartments or flats, BHK wording is allowed.",
+      "Query generation requirements:",
+      "saleQueries: generate 6 to 8 queries; include locality-level comparables, one nearby-landmark search when available, one district-level fallback, one exact-area search, and one pincode fallback placed last; do not include the asking price.",
+      "rentalQueries: generate 5 to 7 queries; search the same property type first; include broader house or villa synonyms when exact matches may be scarce; include one nearby-landmark rental query when available; do not confuse rental listings with rental-demand research.",
+      "valueQueries: generate 3 to 5 queries; find evidence needed to judge whether the asking price is reasonable; cover average property price per sqft, independent-house or villa prices, land rates where relevant, nearby-locality price comparisons, recent comparable listings, and registration or transaction-price evidence when available; do not invent competing localities.",
+    ].join("\n"),
+    JSON.stringify({ property, deterministicQueryIdeas: searchContext }, null, 2),
+  ].join("\n\n");
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort("timeout"), 20000);
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      signal: controller.signal,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        contents: [{ role: "user", parts: [{ text: prompt }] }],
+        generationConfig: { temperature: 0.35, responseMimeType: "application/json" },
+      }),
+    });
+    const payload = await response.json();
+    if (!response.ok) throw new Error(payload?.error?.message || `Gemini query plan failed: ${response.status}`);
+    const text = payload?.candidates?.[0]?.content?.parts?.map((part) => part.text || "").join("\n") || "";
+    const generated = extractJson(text);
+    const saleQueries = normalizeGeneratedQueries(generated.saleQueries, searchContext.saleQueries || [], 12, searchContext);
+    const rentalQueries = normalizeGeneratedQueries(generated.rentalQueries, searchContext.rentalQueries || [], 6, searchContext);
+    const valueQueries = normalizeGeneratedQueries(generated.valueQueries, searchContext.valueQueries || [], 5, searchContext);
+    return {
+      ...searchContext,
+      saleQueries,
+      rentalQueries,
+      valueQueries,
+      queryPlanProvider: "gemini",
+      queryPlanRaw: {
+        saleQueries: Array.isArray(generated.saleQueries) ? generated.saleQueries : [],
+        rentalQueries: Array.isArray(generated.rentalQueries) ? generated.rentalQueries : [],
+        valueQueries: Array.isArray(generated.valueQueries) ? generated.valueQueries : [],
+      },
+      primarySearchQuery: saleQueries[0] || searchContext.primarySearchQuery,
+      rentalSearchQuery: rentalQueries[0] || searchContext.rentalSearchQuery,
+    };
+  } catch {
+    return { ...searchContext, queryPlanProvider: "deterministic" };
+  } finally {
+    clearTimeout(timeout);
+  }
 }
 
 async function geminiRequest(env, input, attempt = 0) {
@@ -607,8 +1095,19 @@ async function geminiRequest(env, input, attempt = 0) {
   const hasExternalSearchResults = Array.isArray(input?.searchResults?.rawResults);
   const prompt = [
     hasExternalSearchResults
-      ? "You are analysing an Indian bank-auction property. Use only the supplied Tavily search results as online evidence. Return structured JSON only. Do not fabricate URLs, prices, rents, distances, land area, legal facts, transaction prices, or source names. If a price/rent/area is not visible in the supplied snippets, leave it null. Online listing prices are asking prices, not completed transaction prices. For independent houses, land extent is a major valuation input; if missing, lower confidence."
-      : "You are analysing an Indian bank-auction property. Use Google Search to find current comparable sale and rental listings. Return structured JSON only. Do not fabricate URLs, prices, rents, distances, land area, legal facts, or transaction prices. Online listing prices are asking prices, not completed transaction prices. For independent houses, land extent is a major valuation input; if missing, lower confidence.",
+      ? [
+        "You are analysing an Indian bank-auction property. Use only the supplied Tavily search results as online evidence. Return structured JSON only.",
+        "Required JSON keys: saleComparables, rentalComparables, valueSignals, strengths, risks, missingInformation, groundedSources.",
+        "For saleComparables include title, locality, propertyType, bhk, builtUpAreaSqft, landAreaCents, askingPrice, sourceName, sourceUrl, similarityScore, matchReason.",
+        "For rentalComparables include title, locality, propertyType, bhk, builtUpAreaSqft, monthlyRent, sourceName, sourceUrl, similarityScore, matchReason.",
+        "For valueSignals include title, locality, pricePerSqft, landRatePerCent, sourceName, sourceUrl, evidence.",
+        "Parse Indian price formats when visible: ₹50L, 50 lakh, 0.5 crore, 50 Lac, 5 Cr, INR 5000/sqft, ₹5,000 per sq ft. Convert prices to INR numbers and area to square feet.",
+        "Do not fabricate URLs, prices, rents, distances, land area, legal facts, transaction prices, or source names. If a price/rent/area is not visible in the supplied title/content/raw content, leave it null.",
+        "Online listing prices are asking prices, not completed transaction prices. For independent houses, land extent is a major valuation input; if missing, lower confidence, but still extract price-per-sqft value signals when visible.",
+        "For location judgement, use searchContext.confirmedNearbyLandmarks and property.nearbyPlaces only when present as factual distance evidence.",
+        "Treat candidateLandmarkHints and regionalDemandDrivers as search-expansion hints only; do not award strengths or location score from candidate hints unless supplied evidence confirms proximity/connectivity.",
+      ].join(" ")
+      : "You are analysing an Indian bank-auction property. Use Google Search to find current comparable sale and rental listings. Return structured JSON only. Do not fabricate URLs, prices, rents, distances, land area, legal facts, or transaction prices. Online listing prices are asking prices, not completed transaction prices. For independent houses, land extent is a major valuation input; if missing, lower confidence. For location judgement, use confirmed nearby landmarks/property.nearbyPlaces only when supplied; candidate hints are not factual evidence.",
     JSON.stringify(input, null, 2),
   ].join("\n\n");
   const body = {
@@ -674,32 +1173,10 @@ export async function handleMarketAnalysisRequest(request, env) {
   if (!auction) return jsonResponse({ error: { code: "NOT_FOUND", message: "Auction property was not found." } }, 404);
   const { property, areaWarnings } = normalizeProperty(auction.payload || {});
   const deterministic = calculateDeterministicAnalysis(property, areaWarnings);
-  const searchContext = buildComparableSearchContext(property);
+  let searchContext = buildComparableSearchContext(property);
   const baseScore = auctionBaseScore(auction);
-  if (baseScore !== null && baseScore < AI_ANALYSIS_MIN_SCORE) {
-    return jsonResponse({
-      property,
-      deterministic,
-      searchContext,
-      marketAnalysis: null,
-      fallbackAnalysis: fallbackAnalysis(property, deterministic, `AI market analysis is reserved for auctions scoring ${AI_ANALYSIS_MIN_SCORE}+ before paid search enrichment.`),
-      generatedAt: new Date().toISOString(),
-      sourceUpdatedAt: property.sourceUpdatedAt,
-      provider,
-      model,
-      searchProvider,
-      groundingEnabled,
-      cached: false,
-      skipped: true,
-      baseScore,
-      minScore: AI_ANALYSIS_MIN_SCORE,
-      error: {
-        code: "LOW_BASE_SCORE",
-        message: `This auction score is ${baseScore}/100. AI market analysis starts at ${AI_ANALYSIS_MIN_SCORE}/100.`,
-      },
-    }, 200);
-  }
   const inputHash = await sha256Json({
+    analysisVersion: AI_ANALYSIS_VERSION,
     property: {
       auctionId: property.auctionId,
       bankPropertyId: property.bankPropertyId,
@@ -715,7 +1192,7 @@ export async function handleMarketAnalysisRequest(request, env) {
   });
   let permanentCached = null;
   try {
-    permanentCached = await readPermanentAuctionCache(env, auctionId, provider);
+    permanentCached = await readPermanentAuctionCache(env, auctionId, provider, inputHash);
   } catch (err) {
     if (isMissingMarketAnalysisTable(err)) {
       return jsonResponse({
@@ -769,16 +1246,34 @@ export async function handleMarketAnalysisRequest(request, env) {
   let searchResults = null;
   try {
     if (searchProvider === "tavily") {
+      searchContext = await geminiSearchQueryPlan(env, property, searchContext);
       searchResults = await tavilyComparableSearch(env, searchContext);
     }
     const aiInput = { property, deterministic, searchContext, searchResults };
     const gemini = await geminiRequest(env, aiInput);
+    if (searchResults?.diagnostics) gemini.analysis.searchDiagnostics = searchResults.diagnostics;
     rawAi = { gemini: gemini.raw, searchResults };
     processed = processGroundedAnalysis(property, deterministic, searchContext, gemini.analysis);
   } catch (err) {
     error = sanitizeError(err);
-    status = "failed";
-    processed = fallbackAnalysis(property, deterministic, error.message);
+    const stale = await readLatestAuctionCache(env, auctionId, provider);
+    if (stale?.processed_analysis) {
+      processed = processGroundedAnalysis(property, deterministic, searchContext, stale.processed_analysis);
+      rawAi = {
+        reusedCachedEvidence: true,
+        reusedAnalysisId: stale.id || null,
+        reusedCreatedAt: stale.created_at || null,
+        originalError: error,
+      };
+      processed.risks = [
+        `Live refresh failed: ${error.message}. Reused latest cached evidence for investment scoring.`,
+        ...(processed.risks || []).filter((item) => !/^Live refresh failed:/i.test(item)),
+      ].slice(0, 8);
+      status = "success";
+    } else {
+      status = "failed";
+      processed = fallbackAnalysis(property, deterministic, error.message);
+    }
   }
   const rows = await supabaseWrite(env, "property_market_analysis?on_conflict=auction_id,input_hash,provider,model", [{
     auction_id: property.auctionId,

@@ -37,7 +37,7 @@ test("server-renders the auction finder shell", async () => {
 
 test("includes the AI market analysis entry point in auction detail source", async () => {
   const source = await readFile(new URL("../app/page.tsx", import.meta.url), "utf8");
-  assert.match(source, /AI Market & Investment Analysis/);
-  assert.match(source, /Check market value/);
-  assert.match(source, /Search current comparable sale and rental listings using AI/);
+  assert.match(source, /Smart AI Score/);
+  assert.match(source, /Generate Smart AI Score/);
+  assert.match(source, /Runs market value, rental, risk, and confirmed location evidence/);
 });

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate explainable opportunity scores for scraped auction data."""
+"""Generate explainable auction scores for scraped auction data."""
 
 from __future__ import annotations
 
@@ -154,6 +154,79 @@ def build_area_profiles(rows: list[dict[str, Any]]) -> dict[str, dict[str, Any]]
     return profiles
 
 
+def nearby_categories(row: dict[str, Any]) -> dict[str, dict[str, Any]]:
+    nearby = row.get("nearbyPlaces") or {}
+    categories = nearby.get("categories") if isinstance(nearby, dict) else {}
+    return categories if isinstance(categories, dict) else {}
+
+
+def nearest_distance(row: dict[str, Any], category: str) -> float | None:
+    data = nearby_categories(row).get(category) or {}
+    value = data.get("nearestDistanceKm") if isinstance(data, dict) else None
+    if value in (None, ""):
+        return None
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return None
+
+
+def nearby_count(row: dict[str, Any], category: str) -> int:
+    data = nearby_categories(row).get(category) or {}
+    value = data.get("count") if isinstance(data, dict) else 0
+    try:
+        return int(value or 0)
+    except (TypeError, ValueError):
+        return 0
+
+
+def nearby_area_adjustment(row: dict[str, Any]) -> tuple[int, list[str]]:
+    categories = nearby_categories(row)
+    if not categories:
+        return 0, ["Nearby schools/hospitals/transport not mapped yet"]
+
+    adjustment = 0
+    reasons: list[str] = []
+    school = nearest_distance(row, "schools")
+    hospital = nearest_distance(row, "hospitals")
+    bus_stand = nearest_distance(row, "bus_stands")
+    metro = nearest_distance(row, "metro")
+
+    if school is not None:
+        if school <= 2:
+            adjustment += 5
+        elif school <= 5:
+            adjustment += 3
+        reasons.append(f"Nearest school/college around {school:g} km")
+    if hospital is not None:
+        if hospital <= 3:
+            adjustment += 5
+        elif hospital <= 8:
+            adjustment += 3
+        reasons.append(f"Nearest hospital/clinic around {hospital:g} km")
+    if bus_stand is not None:
+        if bus_stand <= 2:
+            adjustment += 4
+        elif bus_stand <= 5:
+            adjustment += 2
+        reasons.append(f"Nearest bus stand around {bus_stand:g} km")
+    if metro is not None:
+        if metro <= 3:
+            adjustment += 6
+        elif metro <= 5:
+            adjustment += 4
+        reasons.append(f"Nearest metro station around {metro:g} km")
+
+    if nearby_count(row, "schools") >= 5:
+        adjustment += 2
+        reasons.append("Multiple education options within mapped radius")
+    if nearby_count(row, "hospitals") >= 3:
+        adjustment += 2
+        reasons.append("Multiple medical options within mapped radius")
+
+    return min(adjustment, 15), reasons or ["Nearby places checked; no strong proximity signal found"]
+
+
 def price_per_sqft(row: dict[str, Any]) -> float | None:
     price = rupees(row.get("reservePrice")) or rupees(row.get("reservePriceText"))
     area = parse_area(row)
@@ -249,6 +322,8 @@ def confidence_score(row: dict[str, Any], ppsf: float | None) -> tuple[int, str,
         "Detail page": bool(row.get("customerId") or row.get("emd")),
         "Village/city": bool(row.get("city")),
         "Pincode": bool(row.get("pinCode")),
+        "Map coordinates": bool(row.get("latitude") and row.get("longitude")),
+        "Nearby places": bool(nearby_categories(row)),
         "Area": parse_area(row) is not None,
         "Reserve price": bool(rupees(row.get("reservePrice")) or rupees(row.get("reservePriceText"))),
         "Auction dates": bool(row.get("startDate") and row.get("endDate")),
@@ -287,7 +362,8 @@ def score_rows(rows: list[dict[str, Any]], profiles: dict[str, dict[str, Any]]) 
 
     for row in rows:
         profile = profiles.get(area_key(row), {})
-        area = int(profile.get("areaScore") or 50)
+        nearby_adjustment, nearby_reasons = nearby_area_adjustment(row)
+        area = clamp(int(profile.get("areaScore") or 50) + nearby_adjustment)
         prop, prop_reasons = property_score(row, medians)
         risk, risk_label, risk_reasons = risk_score(row)
         ppsf = price_per_sqft(row)
@@ -317,6 +393,7 @@ def score_rows(rows: list[dict[str, Any]], profiles: dict[str, dict[str, Any]]) 
                 "area": [
                     f"Area profile available for {profile.get('villageOrCity', row.get('city') or 'this locality')}",
                     f"{row.get('district') or 'District'} locality baseline applied",
+                    *nearby_reasons,
                 ],
                 "property": prop_reasons,
                 "risk": risk_reasons,

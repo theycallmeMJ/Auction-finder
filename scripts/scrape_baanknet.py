@@ -10,10 +10,12 @@ from __future__ import annotations
 
 import html
 import json
+import math
 import os
 import re
 import ssl
 import time
+import urllib.parse
 import urllib.request
 from dataclasses import dataclass
 from http.cookiejar import CookieJar
@@ -68,6 +70,9 @@ SCRAPE_STATUSES = [
 MAX_CLOSED_PAGES = int(os.environ.get("BAANKNET_MAX_CLOSED_PAGES", "10"))
 ENRICH_DETAILS = os.environ.get("BAANKNET_ENRICH_DETAILS", "1") == "1"
 ENRICH_LIMIT = int(os.environ.get("BAANKNET_ENRICH_LIMIT", "1000"))
+ENRICH_LOCATION = os.environ.get("BAANKNET_ENRICH_LOCATION", "1") == "1"
+NEARBY_LIMIT = int(os.environ.get("BAANKNET_NEARBY_LIMIT", "120"))
+OVERPASS_URL = os.environ.get("OVERPASS_URL", "https://overpass-api.de/api/interpreter")
 RUN_SCORE_ENGINE = os.environ.get("BAANKNET_SCORE", "1") == "1"
 INCREMENTAL_REFRESH = os.environ.get("BAANKNET_INCREMENTAL", "0") == "1"
 DRY_RUN = os.environ.get("BAANKNET_DRY_RUN", "0") == "1"
@@ -95,6 +100,9 @@ DETAIL_FIELDS = [
     "incrementDuringExtension",
     "extendWhenBidInLastMinutes",
     "extendByMinutes",
+    "latitude",
+    "longitude",
+    "nearbyPlaces",
 ]
 
 REUSABLE_ENRICHED_FIELDS = DETAIL_FIELDS + [
@@ -135,6 +143,10 @@ def request_headers(content_type: str | None = None) -> dict[str, str]:
 def fetch_text(opener: urllib.request.OpenerDirector, url: str, data: bytes | None = None, headers: dict[str, str] | None = None) -> str:
     req = urllib.request.Request(url, data=data, headers=headers or request_headers())
     return opener.open(req, timeout=45).read().decode("utf-8", "ignore")
+
+
+def fetch_json(opener: urllib.request.OpenerDirector, url: str, data: bytes | None = None, headers: dict[str, str] | None = None) -> Any:
+    return json.loads(fetch_text(opener, url, data=data, headers=headers))
 
 
 def start_session() -> Session:
@@ -238,6 +250,178 @@ def absolute_url(url: str) -> str:
     if url.startswith("/"):
         return f"https://baanknet.com{url}"
     return f"{BASE_URL}/{url}"
+
+
+def property_detail_id(url: str) -> str | None:
+    match = re.search(r"/view-property/(\d+)/", url or "")
+    return match.group(1) if match else None
+
+
+def number_or_none(value: Any) -> float | None:
+    if value in (None, ""):
+        return None
+    try:
+        return float(str(value).strip())
+    except ValueError:
+        return None
+
+
+def haversine_km(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
+    radius = 6371.0088
+    phi1 = math.radians(lat1)
+    phi2 = math.radians(lat2)
+    delta_phi = math.radians(lat2 - lat1)
+    delta_lambda = math.radians(lon2 - lon1)
+    a = math.sin(delta_phi / 2) ** 2 + math.cos(phi1) * math.cos(phi2) * math.sin(delta_lambda / 2) ** 2
+    return radius * 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+
+
+NEARBY_CATEGORIES = {
+    "schools": {
+        "radius": 5000,
+        "filters": [
+            'node["amenity"~"school|college|university"]',
+            'way["amenity"~"school|college|university"]',
+            'relation["amenity"~"school|college|university"]',
+        ],
+    },
+    "hospitals": {
+        "radius": 8000,
+        "filters": [
+            'node["amenity"~"hospital|clinic"]',
+            'way["amenity"~"hospital|clinic"]',
+            'relation["amenity"~"hospital|clinic"]',
+            'node["healthcare"~"hospital|clinic"]',
+            'way["healthcare"~"hospital|clinic"]',
+            'relation["healthcare"~"hospital|clinic"]',
+        ],
+    },
+    "bus_stands": {
+        "radius": 5000,
+        "filters": [
+            'node["amenity"="bus_station"]',
+            'way["amenity"="bus_station"]',
+            'relation["amenity"="bus_station"]',
+            'node["public_transport"="station"]["bus"="yes"]',
+            'way["public_transport"="station"]["bus"="yes"]',
+            'relation["public_transport"="station"]["bus"="yes"]',
+        ],
+    },
+    "metro": {
+        "radius": 5000,
+        "filters": [
+            'node["railway"="station"]["station"="subway"]',
+            'way["railway"="station"]["station"="subway"]',
+            'relation["railway"="station"]["station"="subway"]',
+            'node["railway"="station"]["subway"="yes"]',
+            'way["railway"="station"]["subway"="yes"]',
+            'relation["railway"="station"]["subway"="yes"]',
+        ],
+    },
+}
+
+
+def should_check_metro(auction: dict[str, Any]) -> bool:
+    text = " ".join(
+        str(auction.get(key) or "")
+        for key in ("district", "city", "location", "propertyAddress")
+    ).lower()
+    return any(word in text for word in ("ernakulam", "kochi", "kalamassery", "thrikkakara", "edappally", "vyttila", "aluva"))
+
+
+def overpass_query(lat: float, lon: float, include_metro: bool) -> str:
+    parts = []
+    for category, config in NEARBY_CATEGORIES.items():
+        if category == "metro" and not include_metro:
+            continue
+        radius = config["radius"]
+        parts.extend(f"{filter_expr}(around:{radius},{lat},{lon});" for filter_expr in config["filters"])
+    return f"[out:json][timeout:25];({''.join(parts)});out center tags;"
+
+
+def element_coordinates(element: dict[str, Any]) -> tuple[float, float] | None:
+    lat = number_or_none(element.get("lat") or element.get("center", {}).get("lat"))
+    lon = number_or_none(element.get("lon") or element.get("center", {}).get("lon"))
+    if lat is None or lon is None:
+        return None
+    return lat, lon
+
+
+def classify_osm_element(element: dict[str, Any]) -> set[str]:
+    tags = element.get("tags") or {}
+    amenity = str(tags.get("amenity") or "")
+    healthcare = str(tags.get("healthcare") or "")
+    railway = str(tags.get("railway") or "")
+    station = str(tags.get("station") or "")
+    subway = str(tags.get("subway") or "")
+    public_transport = str(tags.get("public_transport") or "")
+    bus = str(tags.get("bus") or "")
+    categories: set[str] = set()
+    if amenity in {"school", "college", "university"}:
+        categories.add("schools")
+    if amenity in {"hospital", "clinic"} or healthcare in {"hospital", "clinic"}:
+        categories.add("hospitals")
+    if amenity == "bus_station" or (public_transport == "station" and bus == "yes"):
+        categories.add("bus_stands")
+    if railway == "station" and (station == "subway" or subway == "yes"):
+        categories.add("metro")
+    return categories
+
+
+def nearby_summary(lat: float, lon: float, elements: list[dict[str, Any]], include_metro: bool) -> dict[str, Any]:
+    summary: dict[str, Any] = {
+        "source": "openstreetmap-overpass",
+        "radiusKm": 10,
+        "coordinates": {"latitude": lat, "longitude": lon},
+        "categories": {},
+    }
+    category_keys = ["schools", "hospitals", "bus_stands"] + (["metro"] if include_metro else [])
+    buckets: dict[str, list[dict[str, Any]]] = {key: [] for key in category_keys}
+
+    for element in elements:
+        coords = element_coordinates(element)
+        if not coords:
+            continue
+        distance = haversine_km(lat, lon, coords[0], coords[1])
+        tags = element.get("tags") or {}
+        name = str(tags.get("name") or tags.get("operator") or "Unnamed place")
+        for category in classify_osm_element(element):
+            if category not in buckets:
+                continue
+            buckets[category].append(
+                {
+                    "name": name[:120],
+                    "distanceKm": round(distance, 2),
+                    "osmType": element.get("type"),
+                    "osmId": element.get("id"),
+                }
+            )
+
+    for category, places in buckets.items():
+        ordered = sorted(places, key=lambda item: item["distanceKm"])
+        summary["categories"][category] = {
+            "count": len(ordered),
+            "nearestDistanceKm": ordered[0]["distanceKm"] if ordered else None,
+            "nearestName": ordered[0]["name"] if ordered else None,
+            "nearest": ordered[:5],
+        }
+    return summary
+
+
+def fetch_nearby_places(lat: float, lon: float, include_metro: bool) -> dict[str, Any]:
+    body = urllib.parse.urlencode({"data": overpass_query(lat, lon, include_metro)}).encode("utf-8")
+    req = urllib.request.Request(
+        OVERPASS_URL,
+        data=body,
+        headers={
+            "User-Agent": "KeralaAuctionFinder/0.1 (nearby enrichment)",
+            "Content-Type": "application/x-www-form-urlencoded",
+            "Accept": "application/json",
+        },
+    )
+    with urllib.request.urlopen(req, timeout=45) as response:
+        data = json.loads(response.read().decode("utf-8", "ignore"))
+    return nearby_summary(lat, lon, data.get("elements") or [], include_metro)
 
 
 def value_between(text: str, label: str, next_labels: list[str]) -> str:
@@ -454,6 +638,8 @@ def merge_existing_details(
         if unchanged and has_detail_data(existing):
             for key in REUSABLE_ENRICHED_FIELDS:
                 value = existing.get(key)
+                if key == "nearbyPlaces" and isinstance(value, dict) and value.get("status") == "failed":
+                    continue
                 if value not in ("", None, []):
                     auction[key] = value
             auction["_needsDetailEnrichment"] = False
@@ -548,6 +734,9 @@ def parse_cards(fragment: str, status: str) -> list[dict[str, Any]]:
                 "startDate": date_match.group(1) if date_match else "",
                 "endDate": date_match.group(2) if date_match else "",
                 "location": location,
+                "latitude": None,
+                "longitude": None,
+                "nearbyPlaces": None,
                 "loanAvailable": "Loan Available" in text,
                 "possessionStatus": "Unknown",
                 "searchText": text.lower(),
@@ -593,6 +782,81 @@ def enrich_auction_details(session: Session, auctions: list[dict[str, Any]], lim
             enriched += 1
             if enriched == total or enriched % 50 == 0:
                 print(f"Processed {enriched}/{total} auction detail pages...", flush=True)
+
+
+def enrich_property_locations(session: Session, auctions: list[dict[str, Any]], limit: int) -> None:
+    coordinate_candidates = [
+        auction
+        for auction in auctions
+        if auction.get("propertyDetailUrl")
+        and not (auction.get("latitude") and auction.get("longitude"))
+    ]
+    coordinate_total = min(len(coordinate_candidates), limit)
+    if coordinate_total:
+        print(f"Fetching BAANKNET map coordinates for {coordinate_total} property pages...", flush=True)
+    fetched_coordinates = 0
+    for auction in coordinate_candidates:
+        if fetched_coordinates >= limit:
+            break
+        detail_id = property_detail_id(auction.get("propertyDetailUrl") or "")
+        if not detail_id:
+            continue
+        try:
+            data = fetch_json(
+                session.opener,
+                f"{BASE_URL}/api/view-property-detail/{detail_id}/1",
+                headers={"User-Agent": "Mozilla/5.0", "Accept": "application/json", "Referer": auction.get("propertyDetailUrl") or f"{BASE_URL}/eproc-listing"},
+            )
+            payload = data.get("respData") if isinstance(data, dict) and isinstance(data.get("respData"), dict) else data
+            lat = number_or_none(payload.get("lat") if isinstance(payload, dict) else None)
+            lon = number_or_none(payload.get("lng") if isinstance(payload, dict) else None)
+            if lat is not None and lon is not None:
+                auction["latitude"] = lat
+                auction["longitude"] = lon
+                auction["mapSource"] = "baanknet-map"
+            fetched_coordinates += 1
+            if fetched_coordinates == coordinate_total or fetched_coordinates % 50 == 0:
+                print(f"Checked {fetched_coordinates}/{coordinate_total} property map pages...", flush=True)
+            time.sleep(0.12)
+        except Exception as exc:
+            auction["locationError"] = str(exc)
+            fetched_coordinates += 1
+
+    nearby_candidates = [
+        auction
+        for auction in auctions
+        if auction.get("latitude")
+        and auction.get("longitude")
+        and (
+            not auction.get("nearbyPlaces")
+            or (isinstance(auction.get("nearbyPlaces"), dict) and auction.get("nearbyPlaces", {}).get("status") == "failed")
+        )
+    ]
+    nearby_total = min(len(nearby_candidates), NEARBY_LIMIT)
+    if not nearby_total:
+        print("No property coordinates need nearby enrichment.", flush=True)
+        return
+
+    print(f"Fetching nearby schools/hospitals/bus stands for {nearby_total} mapped properties...", flush=True)
+    enriched_nearby = 0
+    for auction in nearby_candidates:
+        if enriched_nearby >= NEARBY_LIMIT:
+            break
+        try:
+            lat = float(auction["latitude"])
+            lon = float(auction["longitude"])
+            auction["nearbyPlaces"] = fetch_nearby_places(lat, lon, should_check_metro(auction))
+            enriched_nearby += 1
+            if enriched_nearby == nearby_total or enriched_nearby % 20 == 0:
+                print(f"Enriched nearby places for {enriched_nearby}/{nearby_total} mapped properties...", flush=True)
+            time.sleep(0.25)
+        except Exception as exc:
+            auction["nearbyPlaces"] = {
+                "source": "openstreetmap-overpass",
+                "status": "failed",
+                "error": str(exc),
+            }
+            enriched_nearby += 1
 
 
 def enrich_possession_statuses(
@@ -707,6 +971,8 @@ def main() -> None:
         return
     if ENRICH_DETAILS:
         enrich_auction_details(session, auctions, ENRICH_LIMIT)
+    if ENRICH_LOCATION:
+        enrich_property_locations(session, auctions, ENRICH_LIMIT)
     enrich_possession_statuses(session, base_filters, auctions)
     for auction in auctions:
         auction.pop("_needsDetailEnrichment", None)

@@ -100,13 +100,32 @@ Production refresh env:
 BAANKNET_STATUSES=upcoming
 BAANKNET_INCREMENTAL=1
 BAANKNET_ENRICH_DETAILS=1
+BAANKNET_ENRICH_LOCATION=1
 BAANKNET_ENRICH_LIMIT=2000
+BAANKNET_NEARBY_LIMIT=120
 BAANKNET_SCORE=1
 SUPABASE_REPLACE_STATUS_ROWS=1
 ```
 
 `SUPABASE_REPLACE_STATUS_ROWS=1` prevents stale upcoming auctions from staying
 in Supabase after BAANKNET removes or expires them.
+
+Location enrichment stores BAANKNET map coordinates when the property page has
+them. For mapped properties, the scraper can also query OpenStreetMap/Overpass
+for nearby schools/colleges, hospitals/clinics, bus stands, and metro stations.
+Those results live inside the auction `payload.nearbyPlaces` JSON and influence
+ranking only as confirmed distance/count evidence.
+
+For catch-up runs that only fill map data, use the GitHub Actions manual input:
+
+```text
+refresh_mode=map-only
+nearby_limit=120
+```
+
+This runs `scripts/enrich_maps_only.py`, skips the normal BAANKNET listing scrape,
+rescoring/pushes the existing auction dataset, and deploys the updated site. Use
+a higher `nearby_limit` such as `300` or `500` only for occasional catch-up runs.
 
 ## 4. Auth
 
@@ -184,7 +203,7 @@ from public.catalog_snapshots
 order by created_at desc;
 ```
 
-## 7. AI market analysis
+## 7. Smart AI Score / market analysis
 
 The Cloudflare worker endpoint is:
 
@@ -195,6 +214,12 @@ POST /api/properties/:auctionId/market-analysis
 It uses the service-role key server-side to read the full auction record, cache
 the analysis, write comparable rows, and log usage. Browser code never receives
 the service-role key or Gemini key.
+
+The frontend presents the returned investment `overallScore` / `smartScore` as
+Smart AI Score. Market value, auction discount, rent, and yield remain separate
+fields in the cached `processed_analysis`. When auction payloads contain
+`nearbyPlaces`, confirmed nearby school/hospital/bus/metro distances are
+included as location evidence.
 
 Required Cloudflare runtime variables:
 
@@ -209,10 +234,9 @@ TAVILY_API_KEY
 SEARCH_PROVIDER=tavily
 ```
 
-The worker only runs Tavily/Gemini enrichment for auctions with a base
-opportunity score of `70` or higher. Successful Tavily-backed analysis is reused
-permanently per `auction_id`, so the same auction does not consume Tavily search
-again unless this policy is changed later.
+Successful Tavily-backed analysis is reused permanently per `auction_id`, so the
+same auction does not consume Tavily search again unless a force refresh is
+requested or the cache policy changes later.
 
 Inspect latest AI analysis cache rows:
 

@@ -857,24 +857,45 @@ h1 {
 }
 
 .market-loading {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  display: flex;
+  align-items: center;
   gap: 8px;
+  padding: 14px;
+  border: 1px solid #b9d6c5;
+  border-radius: 8px;
+  background: white;
+}
+
+.market-spinner {
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+  border: 4px solid #dce7df;
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: market-spin 0.85s linear infinite;
+}
+
+.market-loading > div:last-child {
+  display: grid;
+  gap: 3px;
+}
+
+.market-loading strong {
+  color: var(--accent-strong);
+  font-size: 15px;
 }
 
 .market-loading span {
-  padding: 9px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: white;
   color: var(--muted);
   font-size: 12px;
   font-weight: 900;
 }
 
-.market-loading .active {
-  border-color: var(--accent);
-  color: var(--accent);
+@keyframes market-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .market-grid {
@@ -883,12 +904,75 @@ h1 {
   gap: 10px;
 }
 
+.smart-score-panel {
+  display: grid;
+  grid-template-columns: 190px minmax(0, 1fr);
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid #b9d6c5;
+  border-radius: 8px;
+  background: white;
+}
+
+.smart-score-main {
+  display: grid;
+  align-content: center;
+  gap: 4px;
+  padding: 14px;
+  border-radius: 8px;
+  background: #eff8f2;
+}
+
+.smart-score-main span,
+.smart-score-main small,
+.smart-score-context span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.smart-score-main strong {
+  color: var(--accent-strong);
+  font-size: 30px;
+  line-height: 1;
+}
+
+.smart-score-context {
+  display: grid;
+  align-content: center;
+  gap: 8px;
+}
+
+.smart-score-context > span {
+  color: var(--accent-strong);
+  text-transform: capitalize;
+}
+
+.smart-score-context p {
+  margin: 0;
+  color: var(--text);
+}
+
+.nearby-chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.nearby-chip-list span {
+  padding: 7px 10px;
+  border: 1px solid #dce7df;
+  border-radius: 999px;
+  background: #f7fbf8;
+}
+
 .market-grid.rental {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .market-grid > div,
 .investment-scores > div,
+.rental-components > div,
 .comparable-card,
 .market-lists > div,
 .market-verdict,
@@ -906,6 +990,7 @@ h1 {
 
 .market-grid span,
 .investment-scores span,
+.rental-components span,
 .comparable-card span,
 .comparable-card small {
   color: var(--muted);
@@ -920,11 +1005,68 @@ h1 {
 
 .investment-scores {
   display: grid;
-  grid-template-columns: repeat(7, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(132px, 1fr));
+  gap: 10px;
+  align-items: start;
+}
+
+.rental-components {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 10px;
 }
 
+.rental-components h5 {
+  grid-column: 1 / -1;
+}
+
+.evidence-quality {
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: white;
+}
+
+.evidence-pill-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+}
+
+.evidence-pill {
+  display: grid;
+  gap: 4px;
+  padding: 10px;
+  border: 1px solid #dce7df;
+  border-radius: 8px;
+  background: #f7fbf8;
+}
+
+.evidence-pill span,
+.evidence-pill small {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.evidence-pill strong {
+  color: #253029;
+  font-size: 15px;
+  text-transform: capitalize;
+}
+
+.evidence-pill.low strong {
+  color: #8a5a14;
+}
+
+.evidence-pill.high strong {
+  color: var(--accent);
+}
+
 .comparables,
+.search-diagnostics,
 .market-lists,
 .sources {
   display: grid;
@@ -940,6 +1082,65 @@ h1 {
   grid-column: 1 / -1;
 }
 
+.search-diagnostics {
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: white;
+}
+
+.search-diagnostics summary {
+  cursor: pointer;
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.search-diagnostics[open] summary {
+  margin-bottom: 10px;
+}
+
+.search-diagnostics-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.search-diagnostics-summary span,
+.search-diagnostic-row {
+  border: 1px solid #dce7df;
+  border-radius: 8px;
+  background: #f7fbf8;
+}
+
+.search-diagnostics-summary span {
+  padding: 6px 9px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.search-diagnostic-row {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr) 82px;
+  gap: 8px;
+  align-items: center;
+  padding: 9px;
+}
+
+.search-diagnostic-row span,
+.search-diagnostic-row small {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.search-diagnostic-row strong {
+  overflow-wrap: anywhere;
+  color: #253029;
+  font-size: 13px;
+}
+
 .comparable-card a,
 .sources a {
   color: var(--accent);
@@ -948,11 +1149,58 @@ h1 {
 
 .market-lists {
   grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: start;
 }
 
-.market-lists ul {
+.market-insight-card h5 {
+  color: #26342b;
+  font-size: 15px;
+}
+
+.market-insight-card ul {
   margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.market-insight-card li {
+  position: relative;
+  margin-top: 10px;
   padding-left: 18px;
+  color: #26342b;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.market-insight-card li::before {
+  position: absolute;
+  left: 0;
+  top: 0.56em;
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--accent);
+  content: "";
+}
+
+.market-insight-card.risks li::before {
+  background: #a15c20;
+}
+
+.missing-chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.missing-chip-list span {
+  padding: 7px 9px;
+  border: 1px solid #dce7df;
+  border-radius: 999px;
+  background: #f7fbf8;
+  color: #526156;
+  font-size: 12px;
+  font-weight: 900;
 }
 
 .more-details dl {
@@ -1734,10 +1982,14 @@ h1 {
   }
 
   .market-loading,
+  .smart-score-panel,
   .market-grid,
   .market-grid.rental,
   .investment-scores,
+  .rental-components,
+  .evidence-quality,
   .comparables,
+  .search-diagnostic-row,
   .market-lists {
     grid-template-columns: 1fr;
   }

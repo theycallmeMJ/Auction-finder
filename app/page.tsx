@@ -138,6 +138,15 @@ type MarketAnalysis = {
     auctionDiscountHighPercent: number | null;
     grossRentalYieldLowPercent: number | null;
     grossRentalYieldHighPercent: number | null;
+    fairPriceScore?: number;
+    smartScore?: number;
+    rentalComponents?: {
+      tenantDemand: number;
+      occupancyPotential: number;
+      rentalYield: number;
+      tenantStability: number;
+      rentGrowth: number;
+    };
     locationScore: number;
     rentalScore: number;
     appreciationScore: number;
@@ -145,6 +154,21 @@ type MarketAnalysis = {
     valueScore: number;
     riskScore: number;
     overallScore: number;
+    weights?: {
+      fairPrice: number;
+      appreciation: number;
+      rental: number;
+      location: number;
+      liquidity: number;
+      risk: number;
+    };
+  };
+  evidenceQuality?: Record<string, { score: number; level: string; reason: string }>;
+  locationEvidence?: {
+    coordinatesAvailable: boolean;
+    confirmedNearbyPlaces: Array<{ name: string; type: string; distanceKm: number }>;
+    candidateHintsUsedOnlyForSearch: string[];
+    explanation: string;
   };
   strengths: string[];
   risks: string[];
@@ -153,6 +177,15 @@ type MarketAnalysis = {
   confidence: string;
   confidenceReason: string;
   groundedSources: Array<{ title: string; url: string; sourceName: string | null }>;
+  searchDiagnostics?: {
+    saleSearches?: Array<{ query: string; resultCount: number; keptCount?: number }>;
+    rentalSearches?: Array<{ query: string; resultCount: number; keptCount?: number }>;
+    valueSearches?: Array<{ query: string; resultCount: number; keptCount?: number }>;
+    saleResultCount?: number;
+    rentalResultCount?: number;
+    valueResultCount?: number;
+    broadened?: boolean;
+  } | null;
   disclaimer: string;
   comparableCount?: number;
 };
@@ -487,6 +520,41 @@ function scoreLabel(value?: number) {
   return typeof value === "number" ? `${value}/100` : "Pending";
 }
 
+function humanizeFieldName(value: string) {
+  const known: Record<string, string> = {
+    builtUpOrCarpetArea: "Built-up / carpet area",
+    ownershipType: "Ownership type",
+    constructionAge: "Construction age",
+    coordinates: "Map coordinates",
+    images: "Photos",
+    landArea: "Land area",
+  };
+  return known[value] ?? value
+    .replace(/([a-z])([A-Z])/g, "$1 $2")
+    .replace(/_/g, " ")
+    .replace(/^\w/, (letter) => letter.toUpperCase());
+}
+
+function compactInsightList(items: string[], fallback: string, limit = 4) {
+  const seen = new Set<string>();
+  const cleaned = items
+    .map((item) => item.trim())
+    .filter(Boolean)
+    .filter((item) => {
+      const key = item.replace(/\s+/g, " ").toLowerCase();
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+  return (cleaned.length ? cleaned : [fallback]).slice(0, limit);
+}
+
+function compactRiskList(items: string[]) {
+  const liveRefresh = items.find((item) => /^Live refresh failed:/i.test(item));
+  const rest = items.filter((item) => !/^Live refresh failed:/i.test(item));
+  return compactInsightList([...(liveRefresh ? [liveRefresh] : []), ...rest], "No risks identified yet.", 4);
+}
+
 function areaLabel(auction: Auction) {
   return auction.builtUpArea || auction.carpetArea || auction.areaSqft || "Not captured yet";
 }
@@ -561,22 +629,32 @@ function MarketAnalysisPanel({
   const analysis = data?.marketAnalysis ?? data?.fallbackAnalysis ?? null;
   const isLoading = state?.status === "loading";
   const comparableCount = analysis?.comparableCount ?? ((analysis?.saleComparables.length ?? 0) + (analysis?.rentalComparables.length ?? 0));
-  const baseScore = typeof auction.score?.overall === "number" ? auction.score.overall : null;
-  const minAiScore = 70;
-  const isEligible = baseScore === null || baseScore >= minAiScore;
+  const saleSearches = analysis?.searchDiagnostics?.saleSearches ?? [];
+  const rentalSearches = analysis?.searchDiagnostics?.rentalSearches ?? [];
+  const valueSearches = analysis?.searchDiagnostics?.valueSearches ?? [];
+  const showSearchDiagnostics = typeof window !== "undefined" && new URLSearchParams(window.location.search).get("debugAi") === "1";
+  const strengths = compactInsightList(analysis?.strengths ?? [], "No strengths identified yet.");
+  const risks = compactRiskList(analysis?.risks ?? []);
+  const missingInformation = compactInsightList(
+    (analysis?.missingInformation ?? []).map(humanizeFieldName),
+    "No major missing fields flagged.",
+    6,
+  );
+  const smartScore = analysis?.investmentAssessment.smartScore ?? analysis?.investmentAssessment.overallScore;
+  const confirmedNearby = analysis?.locationEvidence?.confirmedNearbyPlaces ?? [];
 
   return (
     <section className="market-analysis">
       <div className="market-analysis-head">
         <div>
-          <h4>AI Market & Investment Analysis</h4>
-          <p>Search current comparable sale and rental listings using AI.</p>
+          <h4>Smart AI Score</h4>
+          <p>Runs market value, rental, risk, and confirmed location evidence in one analysis.</p>
         </div>
         <div className="market-analysis-actions">
-          <button type="button" onClick={onRequest} disabled={isLoading || !isEligible}>
-            {analysis ? "Check again" : "Check market value"}
+          <button type="button" onClick={onRequest} disabled={isLoading}>
+            {analysis ? "Check again" : "Generate Smart AI Score"}
           </button>
-          {analysis && isEligible && (
+          {analysis && (
             <button type="button" className="ghost-button" onClick={onRefresh} disabled={isLoading}>
               Force refresh
             </button>
@@ -584,19 +662,13 @@ function MarketAnalysisPanel({
         </div>
       </div>
 
-      {!isEligible && (
-        <p className="market-warning">
-          AI market analysis starts at {minAiScore}/100. This auction is currently scored {baseScore}/100, so paid comparable search is skipped.
-        </p>
-      )}
-
       {isLoading && (
-        <div className="market-loading">
-          {marketLoadingSteps.map((step, index) => (
-            <span key={step} className={index <= (state?.loadingStep ?? 0) ? "active" : ""}>
-              {step}
-            </span>
-          ))}
+        <div className="market-loading" role="status" aria-live="polite">
+          <div className="market-spinner" aria-hidden="true" />
+          <div>
+            <strong>AI is fetching diamonds...</strong>
+            <span>{marketLoadingSteps[state?.loadingStep ?? 0] ?? marketLoadingSteps[0]}</span>
+          </div>
         </div>
       )}
 
@@ -612,6 +684,27 @@ function MarketAnalysisPanel({
 
       {analysis && (
         <>
+          <div className="smart-score-panel">
+            <div className="smart-score-main">
+              <span>Smart AI Score</span>
+              <strong>{smartScore ?? "--"}/100</strong>
+              <small>Market value is shown separately below.</small>
+            </div>
+            <div className="smart-score-context">
+              <span>{analysis.verdict.replace(/_/g, " ")}</span>
+              <p>{analysis.locationEvidence?.explanation ?? analysis.confidenceReason}</p>
+              <div className="nearby-chip-list">
+                {confirmedNearby.length ? confirmedNearby.slice(0, 4).map((item) => (
+                  <span key={`${item.type}-${item.name}`}>
+                    {item.name} · {item.distanceKm} km
+                  </span>
+                )) : (
+                  <span>{analysis.locationEvidence?.coordinatesAvailable ? "No strong nearby-place evidence yet" : "Map coordinates not available"}</span>
+                )}
+              </div>
+            </div>
+          </div>
+
           <div className="market-grid">
             <div>
               <span>Reserve price</span>
@@ -660,7 +753,7 @@ function MarketAnalysisPanel({
               ["Rental", analysis.investmentAssessment.rentalScore],
               ["Appreciation", analysis.investmentAssessment.appreciationScore],
               ["Liquidity", analysis.investmentAssessment.liquidityScore],
-              ["Value", analysis.investmentAssessment.valueScore],
+              ["Fair Price", analysis.investmentAssessment.fairPriceScore ?? analysis.investmentAssessment.valueScore],
               ["Risk", analysis.investmentAssessment.riskScore],
             ].map(([label, value]) => (
               <div key={String(label)}>
@@ -672,6 +765,49 @@ function MarketAnalysisPanel({
               </div>
             ))}
           </div>
+
+          {analysis.evidenceQuality && (
+            <div className="evidence-quality">
+              <h5>Evidence confidence</h5>
+              <div className="evidence-pill-grid">
+                {[
+                  ["Fair price", analysis.evidenceQuality.fairPrice],
+                  ["Rental", analysis.evidenceQuality.rental],
+                  ["Appreciation", analysis.evidenceQuality.appreciation],
+                  ["Location", analysis.evidenceQuality.location],
+                  ["Liquidity", analysis.evidenceQuality.liquidity],
+                  ["Risk", analysis.evidenceQuality.risk],
+                ].map(([label, item]) => item && (
+                  <div key={String(label)} className={`evidence-pill ${item.level}`}>
+                    <span>{label}</span>
+                    <strong>{item.level}</strong>
+                    <small>{Math.round(item.score)}/10</small>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {analysis.investmentAssessment.rentalComponents && (
+            <div className="rental-components">
+              <h5>Rental score breakdown</h5>
+              {[
+                ["Tenant demand", analysis.investmentAssessment.rentalComponents.tenantDemand],
+                ["Occupancy", analysis.investmentAssessment.rentalComponents.occupancyPotential],
+                ["Rental yield", analysis.investmentAssessment.rentalComponents.rentalYield],
+                ["Tenant stability", analysis.investmentAssessment.rentalComponents.tenantStability],
+                ["Rent growth", analysis.investmentAssessment.rentalComponents.rentGrowth],
+              ].map(([label, value]) => (
+                <div key={String(label)}>
+                  <span>{label}</span>
+                  <strong>{value}/100</strong>
+                  <div className="score-bar">
+                    <span style={{ width: `${value}%` }} />
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
 
           {(analysis.saleComparables.length > 0 || analysis.rentalComparables.length > 0) && (
             <div className="comparables">
@@ -693,18 +829,39 @@ function MarketAnalysisPanel({
             </div>
           )}
 
+          {showSearchDiagnostics && (saleSearches.length > 0 || rentalSearches.length > 0 || valueSearches.length > 0) && (
+            <details className="search-diagnostics">
+              <summary>Search diagnostics</summary>
+              <div className="search-diagnostics-summary">
+                <span>Sale results kept: {analysis.searchDiagnostics?.saleResultCount ?? 0}</span>
+                <span>Rental results kept: {analysis.searchDiagnostics?.rentalResultCount ?? 0}</span>
+                <span>Value signals kept: {analysis.searchDiagnostics?.valueResultCount ?? 0}</span>
+                {analysis.searchDiagnostics?.broadened && <span>Fallback area search used</span>}
+              </div>
+              {[...saleSearches.map((item) => ({ ...item, type: "Sale" })), ...rentalSearches.map((item) => ({ ...item, type: "Rent" })), ...valueSearches.map((item) => ({ ...item, type: "Value" }))].slice(0, 16).map((item, index) => (
+                <div className="search-diagnostic-row" key={`${item.type}-${item.query}-${index}`}>
+                  <span>{item.type}</span>
+                  <strong>{item.query}</strong>
+                  <small>{item.resultCount} results</small>
+                </div>
+              ))}
+            </details>
+          )}
+
           <div className="market-lists">
-            <div>
+            <div className="market-insight-card strengths">
               <h5>Strengths</h5>
-              <ul>{(analysis.strengths.length ? analysis.strengths : ["No strengths identified yet."]).map((item) => <li key={item}>{item}</li>)}</ul>
+              <ul>{strengths.map((item) => <li key={item}>{item}</li>)}</ul>
             </div>
-            <div>
+            <div className="market-insight-card risks">
               <h5>Risks</h5>
-              <ul>{(analysis.risks.length ? analysis.risks : ["No risks identified yet."]).map((item) => <li key={item}>{item}</li>)}</ul>
+              <ul>{risks.map((item) => <li key={item}>{item}</li>)}</ul>
             </div>
-            <div>
+            <div className="market-insight-card missing">
               <h5>Missing information</h5>
-              <ul>{(analysis.missingInformation.length ? analysis.missingInformation : ["No major missing fields flagged."]).map((item) => <li key={item}>{item}</li>)}</ul>
+              <div className="missing-chip-list">
+                {missingInformation.map((item) => <span key={item}>{item}</span>)}
+              </div>
             </div>
           </div>
 
@@ -1509,7 +1666,7 @@ export default function Home() {
             <div>
               <p className="eyebrow">Kerala pilot</p>
               <h2>
-                {viewMode === "rank" ? "Ranked opportunities" : `${sortedResults.length} matching auctions`}
+                {viewMode === "rank" ? "Ranked auctions" : `${sortedResults.length} matching auctions`}
               </h2>
             </div>
             <div className="toolbar">
@@ -1519,7 +1676,7 @@ export default function Home() {
                   <span>Sort</span>
                   <select value={sortMode} onChange={(event) => updateSortMode(event.target.value)}>
                     <option value="soonest">Soonest first</option>
-                    <option value="score">Opportunity score</option>
+                    <option value="score">Auction score</option>
                     <option value="latest">Latest first</option>
                     <option value="price-low">Price low to high</option>
                     <option value="price-high">Price high to low</option>
@@ -1527,7 +1684,7 @@ export default function Home() {
                 </label>
               ) : (
                 <div className="rank-note">
-                  Ranking current filter set by Opportunity Score
+                  Ranking current filter set by Auction Score
                 </div>
               )}
             </div>
@@ -1598,7 +1755,7 @@ export default function Home() {
                       </button>
                     )}
                   </div>
-                  <div className="score-strip" aria-label="Opportunity score">
+                  <div className="score-strip" aria-label="Auction score">
                     <div className="score-ring">
                       <strong>{auction.score?.overall ?? "--"}</strong>
                       <span>Score</span>
@@ -1657,7 +1814,7 @@ export default function Home() {
                   <strong>{auction.auctionId}</strong>
                   <span>Property ID</span>
                   <strong>{auction.bankPropertyId}</strong>
-                  <span>Opportunity</span>
+                  <span>Auction score</span>
                   <strong>{scoreLabel(auction.score?.overall)}</strong>
                   <div className="card-actions" aria-label="Auction links">
                     {auction.auctionDetailUrl && (
@@ -1687,7 +1844,7 @@ export default function Home() {
                   {isScoreDetailsOpen && (
                     <div className="detail-sections">
                       <section>
-                        <h4>Opportunity Score</h4>
+                        <h4>Auction Score</h4>
                         <div className="score-breakdown">
                           {scoreKeys.map((item) => (
                             <div key={item.key}>
