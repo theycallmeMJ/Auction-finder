@@ -797,10 +797,9 @@ function MarketAnalysisPanel({
               </div>
             )}
             {propertyRisks[0] && (
-              <div>
-                <span>Main risk</span>
+              <div className="ai-risk-card">
+                <span>Watch out</span>
                 <strong>{propertyRisks[0]}</strong>
-                <small>Risk score {analysis.investmentAssessment.riskScore}/100</small>
               </div>
             )}
           </div>
@@ -823,16 +822,16 @@ function MarketAnalysisPanel({
           </div>
 
           <details className="ai-details">
-            <summary>View detailed analysis</summary>
+            <summary>More details</summary>
             <div className="ai-details-body">
           <div className="location-intelligence">
             <div className="location-intelligence-head">
               <div>
-                <h5>Location intelligence</h5>
-                <p>Uses BAANKNET map coordinates when available, then verifies nearby places by distance.</p>
+                <h5>Location</h5>
+                <p>Nearby places are based on BAANKNET map coordinates.</p>
               </div>
               <div className="location-score-badge">
-                <span>Smart AI Location score</span>
+                <span>Location score</span>
                 <strong>{analysis.investmentAssessment.locationScore}/100</strong>
               </div>
             </div>

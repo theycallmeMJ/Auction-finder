@@ -939,7 +939,7 @@ h1 {
   padding: 14px;
   border: 1px solid #b9d6c5;
   border-radius: 8px;
-  background: white;
+  background: linear-gradient(180deg, #fbfdfb 0%, #ffffff 100%);
 }
 
 .smart-score-main {
@@ -998,10 +998,11 @@ h1 {
 }
 
 .nearby-chip-list span {
-  padding: 7px 10px;
+  padding: 6px 9px;
   border: 1px solid #dce7df;
   border-radius: 999px;
   background: #f7fbf8;
+  line-height: 1.25;
 }
 
 .ai-simple-grid,
@@ -1011,7 +1012,7 @@ h1 {
 }
 
 .ai-simple-grid {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
 }
 
 .ai-takeaway {
@@ -1021,12 +1022,18 @@ h1 {
 .ai-simple-grid > div,
 .ai-takeaway > div {
   display: grid;
-  gap: 6px;
+  align-content: start;
+  gap: 8px;
   min-width: 0;
-  padding: 14px;
+  padding: 16px;
   border: 1px solid #dce7df;
   border-radius: 8px;
   background: white;
+}
+
+.ai-risk-card {
+  border-color: #e1c9b0 !important;
+  background: #fffaf3 !important;
 }
 
 .ai-simple-grid span,
@@ -1040,9 +1047,14 @@ h1 {
 .ai-simple-grid strong,
 .ai-takeaway strong {
   color: #253029;
-  font-size: 16px;
+  font-size: 17px;
   line-height: 1.35;
   overflow-wrap: anywhere;
+}
+
+.ai-risk-card strong {
+  font-size: 15px;
+  font-weight: 850;
 }
 
 .ai-simple-grid small {
@@ -1065,24 +1077,28 @@ h1 {
 }
 
 .ai-details {
-  border: 1px solid #dce7df;
-  border-radius: 8px;
-  background: white;
+  display: grid;
+  gap: 12px;
 }
 
 .ai-details summary {
+  width: fit-content;
   cursor: pointer;
-  padding: 14px;
+  padding: 10px 14px;
+  border: 1px solid #cbdcd0;
+  border-radius: 999px;
+  background: white;
   color: var(--accent);
   font-weight: 900;
+  list-style: none;
 }
 
 .ai-details summary::after {
   content: " +";
 }
 
-.ai-details[open] summary {
-  border-bottom: 1px solid #dce7df;
+.ai-details summary::-webkit-details-marker {
+  display: none;
 }
 
 .ai-details[open] summary::after {
@@ -1092,16 +1108,16 @@ h1 {
 .ai-details-body {
   display: grid;
   gap: 14px;
-  padding: 14px;
+  padding: 0;
 }
 
 .location-intelligence {
   display: grid;
   gap: 12px;
-  padding: 14px;
+  padding: 16px;
   border: 1px solid #cbdcd0;
   border-radius: 8px;
-  background: white;
+  background: #fbfdfb;
 }
 
 .location-intelligence-head {
@@ -1119,7 +1135,7 @@ h1 {
 }
 
 .location-score-badge {
-  min-width: 142px;
+  min-width: 150px;
   padding: 10px 12px;
   border-radius: 8px;
   background: #eff8f2;
