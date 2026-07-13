@@ -943,7 +943,17 @@ h1 {
   gap: 8px;
 }
 
-.smart-score-context > span {
+.smart-score-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.smart-score-meta span {
+  padding: 6px 9px;
+  border: 1px solid #dce7df;
+  border-radius: 999px;
+  background: #f7fbf8;
   color: var(--accent-strong);
   text-transform: capitalize;
 }
@@ -964,6 +974,86 @@ h1 {
   border: 1px solid #dce7df;
   border-radius: 999px;
   background: #f7fbf8;
+}
+
+.location-intelligence {
+  display: grid;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid #cbdcd0;
+  border-radius: 8px;
+  background: white;
+}
+
+.location-intelligence-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: start;
+}
+
+.location-intelligence-head p,
+.location-evidence-note {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.location-score-badge {
+  min-width: 142px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: #eff8f2;
+  text-align: right;
+}
+
+.location-score-badge span,
+.location-signal-grid span,
+.nearby-place-grid span,
+.nearby-place-grid small {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.location-score-badge strong {
+  display: block;
+  margin-top: 3px;
+  color: var(--accent-strong);
+  font-size: 22px;
+}
+
+.location-signal-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.location-signal-grid > div,
+.nearby-place-grid > div {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid #dce7df;
+  border-radius: 8px;
+  background: #f7fbf8;
+}
+
+.location-signal-grid strong,
+.nearby-place-grid strong {
+  color: #253029;
+  font-size: 14px;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.nearby-place-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
 }
 
 .market-grid.rental {
@@ -1976,6 +2066,15 @@ h1 {
     display: grid;
   }
 
+  .location-intelligence-head {
+    display: grid;
+  }
+
+  .location-score-badge {
+    width: 100%;
+    text-align: left;
+  }
+
   .market-analysis-actions,
   .market-analysis-actions button {
     width: 100%;
@@ -1983,6 +2082,8 @@ h1 {
 
   .market-loading,
   .smart-score-panel,
+  .location-intelligence-head,
+  .location-signal-grid,
   .market-grid,
   .market-grid.rental,
   .investment-scores,

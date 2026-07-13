@@ -559,6 +559,20 @@ function areaLabel(auction: Auction) {
   return auction.builtUpArea || auction.carpetArea || auction.areaSqft || "Not captured yet";
 }
 
+function nearbyTypeLabel(type: string) {
+  const normalized = type.toLowerCase().replace(/[_-]+/g, " ");
+  const labels: Record<string, string> = {
+    bus: "Bus stand",
+    "bus stand": "Bus stand",
+    hospital: "Hospital",
+    clinic: "Clinic",
+    metro: "Metro",
+    school: "School",
+    college: "College",
+  };
+  return labels[normalized] ?? normalized.replace(/\b\w/g, (letter) => letter.toUpperCase());
+}
+
 function normalizeAuction(auction: Auction): Auction {
   return {
     ...auction,
@@ -642,6 +656,10 @@ function MarketAnalysisPanel({
   );
   const smartScore = analysis?.investmentAssessment.smartScore ?? analysis?.investmentAssessment.overallScore;
   const confirmedNearby = analysis?.locationEvidence?.confirmedNearbyPlaces ?? [];
+  const nearestPlaces = [...confirmedNearby]
+    .sort((left, right) => left.distanceKm - right.distanceKm)
+    .slice(0, 6);
+  const locationConfidence = analysis?.evidenceQuality?.location;
 
   return (
     <section className="market-analysis">
@@ -691,18 +709,61 @@ function MarketAnalysisPanel({
               <small>Market value is shown separately below.</small>
             </div>
             <div className="smart-score-context">
-              <span>{analysis.verdict.replace(/_/g, " ")}</span>
+              <div className="smart-score-meta">
+                <span>{analysis.verdict.replace(/_/g, " ")}</span>
+                <span>Location {analysis.investmentAssessment.locationScore}/100</span>
+                {locationConfidence && <span>{locationConfidence.level} evidence</span>}
+              </div>
               <p>{analysis.locationEvidence?.explanation ?? analysis.confidenceReason}</p>
               <div className="nearby-chip-list">
                 {confirmedNearby.length ? confirmedNearby.slice(0, 4).map((item) => (
                   <span key={`${item.type}-${item.name}`}>
-                    {item.name} · {item.distanceKm} km
+                    {nearbyTypeLabel(item.type)} · {item.name} · {item.distanceKm} km
                   </span>
                 )) : (
                   <span>{analysis.locationEvidence?.coordinatesAvailable ? "No strong nearby-place evidence yet" : "Map coordinates not available"}</span>
                 )}
               </div>
             </div>
+          </div>
+
+          <div className="location-intelligence">
+            <div className="location-intelligence-head">
+              <div>
+                <h5>Location intelligence</h5>
+                <p>Uses BAANKNET map coordinates when available, then verifies nearby places by distance.</p>
+              </div>
+              <div className="location-score-badge">
+                <span>Location score</span>
+                <strong>{analysis.investmentAssessment.locationScore}/100</strong>
+              </div>
+            </div>
+            <div className="location-signal-grid">
+              <div>
+                <span>Map coordinates</span>
+                <strong>{analysis.locationEvidence?.coordinatesAvailable ? "Captured" : "Not available"}</strong>
+              </div>
+              <div>
+                <span>Nearby evidence</span>
+                <strong>{confirmedNearby.length ? `${confirmedNearby.length} places` : "Not confirmed"}</strong>
+              </div>
+              <div>
+                <span>Evidence confidence</span>
+                <strong>{locationConfidence ? `${locationConfidence.level} (${Math.round(locationConfidence.score)}/10)` : "Not scored"}</strong>
+              </div>
+            </div>
+            {nearestPlaces.length > 0 && (
+              <div className="nearby-place-grid">
+                {nearestPlaces.map((item) => (
+                  <div key={`${item.type}-${item.name}-${item.distanceKm}`}>
+                    <span>{nearbyTypeLabel(item.type)}</span>
+                    <strong>{item.name}</strong>
+                    <small>{item.distanceKm} km away</small>
+                  </div>
+                ))}
+              </div>
+            )}
+            {locationConfidence?.reason && <p className="location-evidence-note">{locationConfidence.reason}</p>}
           </div>
 
           <div className="market-grid">
