@@ -1409,7 +1409,23 @@ export default function Home() {
         body: JSON.stringify({ forceRefresh }),
       })
         .then(async (response) => {
-          const payload = (await response.json()) as MarketAnalysisResponse;
+          const text = await response.text();
+          let payload: MarketAnalysisResponse;
+          try {
+            payload = text ? JSON.parse(text) as MarketAnalysisResponse : { marketAnalysis: null, cached: false, provider: "unknown", model: "unknown", groundingEnabled: false };
+          } catch {
+            payload = {
+              marketAnalysis: null,
+              cached: false,
+              provider: "unknown",
+              model: "unknown",
+              groundingEnabled: false,
+              error: {
+                code: "NON_JSON_RESPONSE",
+                message: text || `Market analysis failed with HTTP ${response.status}.`,
+              },
+            };
+          }
           if (!response.ok) {
             throw new Error(payload.error?.message || "Market analysis failed.");
           }
