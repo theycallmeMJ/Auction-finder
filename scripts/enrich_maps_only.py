@@ -40,6 +40,16 @@ def needs_nearby(auction: dict[str, Any]) -> bool:
     return bool(auction.get("latitude") and auction.get("longitude")) and (not nearby or failed)
 
 
+def lightweight_session(scraper):
+    context = scraper.ssl._create_unverified_context()
+    jar = scraper.CookieJar()
+    opener = scraper.urllib.request.build_opener(
+        scraper.urllib.request.HTTPCookieProcessor(jar),
+        scraper.urllib.request.HTTPSHandler(context=context),
+    )
+    return scraper.Session(opener=opener, csrf="", form={})
+
+
 def main() -> None:
     if not AUCTIONS_PATH.exists():
         raise SystemExit(f"Missing {AUCTIONS_PATH}. Run the normal scraper first.")
@@ -57,7 +67,7 @@ def main() -> None:
 
     scraper = load_script_module("scrape_baanknet", ROOT / "scripts" / "scrape_baanknet.py")
     scraper.NEARBY_LIMIT = NEARBY_LIMIT
-    session = scraper.start_session()
+    session = lightweight_session(scraper)
     scraper.enrich_property_locations(session, auctions, COORDINATE_LIMIT)
 
     after_missing_coordinates = sum(1 for auction in auctions if needs_coordinates(auction))
