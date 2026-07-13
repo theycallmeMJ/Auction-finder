@@ -689,16 +689,18 @@ function MarketAnalysisPanel({
   const nearestPlaces = [...confirmedNearby]
     .sort((left, right) => left.distanceKm - right.distanceKm)
     .slice(0, 6);
-  const locationConfidence = analysis?.evidenceQuality?.location;
   const analysisNote = analysis ? [
     data?.error?.message,
     ...(!data?.cached ? (analysis.risks ?? []).filter(isAnalysisSystemNote) : []),
   ].find(Boolean) : null;
-  const propertyRisks = analysis ? compactInsightList(
-    (analysis.risks ?? []).filter((item) => !isAnalysisSystemNote(item)),
-    "No major property risk flagged.",
-    4,
-  ) : [];
+  const rawPropertyRisks = analysis ? (analysis.risks ?? []).filter((item) => !isAnalysisSystemNote(item)) : [];
+  const propertyRisks = rawPropertyRisks.length ? compactInsightList(rawPropertyRisks, "", 4) : [];
+  const visibleSmartMeta = analysis ? [
+    analysis.verdict !== "needs_more_data" ? analysis.verdict.replace(/_/g, " ") : null,
+    analysis.confidence !== "low" ? `${analysis.confidence} confidence` : null,
+    comparableCount > 0 ? `${comparableCount} comparables` : null,
+  ].filter((item): item is string => Boolean(item)) : [];
+  const showConfidenceReason = analysis ? analysis.confidence !== "low" || comparableCount > 0 : false;
   const hasAdjustedMarketRange = hasMoneyRange(analysis?.marketAssessment.adjustedMarketValueLow, analysis?.marketAssessment.adjustedMarketValueHigh);
   const hasComparableAskingRange = hasMoneyRange(analysis?.marketAssessment.comparableAskingPriceLow, analysis?.marketAssessment.comparableAskingPriceHigh);
   const hasAuctionDiscount = hasPercentRange(analysis?.investmentAssessment.auctionDiscountLowPercent, analysis?.investmentAssessment.auctionDiscountHighPercent);
@@ -739,7 +741,7 @@ function MarketAnalysisPanel({
         <p className="market-error">{state.error || "Market analysis is temporarily unavailable."}</p>
       )}
 
-      {data?.error && (
+      {showSearchDiagnostics && data?.error && (
         <p className="market-warning">
           {data.error.message} Showing deterministic preliminary analysis where available.
         </p>
@@ -751,24 +753,24 @@ function MarketAnalysisPanel({
             <div className="smart-score-main">
               <span>Smart AI Score</span>
               <strong>{smartScore ?? "--"}/100</strong>
-              <small>{analysis.verdict.replace(/_/g, " ")}</small>
+              {analysis.verdict !== "needs_more_data" && <small>{analysis.verdict.replace(/_/g, " ")}</small>}
             </div>
             <div className="smart-score-context">
-              <div className="smart-score-meta">
-                <span>{analysis.verdict.replace(/_/g, " ")}</span>
-                <span>{analysis.confidence} confidence</span>
-                <span>{comparableCount} comparables</span>
-              </div>
-              <p>{analysis.confidenceReason}</p>
-              <div className="nearby-chip-list">
-                {confirmedNearby.length ? confirmedNearby.slice(0, 4).map((item) => (
-                  <span key={`${item.type}-${item.name}`}>
-                    {nearbyTypeLabel(item.type)} · {item.name} · {item.distanceKm} km
-                  </span>
-                )) : (
-                  <span>{analysis.locationEvidence?.coordinatesAvailable ? "No strong nearby-place evidence yet" : "Map coordinates not available"}</span>
-                )}
-              </div>
+              {visibleSmartMeta.length > 0 && (
+                <div className="smart-score-meta">
+                  {visibleSmartMeta.map((item) => <span key={item}>{item}</span>)}
+                </div>
+              )}
+              {showConfidenceReason && <p>{analysis.confidenceReason}</p>}
+              {confirmedNearby.length > 0 && (
+                <div className="nearby-chip-list">
+                  {confirmedNearby.slice(0, 4).map((item) => (
+                    <span key={`${item.type}-${item.name}`}>
+                      {nearbyTypeLabel(item.type)} · {item.name} · {item.distanceKm} km
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
 
@@ -794,14 +796,16 @@ function MarketAnalysisPanel({
                 {hasRentalDemand && <small>{analysis.rentalAssessment.rentalDemand} demand</small>}
               </div>
             )}
-            <div>
-              <span>Main risk</span>
-              <strong>{propertyRisks[0] ?? "No major property risk flagged"}</strong>
-              <small>Risk score {analysis.investmentAssessment.riskScore}/100</small>
-            </div>
+            {propertyRisks[0] && (
+              <div>
+                <span>Main risk</span>
+                <strong>{propertyRisks[0]}</strong>
+                <small>Risk score {analysis.investmentAssessment.riskScore}/100</small>
+              </div>
+            )}
           </div>
 
-          {analysisNote && (
+          {showSearchDiagnostics && analysisNote && (
             <p className="analysis-note">
               Data note: {analysisNote}
             </p>
@@ -832,20 +836,6 @@ function MarketAnalysisPanel({
                 <strong>{analysis.investmentAssessment.locationScore}/100</strong>
               </div>
             </div>
-            <div className="location-signal-grid">
-              <div>
-                <span>Map coordinates</span>
-                <strong>{analysis.locationEvidence?.coordinatesAvailable ? "Captured" : "Not available"}</strong>
-              </div>
-              <div>
-                <span>Nearby evidence</span>
-                <strong>{confirmedNearby.length ? `${confirmedNearby.length} places` : "Not confirmed"}</strong>
-              </div>
-              <div>
-                <span>Evidence confidence</span>
-                <strong>{locationConfidence ? `${locationConfidence.level} (${Math.round(locationConfidence.score)}/10)` : "Not scored"}</strong>
-              </div>
-            </div>
             {nearestPlaces.length > 0 && (
               <div className="nearby-place-grid">
                 {nearestPlaces.map((item) => (
@@ -857,7 +847,6 @@ function MarketAnalysisPanel({
                 ))}
               </div>
             )}
-            {locationConfidence?.reason && <p className="location-evidence-note">{locationConfidence.reason}</p>}
           </div>
 
           <div className="market-grid">
@@ -885,11 +874,13 @@ function MarketAnalysisPanel({
                 <strong>{percentRangeLabel(analysis.investmentAssessment.auctionDiscountLowPercent, analysis.investmentAssessment.auctionDiscountHighPercent)}</strong>
               </div>
             )}
-            <div>
-              <span>Confidence</span>
-              <strong>{analysis.confidence}</strong>
-              <small>{comparableCount} comparables</small>
-            </div>
+            {analysis.confidence !== "low" && comparableCount > 0 && (
+              <div>
+                <span>Confidence</span>
+                <strong>{analysis.confidence}</strong>
+                <small>{comparableCount} comparables</small>
+              </div>
+            )}
           </div>
 
           {(hasRentalEstimate || hasRentalYield || hasRentalDemand) && (
@@ -959,10 +950,12 @@ function MarketAnalysisPanel({
               <h5>Strengths</h5>
               <ul>{strengths.map((item) => <li key={item}>{item}</li>)}</ul>
             </div>
-            <div className="market-insight-card risks">
-              <h5>Risks</h5>
-              <ul>{propertyRisks.map((item) => <li key={item}>{item}</li>)}</ul>
-            </div>
+            {propertyRisks.length > 0 && (
+              <div className="market-insight-card risks">
+                <h5>Risks</h5>
+                <ul>{propertyRisks.map((item) => <li key={item}>{item}</li>)}</ul>
+              </div>
+            )}
           </div>
 
           <div className="market-verdict">

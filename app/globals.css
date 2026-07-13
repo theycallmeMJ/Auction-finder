@@ -1111,8 +1111,7 @@ h1 {
   align-items: start;
 }
 
-.location-intelligence-head p,
-.location-evidence-note {
+.location-intelligence-head p {
   margin: 0;
   color: var(--muted);
   font-size: 13px;
@@ -1128,7 +1127,6 @@ h1 {
 }
 
 .location-score-badge span,
-.location-signal-grid span,
 .nearby-place-grid span,
 .nearby-place-grid small {
   display: block;
@@ -1144,13 +1142,6 @@ h1 {
   font-size: 22px;
 }
 
-.location-signal-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
-}
-
-.location-signal-grid > div,
 .nearby-place-grid > div {
   display: grid;
   gap: 4px;
@@ -1161,7 +1152,6 @@ h1 {
   background: #f7fbf8;
 }
 
-.location-signal-grid strong,
 .nearby-place-grid strong {
   color: #253029;
   font-size: 14px;
@@ -2122,7 +2112,6 @@ h1 {
   .ai-simple-grid,
   .ai-takeaway,
   .location-intelligence-head,
-  .location-signal-grid,
   .market-grid,
   .market-grid.rental,
   .comparables,
