@@ -59,6 +59,12 @@ type Auction = {
   location: string;
   loanAvailable: boolean;
   possessionStatus?: string;
+  latitude?: number | string | null;
+  longitude?: number | string | null;
+  nearbyPlaces?: {
+    categories?: Record<string, unknown>;
+    status?: string;
+  } | null;
   pricePerSqft?: number | null;
   score?: {
     overall: number;
@@ -557,6 +563,18 @@ function compactRiskList(items: string[]) {
 
 function areaLabel(auction: Auction) {
   return auction.builtUpArea || auction.carpetArea || auction.areaSqft || "Not captured yet";
+}
+
+function hasMapCoordinates(auction: Auction) {
+  return auction.latitude !== null && auction.latitude !== undefined && auction.longitude !== null && auction.longitude !== undefined;
+}
+
+function hasNearbyEvidence(auction: Auction) {
+  return Boolean(auction.nearbyPlaces?.categories);
+}
+
+function locationScore(auction: Auction) {
+  return auction.score?.area ?? null;
 }
 
 function nearbyTypeLabel(type: string) {
@@ -1154,6 +1172,14 @@ export default function Home() {
       if (sortMode === "price-low") return (a.reservePrice ?? Number.MAX_SAFE_INTEGER) - (b.reservePrice ?? Number.MAX_SAFE_INTEGER);
       if (sortMode === "price-high") return (b.reservePrice ?? 0) - (a.reservePrice ?? 0);
       if (sortMode === "score") return (b.score?.overall ?? 0) - (a.score?.overall ?? 0);
+      if (sortMode === "location-score") {
+        const aMapped = hasMapCoordinates(a) ? 1 : 0;
+        const bMapped = hasMapCoordinates(b) ? 1 : 0;
+        if (aMapped !== bMapped) return bMapped - aMapped;
+        const scoreDelta = (locationScore(b) ?? -1) - (locationScore(a) ?? -1);
+        if (scoreDelta !== 0) return scoreDelta;
+        return (b.score?.overall ?? 0) - (a.score?.overall ?? 0);
+      }
       if (sortMode === "latest") return parseAuctionDate(b.startDate) - parseAuctionDate(a.startDate);
       return parseAuctionDate(a.startDate) - parseAuctionDate(b.startDate);
     });
@@ -1668,7 +1694,8 @@ export default function Home() {
                 <span>Sort</span>
                 <select value={sortMode} onChange={(event) => updateSortMode(event.target.value)}>
                   <option value="soonest">Soonest</option>
-                  <option value="score">Score</option>
+                  <option value="score">Auction</option>
+                  <option value="location-score">Location</option>
                   <option value="latest">Latest</option>
                   <option value="price-low">Price ↑</option>
                   <option value="price-high">Price ↓</option>
@@ -1749,16 +1776,22 @@ export default function Home() {
             <div className="toolbar">
               <p>{dataState}</p>
               {viewMode === "search" ? (
-                <label>
-                  <span>Sort</span>
-                  <select value={sortMode} onChange={(event) => updateSortMode(event.target.value)}>
-                    <option value="soonest">Soonest first</option>
-                    <option value="score">Auction score</option>
-                    <option value="latest">Latest first</option>
-                    <option value="price-low">Price low to high</option>
-                    <option value="price-high">Price high to low</option>
-                  </select>
-                </label>
+                <div className="sort-control">
+                  <label>
+                    <span>Sort</span>
+                    <select value={sortMode} onChange={(event) => updateSortMode(event.target.value)}>
+                      <option value="soonest">Soonest first</option>
+                      <option value="score">Auction score</option>
+                      <option value="location-score">Location score</option>
+                      <option value="latest">Latest first</option>
+                      <option value="price-low">Price low to high</option>
+                      <option value="price-high">Price high to low</option>
+                    </select>
+                  </label>
+                  {sortMode === "location-score" && (
+                    <small>Mapped properties first, then Auction Score as tie-breaker.</small>
+                  )}
+                </div>
               ) : (
                 <div className="rank-note">
                   Ranking current filter set by Auction Score
@@ -1790,6 +1823,9 @@ export default function Home() {
               const auctionDetailsKey = `${auction.status}-${auction.auctionId}-details`;
               const isScoreDetailsOpen = openScoreDetails.has(scoreDetailsKey);
               const isAuctionDetailsOpen = openAuctionDetails.has(auctionDetailsKey);
+              const mappedLocation = hasMapCoordinates(auction);
+              const verifiedNearby = hasNearbyEvidence(auction);
+              const auctionLocationScore = locationScore(auction);
 
               return (
               <article className="auction-card" key={`${auction.status}-${auction.auctionId}`}>
@@ -1799,6 +1835,10 @@ export default function Home() {
                       {viewMode === "rank" && <span className="badge rank-badge">Rank #{filterRank}</span>}
                       <span className={`badge ${auction.status}`}>{statusLabels[auction.status]}</span>
                       <span className="badge score-badge">{auction.score?.overall ?? "--"} score</span>
+                      <span className={mappedLocation ? "badge location mapped" : "badge location"}>
+                        {mappedLocation ? `Location ${scoreLabel(auctionLocationScore)}` : "Location not mapped"}
+                      </span>
+                      {verifiedNearby && <span className="badge nearby">Nearby verified</span>}
                       {auction.loanAvailable && <span className="badge loan">Loan available</span>}
                     </div>
                     <button type="button" className="ghost-button city-filter-button" onClick={() => updateFilter("city", auction.city)}>
@@ -1841,6 +1881,7 @@ export default function Home() {
                       <span>Rank #{auction.score?.rankState ?? "--"} Kerala</span>
                       {viewMode === "rank" && <span>Current filter #{filterRank}</span>}
                       <span>Area {scoreLabel(auction.score?.area)}</span>
+                      <span>{mappedLocation ? "Map verified" : "Map pending"}</span>
                       <span>Risk {auction.score?.riskLabel ?? "Pending"}</span>
                       <span>Confidence {auction.score?.confidenceLabel ?? "Pending"}</span>
                     </div>
@@ -1893,6 +1934,8 @@ export default function Home() {
                   <strong>{auction.bankPropertyId}</strong>
                   <span>Auction score</span>
                   <strong>{scoreLabel(auction.score?.overall)}</strong>
+                  <span>Location score</span>
+                  <strong>{mappedLocation ? scoreLabel(auctionLocationScore) : "Not mapped"}</strong>
                   <div className="card-actions" aria-label="Auction links">
                     {auction.auctionDetailUrl && (
                       <button type="button" onClick={() => openProtectedLink(auction.auctionDetailUrl)}>
