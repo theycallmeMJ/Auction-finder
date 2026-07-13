@@ -99,6 +99,95 @@ type Catalog = {
   possessionStatuses: Option[];
 };
 
+type ComparableProperty = {
+  title: string;
+  locality: string | null;
+  propertyType: string;
+  bhk: number | null;
+  builtUpAreaSqft: number | null;
+  landAreaCents: number | null;
+  askingPrice: number | null;
+  monthlyRent: number | null;
+  pricePerSqft: number | null;
+  sourceName: string | null;
+  sourceUrl: string | null;
+  similarityScore: number;
+  matchReason: string;
+};
+
+type MarketAnalysis = {
+  saleComparables: ComparableProperty[];
+  rentalComparables: ComparableProperty[];
+  marketAssessment: {
+    comparableAskingPriceLow: number | null;
+    comparableAskingPriceHigh: number | null;
+    medianComparableAskingPrice: number | null;
+    adjustedMarketValueLow: number | null;
+    adjustedMarketValueHigh: number | null;
+    adjustmentReason: string;
+  };
+  rentalAssessment: {
+    estimatedMonthlyRentLow: number | null;
+    estimatedMonthlyRentHigh: number | null;
+    likelyMonthlyRent: number | null;
+    rentalDemand: string;
+    explanation: string;
+  };
+  investmentAssessment: {
+    auctionDiscountLowPercent: number | null;
+    auctionDiscountHighPercent: number | null;
+    grossRentalYieldLowPercent: number | null;
+    grossRentalYieldHighPercent: number | null;
+    locationScore: number;
+    rentalScore: number;
+    appreciationScore: number;
+    liquidityScore: number;
+    valueScore: number;
+    riskScore: number;
+    overallScore: number;
+  };
+  strengths: string[];
+  risks: string[];
+  missingInformation: string[];
+  verdict: string;
+  confidence: string;
+  confidenceReason: string;
+  groundedSources: Array<{ title: string; url: string; sourceName: string | null }>;
+  disclaimer: string;
+  comparableCount?: number;
+};
+
+type MarketAnalysisResponse = {
+  marketAnalysis: MarketAnalysis | null;
+  fallbackAnalysis?: MarketAnalysis | null;
+  deterministic?: {
+    completenessScore: number;
+    preliminaryScore: number;
+    missingFields: string[];
+    criticalMissingFields: string[];
+    warnings: string[];
+  };
+  searchContext?: {
+    primarySearchQuery: string;
+    rentalSearchQuery: string;
+  };
+  cached: boolean;
+  provider: string;
+  model: string;
+  groundingEnabled: boolean;
+  error?: {
+    code: string;
+    message: string;
+  } | null;
+};
+
+type MarketAnalysisState = {
+  status: "idle" | "loading" | "success" | "error";
+  loadingStep: number;
+  data?: MarketAnalysisResponse;
+  error?: string;
+};
+
 const fallbackCatalog: Catalog = {
   states: [{ id: "17", name: "Kerala" }],
   districts: [{ id: "313", name: "Kottayam", stateId: "17" }],
@@ -377,6 +466,19 @@ function priceLabel(value: number | null) {
   return formatter.format(value);
 }
 
+function rangeLabel(low?: number | null, high?: number | null) {
+  if (!low && !high) return "Not enough evidence";
+  if (low && high) return `${priceLabel(low)} - ${priceLabel(high)}`;
+  return priceLabel(low ?? high ?? null);
+}
+
+function percentRangeLabel(low?: number | null, high?: number | null) {
+  if (typeof low !== "number" && typeof high !== "number") return "Not enough evidence";
+  const format = (value: number) => `${Math.max(0, value).toFixed(1)}%`;
+  if (typeof low === "number" && typeof high === "number") return `${format(low)} - ${format(high)}`;
+  return format((low ?? high) as number);
+}
+
 function scoreLabel(value?: number) {
   return typeof value === "number" ? `${value}/100` : "Pending";
 }
@@ -404,6 +506,13 @@ function splitDateTime(value: string) {
   const [date = "", time = ""] = value.split(" ");
   return { date, time };
 }
+
+const marketLoadingSteps = [
+  "Preparing property data",
+  "Searching similar properties",
+  "Comparing prices",
+  "Calculating investment score",
+];
 
 function Select({
   label,
@@ -433,6 +542,183 @@ function Select({
   );
 }
 
+function MarketAnalysisPanel({
+  auction,
+  state,
+  onRequest,
+  onRefresh,
+}: {
+  auction: Auction;
+  state?: MarketAnalysisState;
+  onRequest: () => void;
+  onRefresh: () => void;
+}) {
+  const data = state?.data;
+  const analysis = data?.marketAnalysis ?? data?.fallbackAnalysis ?? null;
+  const isLoading = state?.status === "loading";
+  const comparableCount = analysis?.comparableCount ?? ((analysis?.saleComparables.length ?? 0) + (analysis?.rentalComparables.length ?? 0));
+
+  return (
+    <section className="market-analysis">
+      <div className="market-analysis-head">
+        <div>
+          <h4>AI Market & Investment Analysis</h4>
+          <p>Search current comparable sale and rental listings using AI.</p>
+        </div>
+        <div className="market-analysis-actions">
+          <button type="button" onClick={onRequest} disabled={isLoading}>
+            {analysis ? "Check again" : "Check market value"}
+          </button>
+          {analysis && (
+            <button type="button" className="ghost-button" onClick={onRefresh} disabled={isLoading}>
+              Force refresh
+            </button>
+          )}
+        </div>
+      </div>
+
+      {isLoading && (
+        <div className="market-loading">
+          {marketLoadingSteps.map((step, index) => (
+            <span key={step} className={index <= (state?.loadingStep ?? 0) ? "active" : ""}>
+              {step}
+            </span>
+          ))}
+        </div>
+      )}
+
+      {state?.status === "error" && !analysis && (
+        <p className="market-error">{state.error || "Market analysis is temporarily unavailable."}</p>
+      )}
+
+      {data?.error && (
+        <p className="market-warning">
+          {data.error.message} Showing deterministic preliminary analysis where available.
+        </p>
+      )}
+
+      {analysis && (
+        <>
+          <div className="market-grid">
+            <div>
+              <span>Reserve price</span>
+              <strong>{priceLabel(auction.reservePrice)}</strong>
+            </div>
+            <div>
+              <span>Comparable asking prices</span>
+              <strong>{rangeLabel(analysis.marketAssessment.comparableAskingPriceLow, analysis.marketAssessment.comparableAskingPriceHigh)}</strong>
+              <small>Asking prices</small>
+            </div>
+            <div>
+              <span>Adjusted likely market range</span>
+              <strong>{rangeLabel(analysis.marketAssessment.adjustedMarketValueLow, analysis.marketAssessment.adjustedMarketValueHigh)}</strong>
+              <small>Estimated range</small>
+            </div>
+            <div>
+              <span>Auction discount</span>
+              <strong>{percentRangeLabel(analysis.investmentAssessment.auctionDiscountLowPercent, analysis.investmentAssessment.auctionDiscountHighPercent)}</strong>
+            </div>
+            <div>
+              <span>Confidence</span>
+              <strong>{analysis.confidence}</strong>
+              <small>{comparableCount} comparables</small>
+            </div>
+          </div>
+
+          <div className="market-grid rental">
+            <div>
+              <span>Estimated monthly rent</span>
+              <strong>{rangeLabel(analysis.rentalAssessment.estimatedMonthlyRentLow, analysis.rentalAssessment.estimatedMonthlyRentHigh)}</strong>
+            </div>
+            <div>
+              <span>Gross rental yield</span>
+              <strong>{percentRangeLabel(analysis.investmentAssessment.grossRentalYieldLowPercent, analysis.investmentAssessment.grossRentalYieldHighPercent)}</strong>
+            </div>
+            <div>
+              <span>Rental demand</span>
+              <strong>{analysis.rentalAssessment.rentalDemand}</strong>
+            </div>
+          </div>
+
+          <div className="investment-scores">
+            {[
+              ["Overall", analysis.investmentAssessment.overallScore],
+              ["Location", analysis.investmentAssessment.locationScore],
+              ["Rental", analysis.investmentAssessment.rentalScore],
+              ["Appreciation", analysis.investmentAssessment.appreciationScore],
+              ["Liquidity", analysis.investmentAssessment.liquidityScore],
+              ["Value", analysis.investmentAssessment.valueScore],
+              ["Risk", analysis.investmentAssessment.riskScore],
+            ].map(([label, value]) => (
+              <div key={String(label)}>
+                <span>{label}</span>
+                <strong>{value}/100</strong>
+                <div className="score-bar">
+                  <span style={{ width: `${value}%` }} />
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {(analysis.saleComparables.length > 0 || analysis.rentalComparables.length > 0) && (
+            <div className="comparables">
+              <h5>Comparable listings</h5>
+              {[...analysis.saleComparables, ...analysis.rentalComparables].slice(0, 8).map((item, index) => (
+                <div className="comparable-card" key={`${item.sourceUrl ?? item.title}-${index}`}>
+                  <strong>{item.title}</strong>
+                  <span>{item.locality || "Locality not shown"} · {item.propertyType}</span>
+                  <span>
+                    {item.builtUpAreaSqft ? `${Math.round(item.builtUpAreaSqft)} sqft` : "Area not shown"}
+                    {item.landAreaCents ? ` · ${item.landAreaCents} cents` : ""}
+                    {item.bhk ? ` · ${item.bhk} BHK` : ""}
+                  </span>
+                  <span>{item.askingPrice ? priceLabel(item.askingPrice) : item.monthlyRent ? `${priceLabel(item.monthlyRent)}/mo` : "Price not shown"}</span>
+                  <small>{item.similarityScore}/100 similarity · {item.matchReason}</small>
+                  {item.sourceUrl && <a href={item.sourceUrl} target="_blank" rel="noreferrer">Source</a>}
+                </div>
+              ))}
+            </div>
+          )}
+
+          <div className="market-lists">
+            <div>
+              <h5>Strengths</h5>
+              <ul>{(analysis.strengths.length ? analysis.strengths : ["No strengths identified yet."]).map((item) => <li key={item}>{item}</li>)}</ul>
+            </div>
+            <div>
+              <h5>Risks</h5>
+              <ul>{(analysis.risks.length ? analysis.risks : ["No risks identified yet."]).map((item) => <li key={item}>{item}</li>)}</ul>
+            </div>
+            <div>
+              <h5>Missing information</h5>
+              <ul>{(analysis.missingInformation.length ? analysis.missingInformation : ["No major missing fields flagged."]).map((item) => <li key={item}>{item}</li>)}</ul>
+            </div>
+          </div>
+
+          <div className="market-verdict">
+            <strong>Verdict: {analysis.verdict.replace(/_/g, " ")}</strong>
+            <p>{analysis.confidenceReason}</p>
+            <p>{analysis.marketAssessment.adjustmentReason}</p>
+          </div>
+
+          {analysis.groundedSources.length > 0 && (
+            <div className="sources">
+              <h5>Sources</h5>
+              {analysis.groundedSources.map((source) => (
+                <a key={source.url} href={source.url} target="_blank" rel="noreferrer">
+                  {source.title || source.sourceName || source.url}
+                </a>
+              ))}
+            </div>
+          )}
+
+          <p className="market-disclaimer">{analysis.disclaimer}</p>
+        </>
+      )}
+    </section>
+  );
+}
+
 export default function Home() {
   const [catalog, setCatalog] = useState<Catalog>(fallbackCatalog);
   const [auctions, setAuctions] = useState<Auction[]>(fallbackAuctions);
@@ -449,6 +735,7 @@ export default function Home() {
   const [authMessage, setAuthMessage] = useState("");
   const [authError, setAuthError] = useState("");
   const [protectedActionCount, setProtectedActionCount] = useState(0);
+  const [marketAnalysisByAuction, setMarketAnalysisByAuction] = useState<Record<string, MarketAnalysisState>>({});
   const [filters, setFilters] = useState({
     state: "Kerala",
     district: "",
@@ -862,6 +1149,52 @@ export default function Home() {
   function openProtectedLink(url?: string) {
     if (!url) return;
     requestProtectedAction(() => window.open(url, "_blank", "noopener,noreferrer"));
+  }
+
+  function requestMarketAnalysis(auction: Auction, forceRefresh = false) {
+    requestProtectedAction(() => {
+      const key = auction.auctionId;
+      setMarketAnalysisByAuction((current) => ({
+        ...current,
+        [key]: { status: "loading", loadingStep: 0 },
+      }));
+
+      let step = 0;
+      const interval = window.setInterval(() => {
+        step = Math.min(step + 1, marketLoadingSteps.length - 1);
+        setMarketAnalysisByAuction((current) => ({
+          ...current,
+          [key]: {
+            ...(current[key] ?? { status: "loading" as const }),
+            status: "loading",
+            loadingStep: step,
+          },
+        }));
+      }, 1400);
+
+      fetch(`/api/properties/${encodeURIComponent(auction.auctionId)}/market-analysis`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ forceRefresh }),
+      })
+        .then(async (response) => {
+          const payload = (await response.json()) as MarketAnalysisResponse;
+          if (!response.ok) {
+            throw new Error(payload.error?.message || "Market analysis failed.");
+          }
+          setMarketAnalysisByAuction((current) => ({
+            ...current,
+            [key]: { status: payload.error ? "error" : "success", loadingStep: marketLoadingSteps.length - 1, data: payload, error: payload.error?.message },
+          }));
+        })
+        .catch((error: Error) => {
+          setMarketAnalysisByAuction((current) => ({
+            ...current,
+            [key]: { status: "error", loadingStep: marketLoadingSteps.length - 1, error: error.message },
+          }));
+        })
+        .finally(() => window.clearInterval(interval));
+    });
   }
 
   async function handleMagicLinkSubmit(event: FormEvent<HTMLFormElement>) {
@@ -1390,6 +1723,13 @@ export default function Home() {
                   </summary>
                   {isAuctionDetailsOpen && (
                     <div className="detail-sections">
+                      <MarketAnalysisPanel
+                        auction={auction}
+                        state={marketAnalysisByAuction[auction.auctionId]}
+                        onRequest={() => requestMarketAnalysis(auction)}
+                        onRefresh={() => requestMarketAnalysis(auction, true)}
+                      />
+
                       <section>
                         <h4>General Detail</h4>
                         <dl>

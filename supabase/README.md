@@ -29,6 +29,9 @@ Tables created by `schema.sql`:
 - `public.catalog_snapshots`: latest filter/catalog metadata
 - `public.refresh_runs`: one row per scraper/Supabase push run
 - `public.login_events`: app-level login history after successful sign-in
+- `public.property_market_analysis`: cached AI market-analysis responses
+- `public.property_comparables`: sale/rental comparables extracted from analysis
+- `public.ai_usage_log`: provider usage and success/failure logging
 
 If Supabase warns that a policy already exists, the database was partially set
 up earlier. Create only the missing tables/indexes/policies or drop/recreate
@@ -179,4 +182,60 @@ select
   created_at
 from public.catalog_snapshots
 order by created_at desc;
+```
+
+## 7. AI market analysis
+
+The Cloudflare worker endpoint is:
+
+```text
+POST /api/properties/:auctionId/market-analysis
+```
+
+It uses the service-role key server-side to read the full auction record, cache
+the analysis, write comparable rows, and log usage. Browser code never receives
+the service-role key or Gemini key.
+
+Required Cloudflare runtime variables:
+
+```text
+NEXT_PUBLIC_SUPABASE_URL
+SUPABASE_SERVICE_ROLE_KEY
+GEMINI_API_KEY
+GEMINI_MODEL
+AI_PROVIDER=gemini
+ENABLE_GOOGLE_SEARCH_GROUNDING=true
+```
+
+Inspect latest AI analysis cache rows:
+
+```sql
+select
+  auction_id,
+  provider,
+  model,
+  grounding_enabled,
+  status,
+  error_message,
+  created_at
+from public.property_market_analysis
+order by created_at desc
+limit 20;
+```
+
+Inspect AI usage:
+
+```sql
+select
+  provider,
+  model,
+  auction_id,
+  grounded,
+  cached,
+  success,
+  error_code,
+  created_at
+from public.ai_usage_log
+order by created_at desc
+limit 50;
 ```

@@ -21,6 +21,8 @@ Pages deployment.
 - Supabase Google OAuth login
 - Login gate after free auction actions
 - Login event tracking schema and frontend insert
+- On-demand AI Market & Investment Analysis
+- Server-side Gemini grounded comparable search API
 - Daily GitHub Actions scrape/deploy workflow
 - Cloudflare Pages build/deploy setup
 
@@ -39,6 +41,7 @@ Pages deployment.
 - `scripts/score_auctions.py`: scoring engine
 - `scripts/push_to_supabase.py`: pushes scraped JSON into Supabase
 - `scripts/prepare_cloudflare_pages.mjs`: prepares `dist-pages` for Cloudflare Pages
+- `cloudflare/market-analysis-api.mjs`: Cloudflare server API for market analysis
 - `public/data/auctions.json`: bundled auction data fallback
 - `public/data/catalog.json`: bundled filter catalog fallback
 - `public/data/area_profiles.json`: cached area profile/scoring support data
@@ -158,10 +161,17 @@ Server/trusted job variable:
 
 ```text
 SUPABASE_SERVICE_ROLE_KEY
+GEMINI_API_KEY
+GEMINI_MODEL
+AI_PROVIDER
+ENABLE_GOOGLE_SEARCH_GROUNDING
 ```
 
 Only use `SUPABASE_SERVICE_ROLE_KEY` from local scripts, cron, or GitHub Actions.
 Never expose it in browser code.
+
+Only set `GEMINI_API_KEY` as a Cloudflare Pages/Worker runtime secret or local
+server-side variable. It must never be exposed as a `NEXT_PUBLIC_*` variable.
 
 Production GitHub Actions secrets:
 
@@ -345,7 +355,51 @@ The main UI supports:
 - mobile auction KPI row
 - score breakdown accordion
 - auction detail accordion
+- AI market check inside auction details
 - protected BAANKNET notice/property links
+
+## AI Market & Investment Analysis
+
+The property detail accordion includes **Check market value**. The browser calls:
+
+```text
+POST /api/properties/:auctionId/market-analysis
+```
+
+The Cloudflare worker:
+
+1. loads the full auction row from Supabase using `auction_id`
+2. normalises area, price, location and property fields
+3. calculates deterministic completeness and preliminary scores
+4. builds comparable sale/rental search context
+5. checks `property_market_analysis` cache for seven-day reuse
+6. calls Gemini with Google Search Grounding when configured
+7. validates and post-processes comparables in application code
+8. writes analysis, comparables and usage logs back to Supabase
+9. returns a graceful deterministic fallback if Gemini/grounding is unavailable
+
+Required Cloudflare runtime variables:
+
+```text
+NEXT_PUBLIC_SUPABASE_URL
+SUPABASE_SERVICE_ROLE_KEY
+GEMINI_API_KEY
+GEMINI_MODEL
+AI_PROVIDER=gemini
+ENABLE_GOOGLE_SEARCH_GROUNDING=true
+```
+
+Gemini grounding may require a billing-enabled Google AI/Gemini project. Without
+Gemini configuration, the endpoint still returns deterministic data quality and
+preliminary analysis with a clear unavailable message.
+
+Cache and usage tables:
+
+```text
+property_market_analysis
+property_comparables
+ai_usage_log
+```
 
 ## Scoring
 

@@ -5,6 +5,7 @@ const root = process.cwd();
 const output = resolve(root, "dist-pages");
 const server = resolve(root, "dist", "server");
 const client = resolve(root, "dist", "client");
+const cloudflare = resolve(root, "cloudflare");
 
 await rm(output, { recursive: true, force: true });
 await mkdir(output, { recursive: true });
@@ -14,10 +15,12 @@ await mkdir(output, { recursive: true });
 // Cloudflare-compatible worker in `dist/server/index.js`.
 await cp(server, output, { recursive: true });
 await cp(client, output, { recursive: true });
+await cp(cloudflare, join(output, "cloudflare"), { recursive: true });
 
 await writeFile(
   join(output, "_worker.js"),
   `import app from "./index.js";
+import { handleMarketAnalysisRequest } from "./cloudflare/market-analysis-api.mjs";
 
 const staticPrefixes = ["/assets/", "/data/"];
 const staticFiles = new Set([
@@ -40,6 +43,10 @@ function withCacheControl(response, value) {
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
+    if (url.pathname.startsWith("/api/properties/")) {
+      const apiResponse = await handleMarketAnalysisRequest(request, env);
+      if (apiResponse) return apiResponse;
+    }
     if (staticPrefixes.some((prefix) => url.pathname.startsWith(prefix)) || staticFiles.has(url.pathname)) {
       const response = await env.ASSETS.fetch(request);
       if (response.status !== 404) {
