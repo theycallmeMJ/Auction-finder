@@ -5,6 +5,7 @@ const CENT_TO_SQFT = 435.6;
 const CACHE_DAYS = 7;
 const MAX_FRESH_ANALYSES_PER_DAY = 20;
 const AI_ANALYSIS_VERSION = "market-v6-candidate-landmark-safeguards";
+const GEMINI_MODEL_COOLDOWNS = new Map();
 
 const DEFAULT_DISCLAIMER =
   "This analysis is based on available auction data and current online asking prices. Asking prices may differ from completed transaction values. Verify title, possession, encumbrances, physical condition, access, statutory approvals and market value independently before bidding.";
@@ -31,6 +32,42 @@ function sanitizeError(error) {
   if (/timeout/i.test(message)) return { code: "PROVIDER_TIMEOUT", message: "Live comparable search timed out." };
   if (/tavily/i.test(message)) return { code: "SEARCH_PROVIDER_UNAVAILABLE", message: "Comparable search is temporarily unavailable." };
   return { code: "GROUNDING_UNAVAILABLE", message: "Live comparable search is temporarily unavailable." };
+}
+
+function geminiModelCandidates(env) {
+  return uniqueStrings([
+    env.GEMINI_MODEL,
+    ...String(env.GEMINI_FALLBACK_MODELS || "gemini-3.1-flash-lite,gemini-2.5-flash,gemini-3-flash")
+      .split(",")
+      .map((item) => item.trim())
+      .filter(Boolean),
+  ].filter(Boolean), 6);
+}
+
+function isGeminiQuotaOrRateLimit(error) {
+  const message = error instanceof Error ? error.message : String(error);
+  return /quota|RESOURCE_EXHAUSTED|rate.?limit|429|GenerateRequestsPerDayPerProjectPerModel/i.test(message);
+}
+
+function geminiCooldownMs(env, error) {
+  const message = error instanceof Error ? error.message : String(error);
+  const retryMatch = message.match(/retry\s+in\s+(\d+(?:\.\d+)?)s/i) || message.match(/retryDelay['"]?\s*:\s*['"]?(\d+)s/i);
+  if (retryMatch) return Math.max(30_000, Math.ceil(Number(retryMatch[1]) * 1000));
+  return Number(env.GEMINI_MODEL_COOLDOWN_MS || 15 * 60 * 1000);
+}
+
+function markGeminiModelCoolingDown(env, model, error) {
+  GEMINI_MODEL_COOLDOWNS.set(model, Date.now() + geminiCooldownMs(env, error));
+}
+
+function isGeminiModelCoolingDown(model) {
+  const until = GEMINI_MODEL_COOLDOWNS.get(model);
+  if (!until) return false;
+  if (until <= Date.now()) {
+    GEMINI_MODEL_COOLDOWNS.delete(model);
+    return false;
+  }
+  return true;
 }
 
 function clamp(value, min = 0, max = 100) {
@@ -1015,9 +1052,8 @@ function normalizeGeneratedQueries(queries, fallback, limit, searchContext) {
 
 async function geminiSearchQueryPlan(env, property, searchContext) {
   const apiKey = env.GEMINI_API_KEY;
-  const model = env.GEMINI_MODEL;
-  if (!apiKey || !model) return searchContext;
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`;
+  const models = geminiModelCandidates(env);
+  if (!apiKey || models.length === 0) return searchContext;
   const prompt = [
     "Generate natural Google search queries for evaluating an Indian residential property and finding comparable listings.",
     'Return valid JSON only with these arrays: {"saleQueries":[],"rentalQueries":[],"valueQueries":[]}.',
@@ -1050,49 +1086,58 @@ async function geminiSearchQueryPlan(env, property, searchContext) {
     ].join("\n"),
     JSON.stringify({ property, deterministicQueryIdeas: searchContext }, null, 2),
   ].join("\n\n");
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort("timeout"), 20000);
-  try {
-    const response = await fetch(url, {
-      method: "POST",
-      signal: controller.signal,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        contents: [{ role: "user", parts: [{ text: prompt }] }],
-        generationConfig: { temperature: 0.35, responseMimeType: "application/json" },
-      }),
-    });
-    const payload = await response.json();
-    if (!response.ok) throw new Error(payload?.error?.message || `Gemini query plan failed: ${response.status}`);
-    const text = payload?.candidates?.[0]?.content?.parts?.map((part) => part.text || "").join("\n") || "";
-    const generated = extractJson(text);
-    const saleQueries = normalizeGeneratedQueries(generated.saleQueries, searchContext.saleQueries || [], 12, searchContext);
-    const rentalQueries = normalizeGeneratedQueries(generated.rentalQueries, searchContext.rentalQueries || [], 6, searchContext);
-    const valueQueries = normalizeGeneratedQueries(generated.valueQueries, searchContext.valueQueries || [], 5, searchContext);
-    return {
-      ...searchContext,
-      saleQueries,
-      rentalQueries,
-      valueQueries,
-      queryPlanProvider: "gemini",
-      queryPlanRaw: {
-        saleQueries: Array.isArray(generated.saleQueries) ? generated.saleQueries : [],
-        rentalQueries: Array.isArray(generated.rentalQueries) ? generated.rentalQueries : [],
-        valueQueries: Array.isArray(generated.valueQueries) ? generated.valueQueries : [],
-      },
-      primarySearchQuery: saleQueries[0] || searchContext.primarySearchQuery,
-      rentalSearchQuery: rentalQueries[0] || searchContext.rentalSearchQuery,
-    };
-  } catch {
-    return { ...searchContext, queryPlanProvider: "deterministic" };
-  } finally {
-    clearTimeout(timeout);
+  for (const model of models) {
+    if (isGeminiModelCoolingDown(model)) continue;
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`;
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort("timeout"), 20000);
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        signal: controller.signal,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents: [{ role: "user", parts: [{ text: prompt }] }],
+          generationConfig: { temperature: 0.35, responseMimeType: "application/json" },
+        }),
+      });
+      const payload = await response.json();
+      if (!response.ok) throw new Error(payload?.error?.message || `Gemini query plan failed: ${response.status}`);
+      const text = payload?.candidates?.[0]?.content?.parts?.map((part) => part.text || "").join("\n") || "";
+      const generated = extractJson(text);
+      const saleQueries = normalizeGeneratedQueries(generated.saleQueries, searchContext.saleQueries || [], 12, searchContext);
+      const rentalQueries = normalizeGeneratedQueries(generated.rentalQueries, searchContext.rentalQueries || [], 6, searchContext);
+      const valueQueries = normalizeGeneratedQueries(generated.valueQueries, searchContext.valueQueries || [], 5, searchContext);
+      return {
+        ...searchContext,
+        saleQueries,
+        rentalQueries,
+        valueQueries,
+        queryPlanProvider: "gemini",
+        queryPlanModel: model,
+        queryPlanRaw: {
+          saleQueries: Array.isArray(generated.saleQueries) ? generated.saleQueries : [],
+          rentalQueries: Array.isArray(generated.rentalQueries) ? generated.rentalQueries : [],
+          valueQueries: Array.isArray(generated.valueQueries) ? generated.valueQueries : [],
+        },
+        primarySearchQuery: saleQueries[0] || searchContext.primarySearchQuery,
+        rentalSearchQuery: rentalQueries[0] || searchContext.rentalSearchQuery,
+      };
+    } catch (error) {
+      if (isGeminiQuotaOrRateLimit(error)) {
+        markGeminiModelCoolingDown(env, model, error);
+        continue;
+      }
+      break;
+    } finally {
+      clearTimeout(timeout);
+    }
   }
+  return { ...searchContext, queryPlanProvider: "deterministic" };
 }
 
-async function geminiRequest(env, input, attempt = 0) {
+async function geminiRequestWithModel(env, input, model, attempt = 0) {
   const apiKey = env.GEMINI_API_KEY;
-  const model = env.GEMINI_MODEL;
   if (!apiKey || !model) throw new Error("Gemini is not configured.");
   const groundingEnabled = String(env.ENABLE_GOOGLE_SEARCH_GROUNDING ?? "true") === "true";
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`;
@@ -1141,15 +1186,32 @@ async function geminiRequest(env, input, attempt = 0) {
       .filter((web) => web?.uri)
       .map((web) => ({ title: web.title || web.uri, url: web.uri, sourceName: web.title || null }));
     analysis.groundedSources = [...(analysis.groundedSources || []), ...groundedSources];
-    return { analysis, raw: payload, groundingEnabled };
+    return { analysis, raw: payload, groundingEnabled, model };
   } catch (error) {
     if (attempt < 1 && !/JSON|validation/i.test(error.message || "")) {
-      return geminiRequest(env, input, attempt + 1);
+      return geminiRequestWithModel(env, input, model, attempt + 1);
     }
     throw error;
   } finally {
     clearTimeout(timeout);
   }
+}
+
+async function geminiRequest(env, input) {
+  const models = geminiModelCandidates(env);
+  if (!env.GEMINI_API_KEY || models.length === 0) throw new Error("Gemini is not configured.");
+  let lastError = null;
+  for (const model of models) {
+    if (isGeminiModelCoolingDown(model)) continue;
+    try {
+      return await geminiRequestWithModel(env, input, model);
+    } catch (error) {
+      lastError = error;
+      if (!isGeminiQuotaOrRateLimit(error)) throw error;
+      markGeminiModelCoolingDown(env, model, error);
+    }
+  }
+  throw lastError || new Error("Gemini failed for all configured models.");
 }
 
 function parseRequest(request) {
@@ -1173,7 +1235,7 @@ export async function handleMarketAnalysisRequest(request, env) {
   }
   const searchProvider = env.SEARCH_PROVIDER || (env.TAVILY_API_KEY ? "tavily" : "gemini-grounding");
   const provider = searchProvider === "tavily" ? "tavily+gemini" : (env.AI_PROVIDER || "gemini");
-  const model = env.GEMINI_MODEL || "not-configured";
+  let model = env.GEMINI_MODEL || geminiModelCandidates(env)[0] || "not-configured";
   const groundingEnabled = String(env.ENABLE_GOOGLE_SEARCH_GROUNDING ?? "true") === "true";
   const auction = await loadAuction(env, auctionId);
   if (!auction) return jsonResponse({ error: { code: "NOT_FOUND", message: "Auction property was not found." } }, 404);
@@ -1257,6 +1319,7 @@ export async function handleMarketAnalysisRequest(request, env) {
     }
     const aiInput = { property, deterministic, searchContext, searchResults };
     const gemini = await geminiRequest(env, aiInput);
+    model = gemini.model || model;
     if (searchResults?.diagnostics) gemini.analysis.searchDiagnostics = searchResults.diagnostics;
     rawAi = { gemini: gemini.raw, searchResults };
     processed = processGroundedAnalysis(property, deterministic, searchContext, gemini.analysis);

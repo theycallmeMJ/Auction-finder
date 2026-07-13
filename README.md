@@ -163,6 +163,8 @@ Server/trusted job variable:
 SUPABASE_SERVICE_ROLE_KEY
 GEMINI_API_KEY
 GEMINI_MODEL
+GEMINI_FALLBACK_MODELS
+GEMINI_MODEL_COOLDOWN_MS
 AI_PROVIDER
 ENABLE_GOOGLE_SEARCH_GROUNDING
 TAVILY_API_KEY
@@ -423,6 +425,8 @@ NEXT_PUBLIC_SUPABASE_URL
 SUPABASE_SERVICE_ROLE_KEY
 GEMINI_API_KEY
 GEMINI_MODEL
+GEMINI_FALLBACK_MODELS=gemini-3.1-flash-lite,gemini-2.5-flash,gemini-3-flash
+GEMINI_MODEL_COOLDOWN_MS=900000
 AI_PROVIDER=gemini
 ENABLE_GOOGLE_SEARCH_GROUNDING=false
 TAVILY_API_KEY
@@ -431,6 +435,13 @@ SEARCH_PROVIDER=tavily
 
 Tavily is the preferred comparable-search provider because it keeps web search
 separate from Gemini reasoning and avoids Google Search Grounding quota surprises.
+If `GEMINI_MODEL` hits quota or rate limits, the worker automatically tries
+models listed in `GEMINI_FALLBACK_MODELS` from left to right before falling back
+to cached or deterministic analysis. The response and usage log store the actual
+Gemini model that succeeded. A quota-limited model is also placed on a best-effort
+in-memory cooldown (`GEMINI_MODEL_COOLDOWN_MS`, default 15 minutes) so the same
+running worker/local process skips it instead of repeatedly trying the exhausted
+model first.
 Once a successful Tavily-backed analysis exists for an `auction_id`, the worker
 reuses it permanently and does not call Tavily again for that auction. Gemini
 grounding remains optional for future use, but it may require a billing-enabled
