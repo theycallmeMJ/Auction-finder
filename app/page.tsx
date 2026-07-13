@@ -515,11 +515,19 @@ function rangeLabel(low?: number | null, high?: number | null) {
   return priceLabel(low ?? high ?? null);
 }
 
+function hasMoneyRange(low?: number | null, high?: number | null) {
+  return Boolean(low || high);
+}
+
 function percentRangeLabel(low?: number | null, high?: number | null) {
   if (typeof low !== "number" && typeof high !== "number") return "Not enough evidence";
   const format = (value: number) => `${Math.max(0, value).toFixed(1)}%`;
   if (typeof low === "number" && typeof high === "number") return `${format(low)} - ${format(high)}`;
   return format((low ?? high) as number);
+}
+
+function hasPercentRange(low?: number | null, high?: number | null) {
+  return typeof low === "number" || typeof high === "number";
 }
 
 function scoreLabel(value?: number) {
@@ -691,6 +699,12 @@ function MarketAnalysisPanel({
     "No major property risk flagged.",
     4,
   ) : [];
+  const hasAdjustedMarketRange = hasMoneyRange(analysis?.marketAssessment.adjustedMarketValueLow, analysis?.marketAssessment.adjustedMarketValueHigh);
+  const hasComparableAskingRange = hasMoneyRange(analysis?.marketAssessment.comparableAskingPriceLow, analysis?.marketAssessment.comparableAskingPriceHigh);
+  const hasAuctionDiscount = hasPercentRange(analysis?.investmentAssessment.auctionDiscountLowPercent, analysis?.investmentAssessment.auctionDiscountHighPercent);
+  const hasRentalEstimate = hasMoneyRange(analysis?.rentalAssessment.estimatedMonthlyRentLow, analysis?.rentalAssessment.estimatedMonthlyRentHigh);
+  const hasRentalYield = hasPercentRange(analysis?.investmentAssessment.grossRentalYieldLowPercent, analysis?.investmentAssessment.grossRentalYieldHighPercent);
+  const hasRentalDemand = analysis?.rentalAssessment.rentalDemand && analysis.rentalAssessment.rentalDemand.toLowerCase() !== "unknown";
 
   return (
     <section className="market-analysis">
@@ -759,21 +773,27 @@ function MarketAnalysisPanel({
           </div>
 
           <div className="ai-simple-grid">
-            <div>
-              <span>Likely market value</span>
-              <strong>{rangeLabel(analysis.marketAssessment.adjustedMarketValueLow, analysis.marketAssessment.adjustedMarketValueHigh)}</strong>
-              <small>Reserve: {priceLabel(auction.reservePrice)}</small>
-            </div>
-            <div>
-              <span>Auction discount</span>
-              <strong>{percentRangeLabel(analysis.investmentAssessment.auctionDiscountLowPercent, analysis.investmentAssessment.auctionDiscountHighPercent)}</strong>
-              <small>{rangeLabel(analysis.marketAssessment.comparableAskingPriceLow, analysis.marketAssessment.comparableAskingPriceHigh)} asking range</small>
-            </div>
-            <div>
-              <span>Rental view</span>
-              <strong>{rangeLabel(analysis.rentalAssessment.estimatedMonthlyRentLow, analysis.rentalAssessment.estimatedMonthlyRentHigh)}</strong>
-              <small>{analysis.rentalAssessment.rentalDemand} demand</small>
-            </div>
+            {hasAdjustedMarketRange && (
+              <div>
+                <span>Likely market value</span>
+                <strong>{rangeLabel(analysis.marketAssessment.adjustedMarketValueLow, analysis.marketAssessment.adjustedMarketValueHigh)}</strong>
+                <small>Reserve: {priceLabel(auction.reservePrice)}</small>
+              </div>
+            )}
+            {hasAuctionDiscount && (
+              <div>
+                <span>Auction discount</span>
+                <strong>{percentRangeLabel(analysis.investmentAssessment.auctionDiscountLowPercent, analysis.investmentAssessment.auctionDiscountHighPercent)}</strong>
+                {hasComparableAskingRange && <small>{rangeLabel(analysis.marketAssessment.comparableAskingPriceLow, analysis.marketAssessment.comparableAskingPriceHigh)} asking range</small>}
+              </div>
+            )}
+            {hasRentalEstimate && (
+              <div>
+                <span>Rental view</span>
+                <strong>{rangeLabel(analysis.rentalAssessment.estimatedMonthlyRentLow, analysis.rentalAssessment.estimatedMonthlyRentHigh)}</strong>
+                {hasRentalDemand && <small>{analysis.rentalAssessment.rentalDemand} demand</small>}
+              </div>
+            )}
             <div>
               <span>Main risk</span>
               <strong>{propertyRisks[0] ?? "No major property risk flagged"}</strong>
@@ -845,20 +865,26 @@ function MarketAnalysisPanel({
               <span>Reserve price</span>
               <strong>{priceLabel(auction.reservePrice)}</strong>
             </div>
-            <div>
-              <span>Comparable asking prices</span>
-              <strong>{rangeLabel(analysis.marketAssessment.comparableAskingPriceLow, analysis.marketAssessment.comparableAskingPriceHigh)}</strong>
-              <small>Asking prices</small>
-            </div>
-            <div>
-              <span>Adjusted likely market range</span>
-              <strong>{rangeLabel(analysis.marketAssessment.adjustedMarketValueLow, analysis.marketAssessment.adjustedMarketValueHigh)}</strong>
-              <small>Estimated range</small>
-            </div>
-            <div>
-              <span>Auction discount</span>
-              <strong>{percentRangeLabel(analysis.investmentAssessment.auctionDiscountLowPercent, analysis.investmentAssessment.auctionDiscountHighPercent)}</strong>
-            </div>
+            {hasComparableAskingRange && (
+              <div>
+                <span>Comparable asking prices</span>
+                <strong>{rangeLabel(analysis.marketAssessment.comparableAskingPriceLow, analysis.marketAssessment.comparableAskingPriceHigh)}</strong>
+                <small>Asking prices</small>
+              </div>
+            )}
+            {hasAdjustedMarketRange && (
+              <div>
+                <span>Adjusted likely market range</span>
+                <strong>{rangeLabel(analysis.marketAssessment.adjustedMarketValueLow, analysis.marketAssessment.adjustedMarketValueHigh)}</strong>
+                <small>Estimated range</small>
+              </div>
+            )}
+            {hasAuctionDiscount && (
+              <div>
+                <span>Auction discount</span>
+                <strong>{percentRangeLabel(analysis.investmentAssessment.auctionDiscountLowPercent, analysis.investmentAssessment.auctionDiscountHighPercent)}</strong>
+              </div>
+            )}
             <div>
               <span>Confidence</span>
               <strong>{analysis.confidence}</strong>
@@ -866,20 +892,28 @@ function MarketAnalysisPanel({
             </div>
           </div>
 
-          <div className="market-grid rental">
-            <div>
-              <span>Estimated monthly rent</span>
-              <strong>{rangeLabel(analysis.rentalAssessment.estimatedMonthlyRentLow, analysis.rentalAssessment.estimatedMonthlyRentHigh)}</strong>
+          {(hasRentalEstimate || hasRentalYield || hasRentalDemand) && (
+            <div className="market-grid rental">
+              {hasRentalEstimate && (
+                <div>
+                  <span>Estimated monthly rent</span>
+                  <strong>{rangeLabel(analysis.rentalAssessment.estimatedMonthlyRentLow, analysis.rentalAssessment.estimatedMonthlyRentHigh)}</strong>
+                </div>
+              )}
+              {hasRentalYield && (
+                <div>
+                  <span>Gross rental yield</span>
+                  <strong>{percentRangeLabel(analysis.investmentAssessment.grossRentalYieldLowPercent, analysis.investmentAssessment.grossRentalYieldHighPercent)}</strong>
+                </div>
+              )}
+              {hasRentalDemand && (
+                <div>
+                  <span>Rental demand</span>
+                  <strong>{analysis.rentalAssessment.rentalDemand}</strong>
+                </div>
+              )}
             </div>
-            <div>
-              <span>Gross rental yield</span>
-              <strong>{percentRangeLabel(analysis.investmentAssessment.grossRentalYieldLowPercent, analysis.investmentAssessment.grossRentalYieldHighPercent)}</strong>
-            </div>
-            <div>
-              <span>Rental demand</span>
-              <strong>{analysis.rentalAssessment.rentalDemand}</strong>
-            </div>
-          </div>
+          )}
 
           <div className="investment-scores">
             {[
