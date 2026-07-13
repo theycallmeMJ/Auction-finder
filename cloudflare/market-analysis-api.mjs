@@ -218,6 +218,26 @@ function confirmedNearbyPlaces(row) {
     .slice(0, 4);
 }
 
+function mergeMissingInformation(rawMissingInformation, deterministicMissingFields) {
+  const currentMissing = new Set(deterministicMissingFields.map((item) => String(item || "").toLowerCase()));
+  const rawItems = Array.isArray(rawMissingInformation) ? rawMissingInformation : [];
+  const filteredRawItems = rawItems.filter((item) => {
+    const value = String(item || "").trim();
+    if (!value) return false;
+    const fieldLike = /^[A-Za-z][A-Za-z0-9_]*$/.test(value);
+    return !fieldLike || currentMissing.has(value.toLowerCase());
+  });
+  const rawText = filteredRawItems.join(" ").toLowerCase();
+  const deterministicItems = deterministicMissingFields.filter((field) => {
+    const value = String(field || "").toLowerCase();
+    if (value === "bhk" && /\bbhk\b|bedroom|configuration/.test(rawText)) return false;
+    if (value === "constructionage" && /construction age|age of construction/.test(rawText)) return false;
+    if (value === "projectfloorparking" && /floor|parking|amenit/.test(rawText)) return false;
+    return true;
+  });
+  return [...new Set([...filteredRawItems, ...deterministicItems])].slice(0, 10);
+}
+
 function normalizeProperty(row) {
   const carpet = parseArea(row.carpetArea);
   const builtUp = parseArea(row.builtUpArea);
@@ -788,7 +808,7 @@ export function processGroundedAnalysis(property, deterministic, searchContext, 
       ...(Array.isArray(rawAnalysis?.strengths) ? rawAnalysis.strengths : []),
     ].slice(0, 6),
     risks: [...(Array.isArray(rawAnalysis?.risks) ? rawAnalysis.risks.slice(0, 6) : []), ...deterministic.warnings].slice(0, 8),
-    missingInformation: [...new Set([...(Array.isArray(rawAnalysis?.missingInformation) ? rawAnalysis.missingInformation : []), ...deterministic.missingFields])].slice(0, 10),
+    missingInformation: mergeMissingInformation(rawAnalysis?.missingInformation, deterministic.missingFields),
     verdict: confidence === "low" ? "needs_more_data" : overallScore >= 75 ? "strong_shortlist" : overallScore >= 55 ? "worth_inspecting" : "low_priority",
     confidence,
     confidenceReason: confidence === "low"
@@ -1239,7 +1259,8 @@ export async function handleMarketAnalysisRequest(request, env) {
   const groundingEnabled = String(env.ENABLE_GOOGLE_SEARCH_GROUNDING ?? "true") === "true";
   const auction = await loadAuction(env, auctionId);
   if (!auction) return jsonResponse({ error: { code: "NOT_FOUND", message: "Auction property was not found." } }, 404);
-  const { property, areaWarnings } = normalizeProperty(auction.payload || {});
+  const normalizedAuctionRow = { ...(auction.payload || {}), ...auction };
+  const { property, areaWarnings } = normalizeProperty(normalizedAuctionRow);
   const deterministic = calculateDeterministicAnalysis(property, areaWarnings);
   let searchContext = buildComparableSearchContext(property);
   const baseScore = auctionBaseScore(auction);
@@ -1253,6 +1274,9 @@ export async function handleMarketAnalysisRequest(request, env) {
       area: [property.carpetAreaSqft, property.builtUpAreaSqft, property.landAreaSqft],
       possessionStatus: property.possessionStatus,
       propertySubType: property.propertySubType,
+      latitude: property.latitude,
+      longitude: property.longitude,
+      nearbyPlaces: property.nearbyPlaces,
       sourceUpdatedAt: property.sourceUpdatedAt,
     },
     model,
