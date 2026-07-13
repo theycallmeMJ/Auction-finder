@@ -21,7 +21,13 @@ function jsonResponse(body, status = 200) {
 
 function sanitizeError(error) {
   const message = error instanceof Error ? error.message : String(error);
-  if (/quota/i.test(message)) return { code: "PROVIDER_QUOTA_EXHAUSTED", message: "Live comparable search quota is temporarily exhausted." };
+  if (/gemini|generativelanguage|generate_content|RESOURCE_EXHAUSTED/i.test(message) && /quota|exhaust/i.test(message)) {
+    return { code: "GEMINI_QUOTA_EXHAUSTED", message: "Gemini analysis quota is temporarily exhausted." };
+  }
+  if (/tavily/i.test(message) && /quota|exhaust/i.test(message)) {
+    return { code: "TAVILY_QUOTA_EXHAUSTED", message: "Tavily comparable-search quota is temporarily exhausted." };
+  }
+  if (/quota|exhaust/i.test(message)) return { code: "PROVIDER_QUOTA_EXHAUSTED", message: "AI analysis quota is temporarily exhausted." };
   if (/timeout/i.test(message)) return { code: "PROVIDER_TIMEOUT", message: "Live comparable search timed out." };
   if (/tavily/i.test(message)) return { code: "SEARCH_PROVIDER_UNAVAILABLE", message: "Comparable search is temporarily unavailable." };
   return { code: "GROUNDING_UNAVAILABLE", message: "Live comparable search is temporarily unavailable." };

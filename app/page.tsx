@@ -561,6 +561,10 @@ function compactRiskList(items: string[]) {
   return compactInsightList([...(liveRefresh ? [liveRefresh] : []), ...rest], "No risks identified yet.", 4);
 }
 
+function isAnalysisSystemNote(item: string) {
+  return /^(Live refresh failed:|Live comparable search|Gemini analysis quota|Tavily comparable-search quota|AI analysis quota)/i.test(item);
+}
+
 function areaLabel(auction: Auction) {
   return auction.builtUpArea || auction.carpetArea || auction.areaSqft || "Not captured yet";
 }
@@ -678,6 +682,15 @@ function MarketAnalysisPanel({
     .sort((left, right) => left.distanceKm - right.distanceKm)
     .slice(0, 6);
   const locationConfidence = analysis?.evidenceQuality?.location;
+  const analysisNote = analysis ? [
+    data?.error?.message,
+    ...(analysis.risks ?? []).filter(isAnalysisSystemNote),
+  ].find(Boolean) : null;
+  const propertyRisks = analysis ? compactInsightList(
+    (analysis.risks ?? []).filter((item) => !isAnalysisSystemNote(item)),
+    "No major property risk flagged.",
+    4,
+  ) : [];
 
   return (
     <section className="market-analysis">
@@ -763,10 +776,16 @@ function MarketAnalysisPanel({
             </div>
             <div>
               <span>Main risk</span>
-              <strong>{risks[0] ?? "No major risk flagged"}</strong>
+              <strong>{propertyRisks[0] ?? "No major property risk flagged"}</strong>
               <small>Risk score {analysis.investmentAssessment.riskScore}/100</small>
             </div>
           </div>
+
+          {analysisNote && (
+            <p className="analysis-note">
+              Data note: {analysisNote}
+            </p>
+          )}
 
           <div className="ai-takeaway">
             <div>
@@ -971,7 +990,7 @@ function MarketAnalysisPanel({
             </div>
             <div className="market-insight-card risks">
               <h5>Risks</h5>
-              <ul>{risks.map((item) => <li key={item}>{item}</li>)}</ul>
+              <ul>{propertyRisks.map((item) => <li key={item}>{item}</li>)}</ul>
             </div>
             <div className="market-insight-card missing">
               <h5>Missing information</h5>
