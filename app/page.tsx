@@ -573,7 +573,7 @@ function hasNearbyEvidence(auction: Auction) {
   return Boolean(auction.nearbyPlaces?.categories);
 }
 
-function locationScore(auction: Auction) {
+function mapAreaScore(auction: Auction) {
   return auction.score?.area ?? null;
 }
 
@@ -729,7 +729,7 @@ function MarketAnalysisPanel({
             <div className="smart-score-context">
               <div className="smart-score-meta">
                 <span>{analysis.verdict.replace(/_/g, " ")}</span>
-                <span>Location {analysis.investmentAssessment.locationScore}/100</span>
+                <span>Smart AI Location {analysis.investmentAssessment.locationScore}/100</span>
                 {locationConfidence && <span>{locationConfidence.level} evidence</span>}
               </div>
               <p>{analysis.locationEvidence?.explanation ?? analysis.confidenceReason}</p>
@@ -752,7 +752,7 @@ function MarketAnalysisPanel({
                 <p>Uses BAANKNET map coordinates when available, then verifies nearby places by distance.</p>
               </div>
               <div className="location-score-badge">
-                <span>Location score</span>
+                <span>Smart AI Location score</span>
                 <strong>{analysis.investmentAssessment.locationScore}/100</strong>
               </div>
             </div>
@@ -1176,7 +1176,7 @@ export default function Home() {
         const aMapped = hasMapCoordinates(a) ? 1 : 0;
         const bMapped = hasMapCoordinates(b) ? 1 : 0;
         if (aMapped !== bMapped) return bMapped - aMapped;
-        const scoreDelta = (locationScore(b) ?? -1) - (locationScore(a) ?? -1);
+        const scoreDelta = (mapAreaScore(b) ?? -1) - (mapAreaScore(a) ?? -1);
         if (scoreDelta !== 0) return scoreDelta;
         return (b.score?.overall ?? 0) - (a.score?.overall ?? 0);
       }
@@ -1695,7 +1695,7 @@ export default function Home() {
                 <select value={sortMode} onChange={(event) => updateSortMode(event.target.value)}>
                   <option value="soonest">Soonest</option>
                   <option value="score">Auction</option>
-                  <option value="location-score">Location</option>
+                  <option value="location-score">Map/area</option>
                   <option value="latest">Latest</option>
                   <option value="price-low">Price ↑</option>
                   <option value="price-high">Price ↓</option>
@@ -1782,14 +1782,14 @@ export default function Home() {
                     <select value={sortMode} onChange={(event) => updateSortMode(event.target.value)}>
                       <option value="soonest">Soonest first</option>
                       <option value="score">Auction score</option>
-                      <option value="location-score">Location score</option>
+                      <option value="location-score">Map/area score</option>
                       <option value="latest">Latest first</option>
                       <option value="price-low">Price low to high</option>
                       <option value="price-high">Price high to low</option>
                     </select>
                   </label>
                   {sortMode === "location-score" && (
-                    <small>Mapped properties first, then Auction Score as tie-breaker.</small>
+                    <small>Uses the daily map/area score. Smart AI Location can differ after analysis.</small>
                   )}
                 </div>
               ) : (
@@ -1825,7 +1825,7 @@ export default function Home() {
               const isAuctionDetailsOpen = openAuctionDetails.has(auctionDetailsKey);
               const mappedLocation = hasMapCoordinates(auction);
               const verifiedNearby = hasNearbyEvidence(auction);
-              const auctionLocationScore = locationScore(auction);
+              const auctionMapAreaScore = mapAreaScore(auction);
 
               return (
               <article className="auction-card" key={`${auction.status}-${auction.auctionId}`}>
@@ -1836,7 +1836,7 @@ export default function Home() {
                       <span className={`badge ${auction.status}`}>{statusLabels[auction.status]}</span>
                       <span className="badge score-badge">{auction.score?.overall ?? "--"} score</span>
                       <span className={mappedLocation ? "badge location mapped" : "badge location"}>
-                        {mappedLocation ? `Location ${scoreLabel(auctionLocationScore)}` : "Location not mapped"}
+                        {mappedLocation ? `Map/area ${scoreLabel(auctionMapAreaScore)}` : "Location not mapped"}
                       </span>
                       {verifiedNearby && <span className="badge nearby">Nearby verified</span>}
                       {auction.loanAvailable && <span className="badge loan">Loan available</span>}
@@ -1934,8 +1934,8 @@ export default function Home() {
                   <strong>{auction.bankPropertyId}</strong>
                   <span>Auction score</span>
                   <strong>{scoreLabel(auction.score?.overall)}</strong>
-                  <span>Location score</span>
-                  <strong>{mappedLocation ? scoreLabel(auctionLocationScore) : "Not mapped"}</strong>
+                  <span>Map/area score</span>
+                  <strong>{mappedLocation ? scoreLabel(auctionMapAreaScore) : "Not mapped"}</strong>
                   <div className="card-actions" aria-label="Auction links">
                     {auction.auctionDetailUrl && (
                       <button type="button" onClick={() => openProtectedLink(auction.auctionDetailUrl)}>
