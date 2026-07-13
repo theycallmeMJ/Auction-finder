@@ -915,69 +915,6 @@ function MarketAnalysisPanel({
             </div>
           )}
 
-          <div className="investment-scores">
-            {[
-              ["Overall", analysis.investmentAssessment.overallScore],
-              ["Location", analysis.investmentAssessment.locationScore],
-              ["Rental", analysis.investmentAssessment.rentalScore],
-              ["Appreciation", analysis.investmentAssessment.appreciationScore],
-              ["Liquidity", analysis.investmentAssessment.liquidityScore],
-              ["Fair Price", analysis.investmentAssessment.fairPriceScore ?? analysis.investmentAssessment.valueScore],
-              ["Risk", analysis.investmentAssessment.riskScore],
-            ].map(([label, value]) => (
-              <div key={String(label)}>
-                <span>{label}</span>
-                <strong>{value}/100</strong>
-                <div className="score-bar">
-                  <span style={{ width: `${value}%` }} />
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {analysis.evidenceQuality && (
-            <div className="evidence-quality">
-              <h5>Evidence confidence</h5>
-              <div className="evidence-pill-grid">
-                {[
-                  ["Fair price", analysis.evidenceQuality.fairPrice],
-                  ["Rental", analysis.evidenceQuality.rental],
-                  ["Appreciation", analysis.evidenceQuality.appreciation],
-                  ["Location", analysis.evidenceQuality.location],
-                  ["Liquidity", analysis.evidenceQuality.liquidity],
-                  ["Risk", analysis.evidenceQuality.risk],
-                ].map(([label, item]) => item && (
-                  <div key={String(label)} className={`evidence-pill ${item.level}`}>
-                    <span>{label}</span>
-                    <strong>{item.level}</strong>
-                    <small>{Math.round(item.score)}/10</small>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {analysis.investmentAssessment.rentalComponents && (
-            <div className="rental-components">
-              <h5>Rental score breakdown</h5>
-              {[
-                ["Tenant demand", analysis.investmentAssessment.rentalComponents.tenantDemand],
-                ["Occupancy", analysis.investmentAssessment.rentalComponents.occupancyPotential],
-                ["Rental yield", analysis.investmentAssessment.rentalComponents.rentalYield],
-                ["Tenant stability", analysis.investmentAssessment.rentalComponents.tenantStability],
-                ["Rent growth", analysis.investmentAssessment.rentalComponents.rentGrowth],
-              ].map(([label, value]) => (
-                <div key={String(label)}>
-                  <span>{label}</span>
-                  <strong>{value}/100</strong>
-                  <div className="score-bar">
-                    <span style={{ width: `${value}%` }} />
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-
           {(analysis.saleComparables.length > 0 || analysis.rentalComparables.length > 0) && (
             <div className="comparables">
               <h5>Comparable listings</h5>
@@ -1025,12 +962,6 @@ function MarketAnalysisPanel({
             <div className="market-insight-card risks">
               <h5>Risks</h5>
               <ul>{propertyRisks.map((item) => <li key={item}>{item}</li>)}</ul>
-            </div>
-            <div className="market-insight-card missing">
-              <h5>Missing information</h5>
-              <div className="missing-chip-list">
-                {missingInformation.map((item) => <span key={item}>{item}</span>)}
-              </div>
             </div>
           </div>
 

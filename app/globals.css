@@ -1180,8 +1180,6 @@ h1 {
 }
 
 .market-grid > div,
-.investment-scores > div,
-.rental-components > div,
 .comparable-card,
 .market-lists > div,
 .market-verdict,
@@ -1198,8 +1196,6 @@ h1 {
 }
 
 .market-grid span,
-.investment-scores span,
-.rental-components span,
 .comparable-card span,
 .comparable-card small {
   color: var(--muted);
@@ -1210,68 +1206,6 @@ h1 {
 .market-grid strong {
   color: #253029;
   font-size: 16px;
-}
-
-.investment-scores {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(132px, 1fr));
-  gap: 10px;
-  align-items: start;
-}
-
-.rental-components {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 10px;
-}
-
-.rental-components h5 {
-  grid-column: 1 / -1;
-}
-
-.evidence-quality {
-  display: grid;
-  gap: 10px;
-  padding: 12px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: white;
-}
-
-.evidence-pill-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 10px;
-}
-
-.evidence-pill {
-  display: grid;
-  gap: 4px;
-  padding: 10px;
-  border: 1px solid #dce7df;
-  border-radius: 8px;
-  background: #f7fbf8;
-}
-
-.evidence-pill span,
-.evidence-pill small {
-  color: var(--muted);
-  font-size: 12px;
-  font-weight: 900;
-}
-
-.evidence-pill strong {
-  color: #253029;
-  font-size: 15px;
-  text-transform: capitalize;
-}
-
-.evidence-pill.low strong {
-  color: #8a5a14;
-}
-
-.evidence-pill.high strong {
-  color: var(--accent);
 }
 
 .comparables,
@@ -1394,22 +1328,6 @@ h1 {
 
 .market-insight-card.risks li::before {
   background: #a15c20;
-}
-
-.missing-chip-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.missing-chip-list span {
-  padding: 7px 9px;
-  border: 1px solid #dce7df;
-  border-radius: 999px;
-  background: #f7fbf8;
-  color: #526156;
-  font-size: 12px;
-  font-weight: 900;
 }
 
 .more-details dl {
@@ -2207,9 +2125,6 @@ h1 {
   .location-signal-grid,
   .market-grid,
   .market-grid.rental,
-  .investment-scores,
-  .rental-components,
-  .evidence-quality,
   .comparables,
   .search-diagnostic-row,
   .market-lists {
