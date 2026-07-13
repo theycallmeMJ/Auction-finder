@@ -821,6 +821,7 @@ def enrich_property_locations(session: Session, auctions: list[dict[str, Any]], 
                 auction["latitude"] = lat
                 auction["longitude"] = lon
                 auction["mapSource"] = "baanknet-map"
+                auction.pop("locationError", None)
             fetched_coordinates += 1
             if fetched_coordinates == coordinate_total or fetched_coordinates % 50 == 0:
                 print(f"Checked {fetched_coordinates}/{coordinate_total} property map pages...", flush=True)
@@ -853,6 +854,7 @@ def enrich_property_locations(session: Session, auctions: list[dict[str, Any]], 
             lat = float(auction["latitude"])
             lon = float(auction["longitude"])
             auction["nearbyPlaces"] = fetch_nearby_places(lat, lon, should_check_metro(auction))
+            auction.pop("nearbyError", None)
             enriched_nearby += 1
             if enriched_nearby == nearby_total or enriched_nearby % 20 == 0:
                 print(f"Enriched nearby places for {enriched_nearby}/{nearby_total} mapped properties...", flush=True)
