@@ -874,7 +874,7 @@ async function loadAuction(env, auctionId) {
 async function readCache(env, auctionId, inputHash, provider, model) {
   const rows = await supabaseFetch(
     env,
-    `property_market_analysis?select=*&auction_id=eq.${encodeURIComponent(auctionId)}&input_hash=eq.${encodeURIComponent(inputHash)}&provider=eq.${provider}&model=eq.${encodeURIComponent(model)}&status=eq.success&order=created_at.desc&limit=1`,
+    `property_market_analysis?select=*&auction_id=eq.${encodeURIComponent(auctionId)}&input_hash=eq.${encodeURIComponent(inputHash)}&provider=eq.${provider}&model=eq.${encodeURIComponent(model)}&status=eq.success&error_message=is.null&order=created_at.desc&limit=1`,
   ).catch(() => []);
   const cached = rows?.[0];
   if (!cached) return null;
@@ -886,7 +886,7 @@ async function readCache(env, auctionId, inputHash, provider, model) {
 async function readPermanentAuctionCache(env, auctionId, provider, inputHash) {
   const rows = await supabaseFetch(
     env,
-    `property_market_analysis?select=*&auction_id=eq.${encodeURIComponent(auctionId)}&input_hash=eq.${encodeURIComponent(inputHash)}&provider=eq.${encodeURIComponent(provider)}&status=eq.success&order=created_at.desc&limit=1`,
+    `property_market_analysis?select=*&auction_id=eq.${encodeURIComponent(auctionId)}&input_hash=eq.${encodeURIComponent(inputHash)}&provider=eq.${encodeURIComponent(provider)}&status=eq.success&error_message=is.null&order=created_at.desc&limit=1`,
   );
   return rows?.[0] ?? null;
 }
@@ -894,7 +894,7 @@ async function readPermanentAuctionCache(env, auctionId, provider, inputHash) {
 async function readLatestAuctionCache(env, auctionId, provider) {
   const rows = await supabaseFetch(
     env,
-    `property_market_analysis?select=*&auction_id=eq.${encodeURIComponent(auctionId)}&provider=eq.${encodeURIComponent(provider)}&status=eq.success&order=created_at.desc&limit=1`,
+    `property_market_analysis?select=*&auction_id=eq.${encodeURIComponent(auctionId)}&provider=eq.${encodeURIComponent(provider)}&status=eq.success&error_message=is.null&order=created_at.desc&limit=1`,
   ).catch(() => []);
   return rows?.[0] ?? null;
 }

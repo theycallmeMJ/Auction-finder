@@ -692,7 +692,7 @@ function MarketAnalysisPanel({
   const locationConfidence = analysis?.evidenceQuality?.location;
   const analysisNote = analysis ? [
     data?.error?.message,
-    ...(analysis.risks ?? []).filter(isAnalysisSystemNote),
+    ...(!data?.cached ? (analysis.risks ?? []).filter(isAnalysisSystemNote) : []),
   ].find(Boolean) : null;
   const propertyRisks = analysis ? compactInsightList(
     (analysis.risks ?? []).filter((item) => !isAnalysisSystemNote(item)),
