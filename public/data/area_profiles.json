@@ -4678,5 +4678,149 @@
       "railway": "pending-osm",
       "roadConnectivity": "pending-osm"
     }
+  },
+  "ernakulam::koovappady": {
+    "areaKey": "ernakulam::koovappady",
+    "villageOrCity": "Koovappady",
+    "district": "Ernakulam",
+    "pinCode": "683545",
+    "areaScore": 89,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 84,
+      "localityAdjustment": 5,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kollam::roduvila": {
+    "areaKey": "kollam::roduvila",
+    "villageOrCity": "RODUVILA",
+    "district": "Kollam",
+    "pinCode": "691516",
+    "areaScore": 75,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 72,
+      "localityAdjustment": 3,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kollam::anchal": {
+    "areaKey": "kollam::anchal",
+    "villageOrCity": "ANCHAL",
+    "district": "Kollam",
+    "pinCode": "691306",
+    "areaScore": 76,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 72,
+      "localityAdjustment": 4,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "kannur::chirakkal": {
+    "areaKey": "kannur::chirakkal",
+    "villageOrCity": "Chirakkal",
+    "district": "Kannur",
+    "pinCode": "670008",
+    "areaScore": 73,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 73,
+      "localityAdjustment": 0,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "thrissur::pappinivattom": {
+    "areaKey": "thrissur::pappinivattom",
+    "villageOrCity": "Pappinivattom",
+    "district": "Thrissur",
+    "pinCode": "680691",
+    "areaScore": 78,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 78,
+      "localityAdjustment": 0,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "ernakulam::eloor": {
+    "areaKey": "ernakulam::eloor",
+    "villageOrCity": "Eloor",
+    "district": "Ernakulam",
+    "pinCode": "683501",
+    "areaScore": 81,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 84,
+      "localityAdjustment": -3,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "alappuzha::mavelikkara": {
+    "areaKey": "alappuzha::mavelikkara",
+    "villageOrCity": "Mavelikkara",
+    "district": "Alappuzha",
+    "pinCode": "690102",
+    "areaScore": 70,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 70,
+      "localityAdjustment": 0,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
+  },
+  "malappuram::pookkottumpadam": {
+    "areaKey": "malappuram::pookkottumpadam",
+    "villageOrCity": "POOKKOTTUMPADAM",
+    "district": "Malappuram",
+    "pinCode": "679332",
+    "areaScore": 66,
+    "source": "heuristic-v1",
+    "factors": {
+      "districtBase": 69,
+      "localityAdjustment": -3,
+      "population": "pending-osm",
+      "civicType": "pending-osm",
+      "hospitals": "pending-osm",
+      "schools": "pending-osm",
+      "railway": "pending-osm",
+      "roadConnectivity": "pending-osm"
+    }
   }
 }
