@@ -85,6 +85,29 @@ type Auction = {
       bonus?: string[];
     };
   };
+  investorScore?: {
+    overall: number;
+    valueGap: number;
+    landStrength: number;
+    locationDemand: number;
+    rentalDemand: number;
+    risk: number;
+    rankState?: number | null;
+    rankDistrict?: number | null;
+    market?: string;
+    landCents?: number | null;
+    estimatedMarketValueLow?: number | null;
+    estimatedMarketValueHigh?: number | null;
+    valueGapPercent?: number | null;
+    confidenceLabel?: string;
+    explanations?: {
+      valueGap?: string[];
+      landStrength?: string[];
+      locationDemand?: string[];
+      rentalDemand?: string[];
+      risk?: string[];
+    };
+  };
   searchText: string;
 };
 
@@ -484,6 +507,14 @@ const scoreKeys = [
   { key: "bonus", label: "Bonus", weight: "10%" },
 ] as const;
 
+const investorScoreKeys = [
+  { key: "valueGap", label: "Value gap", weight: "30%" },
+  { key: "landStrength", label: "Land", weight: "25%" },
+  { key: "locationDemand", label: "Location", weight: "20%" },
+  { key: "rentalDemand", label: "Rental", weight: "15%" },
+  { key: "risk", label: "Risk", weight: "10%" },
+] as const;
+
 const RESULTS_BATCH_SIZE = 40;
 const PROTECTED_ACTION_STORAGE_KEY = "kerala-auction-finder-protected-actions";
 const LOGIN_EVENT_STORAGE_KEY = "kerala-auction-finder-login-event";
@@ -532,6 +563,10 @@ function hasPercentRange(low?: number | null, high?: number | null) {
 
 function scoreLabel(value?: number) {
   return typeof value === "number" ? `${value}/100` : "Pending";
+}
+
+function investorScoreLabel(auction: Auction) {
+  return typeof auction.investorScore?.overall === "number" ? scoreLabel(auction.investorScore.overall) : "Needs refresh";
 }
 
 function humanizeFieldName(value: string) {
@@ -589,6 +624,26 @@ function mapAreaScore(auction: Auction) {
   return auction.score?.area ?? null;
 }
 
+function rankingScore(auction: Auction, sortMode: string) {
+  if (sortMode === "investor-score") return auction.investorScore?.overall ?? null;
+  if (sortMode === "location-score") return mapAreaScore(auction);
+  return auction.score?.overall ?? null;
+}
+
+function investorSortDelta(a: Auction, b: Auction) {
+  const aHasInvestor = typeof a.investorScore?.overall === "number";
+  const bHasInvestor = typeof b.investorScore?.overall === "number";
+  if (aHasInvestor !== bHasInvestor) return bHasInvestor ? 1 : -1;
+  if (aHasInvestor && bHasInvestor) return (b.investorScore?.overall ?? 0) - (a.investorScore?.overall ?? 0);
+  return (b.score?.overall ?? 0) - (a.score?.overall ?? 0);
+}
+
+function rankingLabel(sortMode: string) {
+  if (sortMode === "investor-score") return "Investor";
+  if (sortMode === "location-score") return "Map/area";
+  return "Auction";
+}
+
 function nearbyTypeLabel(type: string) {
   const normalized = type.toLowerCase().replace(/[_-]+/g, " ");
   const labels: Record<string, string> = {
@@ -609,6 +664,24 @@ function normalizeAuction(auction: Auction): Auction {
     state: auction.state || "Kerala",
     possessionStatus: auction.possessionStatus ?? "Unknown",
   };
+}
+
+function mergeBundledScores(supabaseRows: Auction[], bundledRows: Auction[]) {
+  const byAuctionId = new Map(bundledRows.map((auction) => [String(auction.auctionId), auction]));
+  let investorScoresMerged = 0;
+  const merged = supabaseRows.map((auction) => {
+    const bundled = byAuctionId.get(String(auction.auctionId));
+    if (!bundled) return auction;
+    const investorScore = auction.investorScore ?? bundled.investorScore;
+    if (!auction.investorScore && investorScore) investorScoresMerged += 1;
+    return {
+      ...auction,
+      score: auction.score ?? bundled.score,
+      pricePerSqft: auction.pricePerSqft ?? bundled.pricePerSqft,
+      investorScore,
+    };
+  });
+  return { merged, investorScoresMerged };
 }
 
 function parseAuctionDate(value: string) {
@@ -1076,6 +1149,19 @@ export default function Home() {
           ]);
 
           if (nextAuctions?.length) {
+            let mergedAuctions = nextAuctions;
+            let investorScoresMerged = 0;
+            try {
+              const bundledResponse = await fetch("/data/auctions.json");
+              if (bundledResponse.ok) {
+                const bundledAuctions = await bundledResponse.json() as Auction[];
+                const mergedResult = mergeBundledScores(nextAuctions, bundledAuctions);
+                mergedAuctions = mergedResult.merged;
+                investorScoresMerged = mergedResult.investorScoresMerged;
+              }
+            } catch {
+              // Supabase data is still usable if bundled scoring data is unavailable.
+            }
             if (isMounted) {
               setCatalog({
                 ...fallbackCatalog,
@@ -1087,9 +1173,13 @@ export default function Home() {
                 possessionStatuses: nextCatalog?.possessionStatuses ?? fallbackCatalog.possessionStatuses,
               });
               setAuctions(
-                nextAuctions.map(normalizeAuction),
+                mergedAuctions.map(normalizeAuction),
               );
-              setDataState(`Loaded ${nextAuctions.length.toLocaleString("en-IN")} Supabase auction rows`);
+              setDataState(
+                investorScoresMerged > 0
+                  ? `Loaded ${nextAuctions.length.toLocaleString("en-IN")} Supabase rows, merged ${investorScoresMerged.toLocaleString("en-IN")} Investor Scores`
+                  : `Loaded ${nextAuctions.length.toLocaleString("en-IN")} Supabase auction rows`,
+              );
             }
             return;
           }
@@ -1179,9 +1269,19 @@ export default function Home() {
 
   const sortedResults = useMemo(() => {
     return [...results].sort((a, b) => {
+      if (viewMode === "rank" && sortMode === "investor-score") return investorSortDelta(a, b);
+      if (viewMode === "rank" && sortMode === "location-score") {
+        const aMapped = hasMapCoordinates(a) ? 1 : 0;
+        const bMapped = hasMapCoordinates(b) ? 1 : 0;
+        if (aMapped !== bMapped) return bMapped - aMapped;
+        const scoreDelta = (mapAreaScore(b) ?? -1) - (mapAreaScore(a) ?? -1);
+        if (scoreDelta !== 0) return scoreDelta;
+        return (b.investorScore?.overall ?? b.score?.overall ?? 0) - (a.investorScore?.overall ?? a.score?.overall ?? 0);
+      }
       if (viewMode === "rank") return (b.score?.overall ?? 0) - (a.score?.overall ?? 0);
       if (sortMode === "price-low") return (a.reservePrice ?? Number.MAX_SAFE_INTEGER) - (b.reservePrice ?? Number.MAX_SAFE_INTEGER);
       if (sortMode === "price-high") return (b.reservePrice ?? 0) - (a.reservePrice ?? 0);
+      if (sortMode === "investor-score") return investorSortDelta(a, b);
       if (sortMode === "score") return (b.score?.overall ?? 0) - (a.score?.overall ?? 0);
       if (sortMode === "location-score") {
         const aMapped = hasMapCoordinates(a) ? 1 : 0;
@@ -1325,6 +1425,9 @@ export default function Home() {
   function handleRankMode() {
     requestUnlockedAction(() => {
       setVisibleCount(RESULTS_BATCH_SIZE);
+      if (sortMode === "soonest" || sortMode === "latest" || sortMode === "price-low" || sortMode === "price-high") {
+        setSortMode("investor-score");
+      }
       setViewMode("rank");
     });
   }
@@ -1705,6 +1808,7 @@ export default function Home() {
                 <span>Sort</span>
                 <select value={sortMode} onChange={(event) => updateSortMode(event.target.value)}>
                   <option value="soonest">Soonest</option>
+                  <option value="investor-score">Investor</option>
                   <option value="score">Auction</option>
                   <option value="location-score">Map/area</option>
                   <option value="latest">Latest</option>
@@ -1713,7 +1817,14 @@ export default function Home() {
                 </select>
               </label>
             ) : (
-              <span>Best score first</span>
+              <label>
+                <span>Rank by</span>
+                <select value={sortMode} onChange={(event) => updateSortMode(event.target.value)}>
+                  <option value="investor-score">Investor</option>
+                  <option value="score">Auction</option>
+                  <option value="location-score">Map/area</option>
+                </select>
+              </label>
             )}
           </div>
 
@@ -1792,6 +1903,7 @@ export default function Home() {
                     <span>Sort</span>
                     <select value={sortMode} onChange={(event) => updateSortMode(event.target.value)}>
                       <option value="soonest">Soonest first</option>
+                      <option value="investor-score">Investor rank</option>
                       <option value="score">Auction score</option>
                       <option value="location-score">Map/area score</option>
                       <option value="latest">Latest first</option>
@@ -1802,10 +1914,13 @@ export default function Home() {
                   {sortMode === "location-score" && (
                     <small>Uses the daily map/area score. Smart AI Location can differ after analysis.</small>
                   )}
+                  {sortMode === "investor-score" && (
+                    <small>Ranks by land value gap, market demand, rental pull, and auction risk.</small>
+                  )}
                 </div>
               ) : (
                 <div className="rank-note">
-                  Ranking current filter set by Auction Score
+                  Ranking current filter set by {sortMode === "investor-score" ? "Investor Score" : sortMode === "location-score" ? "Map/area Score" : "Auction Score"}
                 </div>
               )}
             </div>
@@ -1820,9 +1935,9 @@ export default function Home() {
                   onClick={() => updateFilter("city", auction.city)}
                 >
                   <span>#{filterRank}</span>
-                  <strong>{auction.score?.overall ?? "--"}</strong>
+                  <strong>{rankingScore(auction, sortMode) ?? "--"}</strong>
                   <p>{auction.city || auction.district || "Unknown area"}</p>
-                  <small>{auction.title}</small>
+                  <small>{rankingLabel(sortMode)} score · {auction.title}</small>
                 </button>
               ))}
             </div>
@@ -1837,6 +1952,7 @@ export default function Home() {
               const mappedLocation = hasMapCoordinates(auction);
               const verifiedNearby = hasNearbyEvidence(auction);
               const auctionMapAreaScore = mapAreaScore(auction);
+              const activeRankScore = rankingScore(auction, sortMode);
 
               return (
               <article className="auction-card" key={`${auction.status}-${auction.auctionId}`}>
@@ -1845,6 +1961,7 @@ export default function Home() {
                     <div className="badge-row">
                       {viewMode === "rank" && <span className="badge rank-badge">Rank #{filterRank}</span>}
                       <span className={`badge ${auction.status}`}>{statusLabels[auction.status]}</span>
+                      <span className="badge investor">Investor {investorScoreLabel(auction)}</span>
                       <span className="badge score-badge">{auction.score?.overall ?? "--"} score</span>
                       <span className={mappedLocation ? "badge location mapped" : "badge location"}>
                         {mappedLocation ? `Map/area ${scoreLabel(auctionMapAreaScore)}` : "Location not mapped"}
@@ -1863,8 +1980,8 @@ export default function Home() {
                       Reserve
                     </span>
                     <span>
-                      <strong>{auction.score?.overall ?? "--"}</strong>
-                      Score
+                      <strong>{activeRankScore ?? auction.score?.overall ?? "--"}</strong>
+                      {viewMode === "rank" ? rankingLabel(sortMode) : "Score"}
                     </span>
                     <span>
                       <strong>{auction.startDate.split(" ")[0] || "--"}</strong>
@@ -1885,12 +2002,13 @@ export default function Home() {
                   </div>
                   <div className="score-strip" aria-label="Auction score">
                     <div className="score-ring">
-                      <strong>{auction.score?.overall ?? "--"}</strong>
-                      <span>Score</span>
+                      <strong>{activeRankScore ?? auction.score?.overall ?? "--"}</strong>
+                      <span>{viewMode === "rank" ? rankingLabel(sortMode) : "Score"}</span>
                     </div>
                     <div className="score-mini-grid">
-                      <span>Rank #{auction.score?.rankState ?? "--"} Kerala</span>
+                      <span>Rank #{sortMode === "investor-score" ? auction.investorScore?.rankState ?? "--" : auction.score?.rankState ?? "--"} Kerala</span>
                       {viewMode === "rank" && <span>Current filter #{filterRank}</span>}
+                      {auction.investorScore && <span>Investor {scoreLabel(auction.investorScore.overall)}</span>}
                       <span>Area {scoreLabel(auction.score?.area)}</span>
                       <span>{mappedLocation ? "Map verified" : "Map pending"}</span>
                       <span>Risk {auction.score?.riskLabel ?? "Pending"}</span>
@@ -1945,6 +2063,8 @@ export default function Home() {
                   <strong>{auction.bankPropertyId}</strong>
                   <span>Auction score</span>
                   <strong>{scoreLabel(auction.score?.overall)}</strong>
+                  <span>Investor score</span>
+                  <strong>{investorScoreLabel(auction)}</strong>
                   <span>Map/area score</span>
                   <strong>{mappedLocation ? scoreLabel(auctionMapAreaScore) : "Not mapped"}</strong>
                   <div className="card-actions" aria-label="Auction links">
@@ -1974,6 +2094,44 @@ export default function Home() {
                   </summary>
                   {isScoreDetailsOpen && (
                     <div className="detail-sections">
+                      {auction.investorScore && (
+                        <section>
+                          <h4>Investor Score</h4>
+                          <div className="score-breakdown">
+                            {investorScoreKeys.map((item) => (
+                              <div key={item.key}>
+                                <div className="score-line-head">
+                                  <span>{item.label}</span>
+                                  <strong>{scoreLabel(auction.investorScore?.[item.key])}</strong>
+                                </div>
+                                <div className="score-bar">
+                                  <span style={{ width: `${auction.investorScore?.[item.key] ?? 0}%` }} />
+                                </div>
+                                <small>Weight {item.weight}</small>
+                              </div>
+                            ))}
+                          </div>
+                          <div className="score-explain investor-summary">
+                            <div>
+                              <h5>Value estimate</h5>
+                              <ul>
+                                <li>{auction.investorScore.estimatedMarketValueLow ? `${priceLabel(auction.investorScore.estimatedMarketValueLow)} - ${priceLabel(auction.investorScore.estimatedMarketValueHigh ?? auction.investorScore.estimatedMarketValueLow)}` : "Conservative value not estimated yet"}</li>
+                                <li>{auction.investorScore.landCents ? `${auction.investorScore.landCents} cents land captured` : "Land extent missing"}</li>
+                                <li>{auction.investorScore.valueGapPercent !== null && auction.investorScore.valueGapPercent !== undefined ? `${auction.investorScore.valueGapPercent}% conservative value gap` : "Value gap pending"}</li>
+                              </ul>
+                            </div>
+                            <div>
+                              <h5>Market logic</h5>
+                              <ul>
+                                <li>{auction.investorScore.market || "Market band not mapped yet"}</li>
+                                {(auction.investorScore.explanations?.locationDemand ?? []).slice(0, 3).map((reason) => (
+                                  <li key={reason}>{reason}</li>
+                                ))}
+                              </ul>
+                            </div>
+                          </div>
+                        </section>
+                      )}
                       <section>
                         <h4>Auction Score</h4>
                         <div className="score-breakdown">

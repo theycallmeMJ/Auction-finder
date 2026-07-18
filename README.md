@@ -229,7 +229,7 @@ Workflow file:
 Triggers:
 
 - manual run from GitHub Actions using **Run workflow**
-- daily schedule at `01:30 UTC`, which is `07:00 IST`
+- light scheduled run every 6 hours
 
 The workflow job is named `deploy`. It performs these steps:
 
@@ -249,12 +249,20 @@ The refresh step currently uses:
 BAANKNET_STATUSES=upcoming
 BAANKNET_INCREMENTAL=1
 BAANKNET_ENRICH_DETAILS=1
-BAANKNET_ENRICH_LOCATION=1
-BAANKNET_ENRICH_LIMIT=2000
-BAANKNET_NEARBY_LIMIT=120
+BAANKNET_ENRICH_LOCATION=0       # scheduled light runs skip map calls
+BAANKNET_ENRICH_LIMIT=80         # scheduled light runs cap detail pages
+BAANKNET_NEARBY_LIMIT=0
+BAANKNET_MAP_COORDINATE_LIMIT=0
 BAANKNET_SCORE=1
+BAANKNET_ALLOW_STALE_ON_BLOCK=1
 SUPABASE_REPLACE_STATUS_ROWS=1
 ```
+
+The scheduled run intentionally makes fewer BAANKNET calls. This reduces the
+chance of a `403 Forbidden` from GitHub runner IPs. If BAANKNET still blocks
+the runner, `BAANKNET_ALLOW_STALE_ON_BLOCK=1` lets the job reuse cached auction
+data, rerun scoring, and continue the deploy instead of failing the whole
+workflow.
 
 Incremental mode compares fresh listing rows against the existing
 `public/data/auctions.json` in the repo. If an auction ID/status is already
@@ -285,10 +293,17 @@ GitHub repo -> Actions -> Refresh BAANKNET data and deploy -> Run workflow
 Manual runs have two modes:
 
 ```text
+refresh_mode=light
+```
+
+Runs the same low-call upcoming-auction refresh used by the schedule.
+
+```text
 refresh_mode=normal
 ```
 
-Runs the normal upcoming-auction refresh.
+Runs a larger upcoming-auction refresh. It can enrich a capped number of detail
+and map rows, but still avoids the old 2000-row spike.
 
 ```text
 refresh_mode=map-only
@@ -300,8 +315,8 @@ only fills missing BAANKNET map coordinates and a capped batch of nearby
 school/hospital/bus/metro evidence, then rescoring/push/deploy continues as
 usual.
 
-Use `nearby_limit` to control Overpass work for either mode. `120` is the safe
-default; `300-500` is reasonable for a one-off catch-up run.
+Use `nearby_limit` to control Overpass work for normal/map-only modes. `40` is
+the safe default. Use larger values only for a one-off local catch-up run.
 
 Expected success signs:
 
@@ -685,20 +700,20 @@ the **Run Locally** section.
 
 ## Daily Refresh Workflow
 
-`.github/workflows/cloudflare-pages.yml` runs daily at:
+`.github/workflows/cloudflare-pages.yml` runs every 6 hours at:
 
 ```text
-01:30 UTC
+minute 30, every 6th hour
 ```
 
 It:
 
 1. installs dependencies
-2. scrapes upcoming BAANKNET auctions
+2. scrapes upcoming BAANKNET auctions with a low-call scheduled profile
 3. reuses existing enriched details for unchanged rows
-4. enriches only new or changed auction detail pages
-5. stores BAANKNET map coordinates when available
-6. enriches a capped set of mapped properties with nearby school/hospital/bus/metro evidence
+4. enriches only a capped number of new or changed auction detail pages
+5. skips BAANKNET map-coordinate calls during scheduled light runs
+6. skips nearby-place enrichment during scheduled light runs
 7. scores auctions
 8. replaces Supabase rows for refreshed statuses and records a `refresh_runs` status row
 9. commits refreshed `public/data/*.json`

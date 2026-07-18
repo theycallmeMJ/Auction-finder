@@ -15,6 +15,7 @@ import os
 import re
 import ssl
 import time
+import urllib.error
 import urllib.parse
 import urllib.request
 from dataclasses import dataclass
@@ -76,6 +77,7 @@ OVERPASS_URL = os.environ.get("OVERPASS_URL", "https://overpass-api.de/api/inter
 RUN_SCORE_ENGINE = os.environ.get("BAANKNET_SCORE", "1") == "1"
 INCREMENTAL_REFRESH = os.environ.get("BAANKNET_INCREMENTAL", "0") == "1"
 DRY_RUN = os.environ.get("BAANKNET_DRY_RUN", "0") == "1"
+ALLOW_STALE_ON_BLOCK = os.environ.get("BAANKNET_ALLOW_STALE_ON_BLOCK", "1") == "1"
 
 DETAIL_FIELDS = [
     "propertyAddress",
@@ -620,6 +622,41 @@ def load_existing_auctions() -> dict[tuple[str, str], dict[str, Any]]:
     }
 
 
+def existing_auctions_list(existing_by_key: dict[tuple[str, str], dict[str, Any]]) -> list[dict[str, Any]]:
+    return list(existing_by_key.values())
+
+
+def run_score_engine() -> None:
+    if not RUN_SCORE_ENGINE:
+        return
+    score_path = Path(__file__).resolve().parent / "score_auctions.py"
+    spec = importlib.util.spec_from_file_location("score_auctions", score_path)
+    if spec and spec.loader:
+        score_module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(score_module)
+        score_module.main()
+
+
+def is_baanknet_block(error: BaseException) -> bool:
+    return isinstance(error, urllib.error.HTTPError) and error.code in {403, 429}
+
+
+def write_stale_refresh(existing_by_key: dict[tuple[str, str], dict[str, Any]], reason: BaseException) -> None:
+    auctions = existing_auctions_list(existing_by_key)
+    if not auctions:
+        raise reason
+    print(
+        f"BAANKNET blocked refresh ({reason}). Reusing {len(auctions)} cached auctions and rerunning scoring.",
+        flush=True,
+    )
+    if DRY_RUN:
+        print("Dry run enabled. Skipping stale file writes.", flush=True)
+        return
+    (OUTPUT_DIR / "auctions.json").write_text(json.dumps(auctions, indent=2, ensure_ascii=False), encoding="utf-8")
+    run_score_engine()
+    print(f"Wrote stale-but-scored {len(auctions)} auctions to {OUTPUT_DIR / 'auctions.json'}", flush=True)
+
+
 def merge_existing_details(
     auctions: list[dict[str, Any]],
     existing_by_key: dict[tuple[str, str], dict[str, Any]],
@@ -923,7 +960,13 @@ def main() -> None:
     existing_by_key = load_existing_auctions() if INCREMENTAL_REFRESH else {}
     if INCREMENTAL_REFRESH:
         print(f"Incremental refresh enabled. Loaded {len(existing_by_key)} existing auctions.", flush=True)
-    session = start_session()
+    try:
+        session = start_session()
+    except Exception as error:
+        if ALLOW_STALE_ON_BLOCK and is_baanknet_block(error):
+            write_stale_refresh(existing_by_key, error)
+            return
+        raise
 
     states = {DEFAULT_STATE_ID: "Kerala"}
     districts = get_json_map(session, f"/ajax/district-json/{DEFAULT_STATE_ID}")
@@ -1012,13 +1055,7 @@ def main() -> None:
 
     (OUTPUT_DIR / "catalog.json").write_text(json.dumps(catalog, indent=2, ensure_ascii=False), encoding="utf-8")
     (OUTPUT_DIR / "auctions.json").write_text(json.dumps(auctions, indent=2, ensure_ascii=False), encoding="utf-8")
-    if RUN_SCORE_ENGINE:
-        score_path = Path(__file__).resolve().parent / "score_auctions.py"
-        spec = importlib.util.spec_from_file_location("score_auctions", score_path)
-        if spec and spec.loader:
-            score_module = importlib.util.module_from_spec(spec)
-            spec.loader.exec_module(score_module)
-            score_module.main()
+    run_score_engine()
     print(f"Wrote {len(auctions)} auctions to {OUTPUT_DIR / 'auctions.json'}")
 
 

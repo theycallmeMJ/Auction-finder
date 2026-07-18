@@ -6,17 +6,18 @@ on:
       refresh_mode:
         description: "Refresh mode"
         required: true
-        default: "normal"
+        default: "light"
         type: choice
         options:
+          - light
           - normal
           - map-only
       nearby_limit:
         description: "Nearby-place rows to enrich during this run"
         required: true
-        default: "120"
+        default: "40"
   schedule:
-    - cron: "30 1 * * *"
+    - cron: "30 */6 * * *"
 
 concurrency:
   group: baanknet-refresh
@@ -47,23 +48,38 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Refresh upcoming auctions
-        if: ${{ github.event_name != 'workflow_dispatch' || inputs.refresh_mode == 'normal' }}
+      - name: Refresh upcoming auctions lightly
+        if: ${{ github.event_name != 'workflow_dispatch' || inputs.refresh_mode == 'light' }}
+        env:
+          BAANKNET_STATUSES: upcoming
+          BAANKNET_INCREMENTAL: "1"
+          BAANKNET_ENRICH_DETAILS: "1"
+          BAANKNET_ENRICH_LOCATION: "0"
+          BAANKNET_ENRICH_LIMIT: "80"
+          BAANKNET_NEARBY_LIMIT: "0"
+          BAANKNET_MAP_COORDINATE_LIMIT: "0"
+          BAANKNET_SCORE: "1"
+          BAANKNET_ALLOW_STALE_ON_BLOCK: "1"
+        run: python3 scripts/scrape_baanknet.py
+
+      - name: Refresh upcoming auctions with capped maps
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.refresh_mode == 'normal' }}
         env:
           BAANKNET_STATUSES: upcoming
           BAANKNET_INCREMENTAL: "1"
           BAANKNET_ENRICH_DETAILS: "1"
           BAANKNET_ENRICH_LOCATION: "1"
-          BAANKNET_ENRICH_LIMIT: "2000"
-          BAANKNET_NEARBY_LIMIT: ${{ github.event_name == 'workflow_dispatch' && inputs.nearby_limit || '120' }}
-          BAANKNET_MAP_COORDINATE_LIMIT: "2000"
+          BAANKNET_ENRICH_LIMIT: "300"
+          BAANKNET_NEARBY_LIMIT: ${{ inputs.nearby_limit }}
+          BAANKNET_MAP_COORDINATE_LIMIT: "120"
           BAANKNET_SCORE: "1"
+          BAANKNET_ALLOW_STALE_ON_BLOCK: "1"
         run: python3 scripts/scrape_baanknet.py
 
       - name: Map-only enrichment
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.refresh_mode == 'map-only' }}
         env:
-          BAANKNET_MAP_COORDINATE_LIMIT: "2000"
+          BAANKNET_MAP_COORDINATE_LIMIT: "80"
           BAANKNET_NEARBY_LIMIT: ${{ inputs.nearby_limit }}
           BAANKNET_SCORE: "1"
         run: python3 scripts/enrich_maps_only.py

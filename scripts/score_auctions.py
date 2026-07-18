@@ -25,6 +25,62 @@ WEIGHTS = {
     "bonus": 0.10,
 }
 
+INVESTOR_WEIGHTS = {
+    "valueGap": 0.30,
+    "landStrength": 0.25,
+    "locationDemand": 0.20,
+    "rentalDemand": 0.15,
+    "risk": 0.10,
+}
+
+MICRO_MARKETS = [
+    {
+        "name": "Central Kochi / Kaloor",
+        "districts": ["Ernakulam"],
+        "keywords": ["kaloor", "banerji", "banerjee", "jn stadium", "jawaharlal nehru", "edappally south", "palarivattom", "682032"],
+        "landRateLow": 1_800_000,
+        "landRateHigh": 2_200_000,
+        "locationBase": 92,
+        "rentalBase": 86,
+    },
+    {
+        "name": "Elamakkara metro corridor",
+        "districts": ["Ernakulam"],
+        "keywords": ["elamakkara", "swamypady", "changampuzha"],
+        "landRateLow": 1_600_000,
+        "landRateHigh": 2_000_000,
+        "locationBase": 90,
+        "rentalBase": 84,
+    },
+    {
+        "name": "Thrikkakara-Kalamassery growth corridor",
+        "districts": ["Ernakulam"],
+        "keywords": ["thrikkakara", "kalamassery", "cusat", "edathala", "kangarapady", "kangarappady"],
+        "landRateLow": 1_200_000,
+        "landRateHigh": 1_500_000,
+        "locationBase": 86,
+        "rentalBase": 82,
+    },
+    {
+        "name": "Kakkanad / Infopark commuter belt",
+        "districts": ["Ernakulam"],
+        "keywords": ["kakkanad", "infopark", "seaport", "chittethukara", "vazhakkala"],
+        "landRateLow": 1_000_000,
+        "landRateHigh": 1_300_000,
+        "locationBase": 84,
+        "rentalBase": 82,
+    },
+    {
+        "name": "Central Thiruvananthapuram",
+        "districts": ["Thiruvananthapuram"],
+        "keywords": ["peroorkada", "kowdiar", "pattom", "vazhuthacaud"],
+        "landRateLow": 900_000,
+        "landRateHigh": 1_400_000,
+        "locationBase": 82,
+        "rentalBase": 76,
+    },
+]
+
 DISTRICT_BASE = {
     "Ernakulam": 84,
     "Thiruvananthapuram": 82,
@@ -107,6 +163,69 @@ def parse_area(row: dict[str, Any]) -> float | None:
     hectares = re.search(r"([\d,.]+)\s*hectares?", text)
     if hectares:
         return float(hectares.group(1).replace(",", "")) * 107639
+    return None
+
+
+def parse_building_area(row: dict[str, Any]) -> float | None:
+    candidates = [
+        str(row.get("carpetArea") or ""),
+        str(row.get("builtUpArea") or ""),
+        str(row.get("areaSqft") or ""),
+    ]
+    text = " ".join(candidates).lower()
+    sq_ft = re.search(r"([\d,.]+)\s*(?:sq\.?\s*ft|sqft|sq feet|square feet)", text)
+    if sq_ft:
+        return float(sq_ft.group(1).replace(",", ""))
+    sq_m = re.search(r"([\d,.]+)\s*(?:sq\.?\s*m|sq mtr|sqm|square meter|square metre)", text)
+    if sq_m:
+        return float(sq_m.group(1).replace(",", "")) * 10.7639
+    unspecified = re.search(r"([\d,.]+)\s*unit\s+not\s+specified", text)
+    if unspecified:
+        value = float(unspecified.group(1).replace(",", ""))
+        return value * 10.7639 if value < 500 else value
+    bare_number = re.fullmatch(r"\s*([\d,.]+)\s*", text)
+    if bare_number:
+        value = float(bare_number.group(1).replace(",", ""))
+        return value * 10.7639 if value < 500 else value
+    return None
+
+
+def parse_land_cents(row: dict[str, Any]) -> float | None:
+    explicit = row.get("landArea") or row.get("landAreaCents")
+    if isinstance(explicit, (int, float)) and explicit > 0:
+        return float(explicit)
+    if isinstance(explicit, str) and explicit.strip():
+        parsed = re.search(r"([\d,.]+)", explicit)
+        if parsed:
+            value = float(parsed.group(1).replace(",", ""))
+            if "are" in explicit.lower():
+                return value * 2.47105
+            return value
+
+    candidates = [
+        str(row.get("propertyAddress") or ""),
+        str(row.get("borrowerAddress") or ""),
+        str(row.get("title") or ""),
+        str(row.get("searchText") or ""),
+    ]
+    text = " ".join(candidates).lower()
+
+    patterns = [
+        (r"(?:land|property|plot|extent|extend|admeasuring|measuring|having)[^.;,\n]{0,60}?([\d,.]+)\s*cents?", 1.0),
+        (r"([\d,.]+)\s*cents?[^.;,\n]{0,60}?(?:land|property|plot|extent)", 1.0),
+        (r"(?:land|property|plot|extent|extend|admeasuring|measuring|having)[^.;,\n]{0,60}?([\d,.]+)\s*ares?", 2.47105),
+        (r"([\d,.]+)\s*ares?[^.;,\n]{0,60}?(?:land|property|plot|extent)", 2.47105),
+        (r"(?:land|property|plot|extent|extend|admeasuring|measuring|having)[^.;,\n]{0,60}?([\d,.]+)\s*acres?", 100.0),
+    ]
+    values: list[float] = []
+    for pattern, factor in patterns:
+        for match in re.finditer(pattern, text):
+            value = float(match.group(1).replace(",", "")) * factor
+            if 0.2 <= value <= 200:
+                values.append(value)
+
+    if values:
+        return min(values)
     return None
 
 
@@ -233,6 +352,181 @@ def price_per_sqft(row: dict[str, Any]) -> float | None:
     if not price or not area or area <= 0:
         return None
     return price / area
+
+
+def is_plot(row: dict[str, Any]) -> bool:
+    text = " ".join(
+        str(row.get(key) or "")
+        for key in ["propertySubType", "propertyType", "title"]
+    ).lower()
+    return "plot" in text and not any(word in text for word in ["house", "villa", "flat", "apartment"])
+
+
+def market_text(row: dict[str, Any]) -> str:
+    return " ".join(
+        str(row.get(key) or "")
+        for key in ["title", "location", "city", "district", "propertyAddress", "pinCode"]
+    ).lower()
+
+
+def detect_micro_market(row: dict[str, Any]) -> dict[str, Any] | None:
+    text = market_text(row)
+    district = str(row.get("district") or "")
+    for market in MICRO_MARKETS:
+        districts = market.get("districts") or []
+        if districts and district not in districts:
+            continue
+        if any(keyword in text for keyword in market["keywords"]):
+            return market
+    return None
+
+
+def land_value_range(row: dict[str, Any], land_cents: float | None, built_area: float | None) -> tuple[int | None, int | None, str, list[str]]:
+    price = rupees(row.get("reservePrice")) or rupees(row.get("reservePriceText"))
+    market = detect_micro_market(row)
+    reasons: list[str] = []
+
+    if not market:
+        reasons.append("No local land-rate band configured yet")
+        return None, None, "Unmapped market", reasons
+
+    market_name = str(market["name"])
+    reasons.append(f"{market_name} conservative land-rate band applied")
+    land_low = land_high = 0
+    if land_cents:
+        land_low = int(land_cents * int(market["landRateLow"]))
+        land_high = int(land_cents * int(market["landRateHigh"]))
+        reasons.append(f"Land extent around {land_cents:.2f} cents")
+    else:
+        reasons.append("Land extent missing, so investor score is capped")
+
+    building_low = building_high = 0
+    subtype = str(row.get("propertySubType") or row.get("propertyType") or "").lower()
+    if built_area and ("house" in subtype or "villa" in subtype or "residential" in subtype):
+        building_low = int(min(built_area * 1_200, 3_500_000))
+        building_high = int(min(built_area * 1_800, 5_000_000))
+        reasons.append(f"Conservative building value added for {built_area:.0f} sqft")
+
+    if not land_low and not building_low:
+        return None, None, market_name, reasons
+
+    estimated_low = land_low + building_low
+    estimated_high = land_high + building_high
+    if price and estimated_low < price * 0.7 and land_cents:
+        reasons.append("Estimate is intentionally conservative versus reserve price")
+    return estimated_low or None, estimated_high or None, market_name, reasons
+
+
+def score_value_gap(price: int | None, estimated_low: int | None) -> tuple[int, float | None, list[str]]:
+    if not price or not estimated_low:
+        return 45, None, ["Conservative market value not estimated yet"]
+    gap = (estimated_low - price) / price
+    if gap >= 0.60:
+        score = 96
+    elif gap >= 0.35:
+        score = 86
+    elif gap >= 0.20:
+        score = 74
+    elif gap >= 0.08:
+        score = 64
+    elif gap >= 0:
+        score = 55
+    else:
+        score = 38
+    return score, gap * 100, [f"Conservative value gap around {gap * 100:.1f}%"]
+
+
+def investor_score(row: dict[str, Any], area_score_value: int, risk: int) -> dict[str, Any]:
+    price = rupees(row.get("reservePrice")) or rupees(row.get("reservePriceText"))
+    built_area = parse_building_area(row)
+    land_cents = parse_land_cents(row)
+    plot_only = is_plot(row)
+    estimated_low, estimated_high, market_name, value_reasons = land_value_range(row, land_cents, built_area)
+    value_gap, value_gap_percent, gap_reasons = score_value_gap(price, estimated_low)
+    market = detect_micro_market(row)
+
+    if land_cents:
+        if land_cents >= 6:
+            land_strength = 100
+        elif land_cents >= 4:
+            land_strength = 92
+        elif land_cents >= 2.5:
+            land_strength = 84
+        else:
+            land_strength = 66
+    else:
+        land_strength = 52
+
+    nearby_adjustment, nearby_reasons = nearby_area_adjustment(row)
+    location_base = int(market["locationBase"]) if market else area_score_value
+    location_demand = clamp(location_base + min(nearby_adjustment, 10))
+    rental_base = int(market["rentalBase"]) if market else max(50, area_score_value - 6)
+    rental_demand = clamp(rental_base + (4 if nearest_distance(row, "metro") and (nearest_distance(row, "metro") or 99) <= 5 else 0))
+
+    if not land_cents:
+        value_gap = min(value_gap, 62)
+        land_strength = min(land_strength, 60)
+    if not market:
+        value_gap = min(value_gap, 45)
+        land_strength = min(land_strength, 72)
+        location_demand = min(location_demand, 78)
+        rental_demand = min(rental_demand, 72)
+    if price and price >= 15_000_000 and (value_gap_percent is None or value_gap_percent < 20):
+        value_gap = min(value_gap, 48)
+        land_strength = min(land_strength, 78)
+    if plot_only:
+        rental_demand = min(rental_demand, 42)
+        risk = min(risk, 58)
+        if not market:
+            value_gap = min(value_gap, 40)
+            land_strength = min(land_strength, 62)
+            location_demand = min(location_demand, 68)
+        if value_gap_percent is None or value_gap_percent < 60:
+            value_gap = min(value_gap, 55)
+            land_strength = min(land_strength, 70)
+        if not nearby_categories(row):
+            location_demand = min(location_demand, 78)
+
+    overall = clamp(
+        value_gap * INVESTOR_WEIGHTS["valueGap"]
+        + land_strength * INVESTOR_WEIGHTS["landStrength"]
+        + location_demand * INVESTOR_WEIGHTS["locationDemand"]
+        + rental_demand * INVESTOR_WEIGHTS["rentalDemand"]
+        + risk * INVESTOR_WEIGHTS["risk"]
+    )
+    if plot_only:
+        if market and value_gap_percent is not None and value_gap_percent >= 100 and nearby_categories(row):
+            overall = min(overall, 82)
+        elif market and value_gap_percent is not None and value_gap_percent >= 60:
+            overall = min(overall, 72)
+        else:
+            overall = min(overall, 58)
+
+    reasons = {
+        "valueGap": [*value_reasons, *gap_reasons],
+        "landStrength": [f"Land extent {'captured' if land_cents else 'missing'}"],
+        "locationDemand": [f"{market_name} demand profile", *nearby_reasons[:2]],
+        "rentalDemand": [f"{market_name} rental demand profile"],
+        "risk": risk_score(row)[2],
+    }
+    return {
+        "overall": overall,
+        "valueGap": value_gap,
+        "landStrength": land_strength,
+        "locationDemand": location_demand,
+        "rentalDemand": rental_demand,
+        "risk": risk,
+        "rankState": None,
+        "rankDistrict": None,
+        "market": market_name,
+        "landCents": round(land_cents, 2) if land_cents else None,
+        "estimatedMarketValueLow": estimated_low,
+        "estimatedMarketValueHigh": estimated_high,
+        "valueGapPercent": round(value_gap_percent, 1) if value_gap_percent is not None else None,
+        "confidenceLabel": "High" if land_cents and estimated_low else "Medium" if estimated_low else "Low",
+        "explanations": reasons,
+        "weights": INVESTOR_WEIGHTS,
+    }
 
 
 def property_score(row: dict[str, Any], medians: dict[str, float]) -> tuple[int, list[str]]:
@@ -401,10 +695,15 @@ def score_rows(rows: list[dict[str, Any]], profiles: dict[str, dict[str, Any]]) 
                 "bonus": bonus_reasons,
             },
         }
+        row["investorScore"] = investor_score(row, area, risk)
 
     ranked_state = sorted(active_rows, key=lambda item: item.get("score", {}).get("overall", 0), reverse=True)
     for index, row in enumerate(ranked_state, start=1):
         row["score"]["rankState"] = index
+
+    investor_ranked_state = sorted(active_rows, key=lambda item: item.get("investorScore", {}).get("overall", 0), reverse=True)
+    for index, row in enumerate(investor_ranked_state, start=1):
+        row["investorScore"]["rankState"] = index
 
     by_district: dict[str, list[dict[str, Any]]] = {}
     for row in active_rows:
@@ -412,6 +711,8 @@ def score_rows(rows: list[dict[str, Any]], profiles: dict[str, dict[str, Any]]) 
     for district_rows in by_district.values():
         for index, row in enumerate(sorted(district_rows, key=lambda item: item.get("score", {}).get("overall", 0), reverse=True), start=1):
             row["score"]["rankDistrict"] = index
+        for index, row in enumerate(sorted(district_rows, key=lambda item: item.get("investorScore", {}).get("overall", 0), reverse=True), start=1):
+            row["investorScore"]["rankDistrict"] = index
 
 
 def main() -> None:

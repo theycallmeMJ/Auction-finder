@@ -675,6 +675,11 @@ h1 {
   color: var(--blue);
 }
 
+.badge.investor {
+  background: #f3ead8;
+  color: #7a4a0a;
+}
+
 .badge.score-badge {
   display: none;
 }
